@@ -1,0 +1,22 @@
+development:
+  url: dev.local
+  user: cap
+  repository: cap@git.msltechdev.com:vpsi/wordpress.git
+  deploy_to: /msl/php/vpsi
+  backup: false
+  app:
+    - stage1.mslideas.com
+  db:
+    - stage1.mslideas.com
+  wordpress:
+    version: 3.2.1
+    db: wp_vpsi
+    db_user: root
+    db_password:
+    db_host: localhost
+    db_prefix: wp_
+    db_charset: utf8
+    base_uri: 
+staging:
+
+production:

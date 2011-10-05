@@ -1,36 +1,50 @@
 <?php
+set_include_path('lib');
+require_once('Deploy.php');
+global $deploy;
+$deploy = new Deploy();
+if( file_exists($deploy->config_path) )
+  $deploy->config($deploy->config_path);
+else
+  warn("config","unable to locate config.yml");
 
-global $env; $env = "development";
-
-task('staging', function($app)
+task('test','environment', function($app)
 {
-  global $env;
-    $env = "staging\n";
+  global $deploy;
+  echo "testing...\n";
+  puts($deploy->env->user);
+  //var_dump($deploy->env);
 });
+
+task('app', function($app) { var_dump($app); });
 
 task('deploy', function($app)
 {
   global $env;
   if( $env == "staging\n" )
   {
-    set_include_path('lib');
     include('Net/SSH2.php');
     include('Crypt/RSA.php');
     define('NET_SSH2_LOGGING', NET_SSH2_LOG_COMPLEX);
     $ssh = new Net_SSH2('stage1.mslideas.com');
-    $key = new Crypt_RSA();
+    
     if( file_exists("/Users/mkruk/.ssh/id_rsa") )
     {
+      $key = new Crypt_RSA();
       $pub = file_get_contents('/Users/mkruk/.ssh/id_rsa');
       $key->setPassword('');
       $result = $key->loadKey($pub);
+      $login = $ssh->login('cap',$key);
+    }else
+    {
+      $login = $ssh->login('cap');  
     }
 
-    if(!$ssh->login('cap',$key))
+    /*if(!$login)
     {
       echo $ssh->getLog();
       exit('Login failed');
-    }
+    }*/
     echo $ssh->exec('cd /msl/php/acgmedemo && git pull');
 
     include('Net/SFTP.php');
@@ -45,11 +59,6 @@ desc('Dump all args');
 task('args', function($app) {
     echo "Arguments:\n";
     foreach ($app as $k => $v) echo "$k = $v\n";
-});
-
-desc('Load the application environment');
-task('environment', function() {
-    echo "I am the outer environment. I should run first.\n";
 });
 
 desc('Initialises the database connection');
