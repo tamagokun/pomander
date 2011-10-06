@@ -2,7 +2,7 @@
 class Environment
 {
   public $name;
-  private $config,$shell;
+  private $config,$shell,$current_role,$current_role_key;
 
   public function __construct($env_name,$args=null)
   {
@@ -27,13 +27,34 @@ class Environment
     $this->config[$prop] = $value;
   }
 
+  public function role($key)
+  {
+    if(!$this->$key) return false;
+    if( !$this->current_role )
+    {
+      $this->current_role = $this->$key;
+      $this->current_role_key = 0;
+      return true;
+    }else
+    {
+      if(isset($this->current_role[$this->current_role_key+1]))
+      {
+        $this->current_role_key++;
+        return true;
+      }  
+      else
+        $this->current_role = false;
+    }
+  }
+
   public function connect()
   {
-    include('Net/SSH2.php');
-    include('Crypt/RSA.php');
+    if( !$this->current_role || !isset($this->current_role[$this->current_role_key])) return false;
+    include_once('Net/SSH2.php');
+    include_once('Crypt/RSA.php');
     define('NET_SSH2_LOGGING', NET_SSH2_LOG_COMPLEX);
     //change to :app or :db
-    $this->shell = new Net_SSH2('stage1.mslideas.com');
+    $this->shell = new Net_SSH2($this->current_role[$this->current_role_key]);
     $key_path = home()."/.ssh/id_rsa";
     if( file_exists($key_path) )
     {

@@ -8,77 +8,54 @@ if( file_exists($deploy->config_path) )
 else
   warn("config","unable to locate config.yml");
 
-task('test','environment', function($app)
-{
+//deploy
+group('deploy', function() {
+  
+  task('setup','environment', function() {
+    info("setup","running setup commands");
+  });
+
+  task('update','environment', function() {
+    info("update","code update");
+  });
+
+  task('wordpress','environment', function() {
+    
+  });
+
+  task('toolkit','environment', function() {
+    
+  });
+
+  task('initial','app', function($app) {
+    global $deploy;
+    //foreach( $deploy->env->role["app"] as $target ):
+    //  $deploy->env->connect($target);
+    info("run","i'm running");
+    
+
+    $app->invoke('deploy:setup');
+    $app->invoke('deploy:update');
+  
+    //endforeach;
+    $app->reset();
+    $app->invoke('deploy:initial');
+  });
+});
+task('deploy','deploy:update');
+
+
+task('app','environment',function($app) {
   global $deploy;
-  echo "testing...\n";
-  puts($deploy->env->user);
-  $cmd = array(
-    "cd {$deploy->env->deploy_to}",
-    "ls -al"
-  );
-  run($cmd);
+  if( $deploy->env->role("app") )
+    $deploy->env->connect();
+  else
+    return false;
 });
 
-task('app', function($app) { var_dump($app); });
-
-task('deploy','environment', function($app)
+function app_task()
 {
-  global $deploy;
-  info("deploy","with git");
-  run("cd {$deploy->env->deploy_to}","git pull");
-  info("deploy","deployment completed");
-});
-
-desc('Dump all args');
-task('args', function($app) {
-    echo "Arguments:\n";
-    foreach ($app as $k => $v) echo "$k = $v\n";
-});
-
-desc('Initialises the database connection');
-task('database', function() {
-    echo "I am initialising the database...\n";
-});
-
-group('test', function() {
     
-    // 'environment' dependency for this task is resolved locally to
-    // task in same group. There is no 'database' task defined in this
-    // group so it drops back to a search of the root group.
-    desc('Run the unit tests');
-    task('units', 'environment', ':environment', 'database', function() {
-        echo "Running unit tests...\n";
-    });
-    
-    // another level of nesting; application object is passed to all
-    // executing tasks
-    group('all', function() {
-        desc('Run absolutely every test everywhere!');
-        task('run', 'test:units', function($application) {
-            echo "All tests complete! ($application)\n";
-        });
-    });
+}
 
-});
-
-// duplicate group definitions are merged
-group('test', function() {
-    
-    // duplicate task definitions are merged
-    // (although the first description takes precedence when running with -T)
-    desc("You won't see this description");
-    task('units', function() {
-        echo "Running a second batch of unit tests...\n";
-    });
-    
-    // use ':environment' to refer to task in root group
-    // we currently have no cyclic dependency checking, you have been warned.
-    task('environment', ':environment', function() {
-        echo "I am the inner environment. I should run second.\n";
-    });
-    
-});
-
-task('default', 'test:all:run');
 ?>

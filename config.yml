@@ -20,4 +20,15 @@ development:
 staging:
   user: cap
   deploy_to: /msl/php/vpsi
+  app:
+    - stage1.mslideas.com
+  db:
+    - stage1.mslideas.com
 production:
+  user: cap
+  deploy_to: /msl/php/vpsi
+  app:
+    - web-01.mslideas.com
+    - web-02.mslideas.com
+  db:
+    - web-01.mslideas.com

@@ -28,6 +28,24 @@ class Deploy
     $this->load_environments();
   }
 
+  public function deploy_task($role,$args)
+  {
+    $name = array_shift($args);
+    if ($args[count($args) - 1] instanceof Closure) {
+        $work = array_pop($args);
+    } else {
+        $work = null;
+    }
+    builder()->add_task($name, $work, $args);
+
+    $app = builder()->get_application();
+    foreach($this->env->$role as $target)
+    {
+      $this->env->connect($target);
+      $app->invoke($name);
+    }
+  }
+
   private function load_environments()
   {
     foreach($this->config as $env_name=>$environment)
@@ -48,35 +66,9 @@ task("environment",function($app) {
   global $deploy;
   if(!$deploy->env)
     $app->invoke($deploy->default_env);
-  if($deploy->env->name != "development")
-    $deploy->env->connect(); 
+  //if($deploy->env->name != "development")
+  //  $deploy->env->connect();
 });
-
-//deploy
-group('deploy', function() {
-  
-  task('setup', function() {
-    
-  });
-
-  task('update', function() {
-    
-  });
-
-  task('wordpress', function() {
-    
-  });
-
-  task('toolkit', function() {
-    
-  });
-
-  task('initial', function() {
-    
-  });
-
-});
-task('deploy','deploy:update');
 
 //utils
 function info($status,$msg)
@@ -118,6 +110,18 @@ function flatten($array)
   foreach( new RecursiveIteratorIterator(new RecursiveArrayIterator($array)) as $value)
     $flattened[] = $value;
   return $flattened;
+}
+
+function app_task()
+{
+  global $deploy;
+  return $deploy->deploy_task("app",func_get_args());
+}
+
+function db_task()
+{
+  global $deploy;
+  return $deploy->deploy_task("db",func_get_args());
 }
 
 ?>
