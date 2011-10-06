@@ -18,5 +18,5 @@ development:
     db_charset: utf8
     base_uri: 
 staging:
-
+  user: cap
 production:

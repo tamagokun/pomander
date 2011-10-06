@@ -13,46 +13,18 @@ task('test','environment', function($app)
   global $deploy;
   echo "testing...\n";
   puts($deploy->env->user);
-  //var_dump($deploy->env);
+  $cmd = array(
+    "cd {$deploy->env->deploy_to}",
+    "ls -al"
+  );
+  run($cmd);
 });
 
 task('app', function($app) { var_dump($app); });
 
-task('deploy', function($app)
+task('deploy','environment', function($app)
 {
-  global $env;
-  if( $env == "staging\n" )
-  {
-    include('Net/SSH2.php');
-    include('Crypt/RSA.php');
-    define('NET_SSH2_LOGGING', NET_SSH2_LOG_COMPLEX);
-    $ssh = new Net_SSH2('stage1.mslideas.com');
-    
-    if( file_exists("/Users/mkruk/.ssh/id_rsa") )
-    {
-      $key = new Crypt_RSA();
-      $pub = file_get_contents('/Users/mkruk/.ssh/id_rsa');
-      $key->setPassword('');
-      $result = $key->loadKey($pub);
-      $login = $ssh->login('cap',$key);
-    }else
-    {
-      $login = $ssh->login('cap');  
-    }
-
-    /*if(!$login)
-    {
-      echo $ssh->getLog();
-      exit('Login failed');
-    }*/
-    echo $ssh->exec('cd /msl/php/acgmedemo && git pull');
-
-    include('Net/SFTP.php');
-    $sftp = new Net_SFTP('stage1.mslideas.com');
-    if(!$sftp->login('cap',$key))
-      exit('Login Failed');
-    echo $sftp->pwd() . "\r\n";
-  }
+  
 });
 
 desc('Dump all args');

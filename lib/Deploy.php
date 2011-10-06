@@ -3,8 +3,9 @@ require_once("Environment.php");
 
 class Deploy
 {
-  public $config_path,$env;
-  private $config,$default_env;
+  static $home;
+  public $config_path,$default_env,$env;
+  private $config;
 
   public function __construct()
   {
@@ -25,7 +26,6 @@ class Deploy
     require_once("spyc.php");
     $this->config = Spyc::YAMLLoad($yaml);
     $this->load_environments();
-    $this->use_default();
   }
 
   private function load_environments()
@@ -41,15 +41,15 @@ class Deploy
     }
   }
 
-  private function use_default()
-  {
-    task("environment",$this->default_env);
-  }
 }
 
 //core tasks
 task("environment",function($app) {
-  
+  global $deploy;
+  if(!$deploy->env)
+    $app->invoke($deploy->default_env);
+  if($deploy->env->name != "development")
+    $deploy->env->connect(); 
 });
 
 //utils
@@ -67,4 +67,27 @@ function puts($text)
 {
   echo $text."\n";  
 }
+
+function home()
+{
+  if(!Deploy::$home)
+  {
+    Deploy::$home = trim(shell_exec("cd ~ && pwd"),"\r\n");
+    shell_exec("cd ".getcwd());
+  }
+  return Deploy::$home;
+}
+
+function run()
+{
+  global $deploy;
+  $cmd = implode(" && ",flatten(func_get_args()));
+  echo $deploy->env->exec($cmd);
+}
+
+function flatten($array)
+{
+  return (array) new RecursiveIteratorIterator(new RecursiveArrayIterator($array));
+}
+
 ?>
