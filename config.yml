@@ -2,7 +2,7 @@ development:
   url: dev.local
   user: cap
   repository: cap@git.msltechdev.com:vpsi/wordpress.git
-  deploy_to: /msl/php/vpsi
+  deploy_to: /Users/mkruk/Sites/php/vpsi
   backup: false
   app:
     - stage1.mslideas.com
@@ -19,4 +19,5 @@ development:
     base_uri: 
 staging:
   user: cap
+  deploy_to: /msl/php/vpsi
 production:

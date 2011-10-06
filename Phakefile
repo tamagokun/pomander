@@ -24,7 +24,10 @@ task('app', function($app) { var_dump($app); });
 
 task('deploy','environment', function($app)
 {
-  
+  global $deploy;
+  info("deploy","with git");
+  run("cd {$deploy->env->deploy_to}","git pull");
+  info("deploy","deployment completed");
 });
 
 desc('Dump all args');

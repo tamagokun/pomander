@@ -52,6 +52,32 @@ task("environment",function($app) {
     $deploy->env->connect(); 
 });
 
+//deploy
+group('deploy', function() {
+  
+  task('setup', function() {
+    
+  });
+
+  task('update', function() {
+    
+  });
+
+  task('wordpress', function() {
+    
+  });
+
+  task('toolkit', function() {
+    
+  });
+
+  task('initial', function() {
+    
+  });
+
+});
+task('deploy','deploy:update');
+
 //utils
 function info($status,$msg)
 {
@@ -87,7 +113,11 @@ function run()
 
 function flatten($array)
 {
-  return (array) new RecursiveIteratorIterator(new RecursiveArrayIterator($array));
+  if(!$array) return false;
+  $flattened = array();
+  foreach( new RecursiveIteratorIterator(new RecursiveArrayIterator($array)) as $value)
+    $flattened[] = $value;
+  return $flattened;
 }
 
 ?>
