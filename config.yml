@@ -3,7 +3,7 @@ development: &defaults
   user: cap
   repository: cap@git.msltechdev.com:vpsi/wordpress.git
   revision: 
-  deploy_to: /Users/mkruk/Sites/php/TESTING
+  deploy_to:
   backup: false
   app:
   db:
@@ -27,7 +27,7 @@ staging:
 production:
   <<:   *defaults
   user: cap
-  deploy_to: /msl/php/vpsi
+  deploy_to: /msl/php/TESTING
   revision: origin/master
   app:
     - web-01.mslideas.com
