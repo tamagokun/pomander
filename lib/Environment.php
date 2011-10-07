@@ -8,7 +8,7 @@ class Environment
   {
     $this->name = $env_name;
     $this->config = (array) $args;
-    $this->add_scm();
+    $this->init_scm();
   }
 
   public function __get($prop)
@@ -95,7 +95,7 @@ class Environment
     return true;
   }
 
-  private function add_scm()
+  private function init_scm()
   {
     require_once("Scm.php");
     foreach(glob("lib/Scm/*.php") as $file) require_once "Scm/".basename($file);
