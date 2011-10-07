@@ -1,7 +1,7 @@
 <?php
 class Environment
 {
-  public $name;
+  public $name,$target;
   private $config,$shell,$current_role,$current_role_key;
 
   public function __construct($env_name,$args=null)
@@ -33,28 +33,35 @@ class Environment
     if( !$this->current_role )
     {
       $this->current_role = $this->$key;
-      $this->current_role_key = 0;
+      $this->target = $this->current_role[0];
       return true;
     }else
     {
-      if(isset($this->current_role[$this->current_role_key+1]))
+      $index = array_search($this->target,$this->current_role);
+      if( isset($this->current_role[$index+1]))
       {
-        $this->current_role_key++;
+        $this->target = $this->current_role[$index+1];
         return true;
-      }  
+      }
       else
         $this->current_role = false;
     }
   }
 
+  public function next_role()
+  {
+    if(!isset($this->target) || !isset($this->current_role)) return false;
+    $index = array_search($this->target,$this->current_role);
+    return isset($this->current_role[$index+1]);
+  }
+
   public function connect()
   {
-    if( !$this->current_role || !isset($this->current_role[$this->current_role_key])) return false;
+    if( !isset($this->target) ) return false;
     include_once('Net/SSH2.php');
     include_once('Crypt/RSA.php');
     define('NET_SSH2_LOGGING', NET_SSH2_LOG_COMPLEX);
-    //change to :app or :db
-    $this->shell = new Net_SSH2($this->current_role[$this->current_role_key]);
+    $this->shell = new Net_SSH2($this->target);
     $key_path = home()."/.ssh/id_rsa";
     if( file_exists($key_path) )
     {

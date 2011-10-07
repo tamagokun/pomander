@@ -8,6 +8,11 @@ if( file_exists($deploy->config_path) )
 else
   warn("config","unable to locate config.yml");
 
+desc("test");
+task("test","app", function() {
+  info("test","yay");
+});
+
 //deploy
 group('deploy', function() {
   
@@ -27,35 +32,17 @@ group('deploy', function() {
     
   });
 
+  desc("Initial deploy");
   task('initial','app', function($app) {
     global $deploy;
-    //foreach( $deploy->env->role["app"] as $target ):
-    //  $deploy->env->connect($target);
     info("run","i'm running");
     
 
     $app->invoke('deploy:setup');
     $app->invoke('deploy:update');
   
-    //endforeach;
-    $app->reset();
-    $app->invoke('deploy:initial');
   });
 });
 task('deploy','deploy:update');
-
-
-task('app','environment',function($app) {
-  global $deploy;
-  if( $deploy->env->role("app") )
-    $deploy->env->connect();
-  else
-    return false;
-});
-
-function app_task()
-{
-    
-}
 
 ?>

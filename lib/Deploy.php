@@ -66,8 +66,14 @@ task("environment",function($app) {
   global $deploy;
   if(!$deploy->env)
     $app->invoke($deploy->default_env);
-  //if($deploy->env->name != "development")
-  //  $deploy->env->connect();
+});
+
+task('app','environment',function($app) {
+  multi_role_support("app",$app);
+});
+
+task('db','environment',function($app) {
+  multi_role_support("db",$app);
 });
 
 //utils
@@ -112,16 +118,25 @@ function flatten($array)
   return $flattened;
 }
 
-function app_task()
+function multi_role_support($role,$app)
 {
   global $deploy;
-  return $deploy->deploy_task("app",func_get_args());
-}
-
-function db_task()
-{
-  global $deploy;
-  return $deploy->deploy_task("db",func_get_args());
+  $deploy->env->role($role);
+  $tasks = $app->get_task_list();
+  foreach($tasks as $task_name=>$desc)
+  {
+    if( in_array($role,$app->resolve($task_name)->dependencies()) )
+    {
+      after($task_name,function($app) use($task_name) {
+        global $deploy;
+        if( $deploy->env->next_role() )
+        {
+          $app->reset();
+          $app->invoke($task_name);
+        }
+      });
+    }
+  }    
 }
 
 ?>
