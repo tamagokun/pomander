@@ -28,24 +28,6 @@ class Deploy
     $this->load_environments();
   }
 
-  public function deploy_task($role,$args)
-  {
-    $name = array_shift($args);
-    if ($args[count($args) - 1] instanceof Closure) {
-        $work = array_pop($args);
-    } else {
-        $work = null;
-    }
-    builder()->add_task($name, $work, $args);
-
-    $app = builder()->get_application();
-    foreach($this->env->$role as $target)
-    {
-      $this->env->connect($target);
-      $app->invoke($name);
-    }
-  }
-
   private function load_environments()
   {
     foreach($this->config as $env_name=>$environment)
@@ -58,7 +40,6 @@ class Deploy
       });
     }
   }
-
 }
 
 //core tasks
@@ -139,4 +120,5 @@ function multi_role_support($role,$app)
   }    
 }
 
+require_once('defaults.php');
 ?>

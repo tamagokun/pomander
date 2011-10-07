@@ -34,14 +34,14 @@ class Environment
     {
       $this->current_role = $this->$key;
       $this->target = $this->current_role[0];
-      return true;
+      return $this->new_target();
     }else
     {
       $index = array_search($this->target,$this->current_role);
       if( isset($this->current_role[$index+1]))
       {
         $this->target = $this->current_role[$index+1];
-        return true;
+        return $this->new_target();
       }
       else
         $this->current_role = false;
@@ -76,16 +76,22 @@ class Environment
 
     if(!$this->shell->login($this->user,$key))
       warn("ssh","Login failed");
-
-    puts($this->shell->exec("ls -al"));
   }
 
   public function exec($cmd)
   {
+    if($this->target && !$this->shell)
+      $this->connect();
     if($this->shell)
       return $this->shell->exec($cmd);
     else
-      return shell_exec($cmd);  
+      return shell_exec($cmd);
+  }
+
+  private function new_target()
+  {
+    info("target",$this->target);
+    return true;
   }
 
 }
