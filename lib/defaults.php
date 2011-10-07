@@ -11,7 +11,7 @@ group('deploy', function() {
   });
   
   desc("Update code to latest changes.");
-  task('update','app', function() {
+  task('update','app', function($app) {
     global $deploy;
     info("deploy","updating code");
     run("cd {$deploy->env->deploy_to}",$deploy->env->scm->update());
@@ -35,7 +35,7 @@ group('deploy', function() {
   });
 
   desc("Complete deployment stack (1 and done)");
-  task('initial','deploy:setup','deploy:update', function($app) {
+  task('initial','app','deploy:setup','deploy:update', function($app) {
     //$app->invoke('deploy:setup');
     //$app->invoke('deploy:update');
   });

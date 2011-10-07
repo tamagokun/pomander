@@ -103,8 +103,7 @@ function multi_role_support($role,$app)
 {
   global $deploy;
   $deploy->env->role($role);
-  $tasks = $app->get_task_list();
-  foreach($tasks as $task_name=>$desc)
+  foreach($app->top_level_tasks as $task_name)
   {
     if( in_array($role,$app->resolve($task_name)->dependencies()) )
     {
@@ -117,7 +116,7 @@ function multi_role_support($role,$app)
         }
       });
     }
-  }    
+  }
 }
 
 require_once('defaults.php');
