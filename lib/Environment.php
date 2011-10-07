@@ -1,13 +1,14 @@
 <?php
 class Environment
 {
-  public $name,$target;
+  public $name,$target,$scm;
   private $config,$shell,$current_role,$current_role_key;
 
   public function __construct($env_name,$args=null)
   {
     $this->name = $env_name;
     $this->config = (array) $args;
+    $this->add_scm();
   }
 
   public function __get($prop)
@@ -92,6 +93,15 @@ class Environment
   {
     info("target",$this->target);
     return true;
+  }
+
+  private function add_scm()
+  {
+    require_once("Scm.php");
+    foreach(glob("lib/Scm/*.php") as $file) require_once "Scm/".basename($file);
+    $this->config["scm"] = (!isset($this->config["scm"]))? "Git" : ucwords(strtolower($this->config["scm"]));
+    if( !$this->scm = new $this->config["scm"]($this->repository) )
+      warn("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");  
   }
 
 }
