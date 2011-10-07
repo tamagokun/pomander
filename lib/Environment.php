@@ -2,7 +2,7 @@
 class Environment
 {
   public $name,$target,$scm;
-  private $config,$shell,$current_role,$current_role_key;
+  private $config,$shell,$current_role,$mysql;
 
   public function __construct($env_name,$args=null)
   {
@@ -92,12 +92,29 @@ class Environment
 
   public function put($what,$where)
   {
-    
+    if($this->target)
+      $cmd = "rsync -avuz --quiet $what {$this->user}@{$this->target}:$where";
+    else
+      $cmd = "cp $what $where";
+    return shell_exec($cmd);
   }
 
   public function get($what,$where)
   {
-    
+    if($this->target)
+      $cmd = "rsync -avuz --quiet {$this->user}@{$this->target}:$what $where";
+    else
+      $cmd = "cp $what $where";
+    return shell_exec($cmd);
+  }
+
+  public function query($query,$select_db)
+  {
+    if(!$this->mysql)
+      $this->db_connect();
+    if( $select_db )
+      mysql_select_db($this->wordpress["db"],$this->mysql);
+    mysql_query($query,$this->mysql);
   }
 
   private function new_target()
@@ -113,6 +130,11 @@ class Environment
     $this->config["scm"] = (!isset($this->config["scm"]))? "Git" : ucwords(strtolower($this->config["scm"]));
     if( !$this->scm = new $this->config["scm"]($this->repository) )
       warn("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");  
+  }
+
+  private function db_connect()
+  {
+    $this->mysql = mysql_connect($this->wordpress["db_host"],$this->wordpress["db_user"],$this->wordpress["db_password"]);  
   }
 
 }

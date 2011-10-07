@@ -90,6 +90,12 @@ function run()
   echo $deploy->env->exec($cmd);
 }
 
+function query($query,$select_db = true)
+{
+  global $deploy;
+  $deploy->env->query($query,$select_db);
+}
+
 function flatten($array)
 {
   if(!$array) return false;

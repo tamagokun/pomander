@@ -43,6 +43,13 @@ task('deploy','deploy:update');
 
 //db
 group('db', function() {
+  desc("Create database in environment if it doesn't already exist");
+  task('create','db', function() {
+    global $deploy;
+    info("create","database {$deploy->env->wordpress["db"]}");
+    query("create database if not exists {$deploy->env->wordpress["db"]}", false);
+  });
+
   desc("Perform a backup of environment's database for use in merging");
   task('backup','db', function($app) {
     
@@ -74,14 +81,17 @@ task('wp_config','app', function($app) {
 });
 
 desc("Wordpress task stack for local machine (1 and done)");
-task('wpify', function($app) {
+task('wpify','config','deploy:wordpress','deploy:toolkit','db:create', function($app) {
   
 });
 
 //local
 desc("Create default deployment config.yml for project");
 task('config', function($app) {
-  
+  if( file_exists("./config.yml"))
+    warn("config.yml","Already exists, skipping");
+  else
+    put("lib/Template/config.yml","./config.yml");
 });
 
 ?>
