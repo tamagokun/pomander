@@ -3,7 +3,7 @@ development: &defaults
   user: cap
   repository: cap@git.msltechdev.com:vpsi/wordpress.git
   revision: 
-  deploy_to:
+  deploy_to: /Users/mkruk/Sites/php/TESTING
   backup: false
   app:
   db:

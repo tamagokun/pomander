@@ -4,7 +4,7 @@ class Git extends Scm
   public function create()
   {
     global $deploy;
-    return "git clone $repository {$deploy->env->deploy_to}";
+    return "git clone {$this->repository} {$deploy->env->deploy_to}";
   }
 
   public function update()
