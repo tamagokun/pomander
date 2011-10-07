@@ -1,0 +1,22 @@
+development: &defaults
+  url: localhost
+  user: cap
+  repository:
+  revision:
+  deploy_to:
+  backup: false
+  app:
+  db:
+  wordpress:
+    version: 3.2.1
+    db: wp_database
+    db_user: root
+    db_password:
+    db_host: localhost
+    db_prefix: wp_
+    db_charset: utf8
+    base_uri: /wordpress
+staging:
+  <<:   *defaults
+production:
+  <<:   *defaults

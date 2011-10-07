@@ -6,6 +6,7 @@ class Environment
 
   public function __construct($env_name,$args=null)
   {
+    $this->deploy_to = "./";
     $this->name = $env_name;
     $this->config = (array) $args;
     $this->init_scm();
@@ -87,6 +88,16 @@ class Environment
       return $this->shell->exec($cmd);
     else
       return shell_exec($cmd);
+  }
+
+  public function put($what,$where)
+  {
+    
+  }
+
+  public function get($what,$where)
+  {
+    
   }
 
   private function new_target()
