@@ -36,8 +36,10 @@ group('deploy', function() {
     
   });
 
+  task('all','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit');
+
   desc("Complete deployment stack (1 and done)");
-  task('initial','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit','db','db:create');
+  task('initial','deploy:all','db:create');
 });
 task('deploy','deploy:update');
 

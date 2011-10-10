@@ -112,18 +112,28 @@ function multi_role_support($role,$app)
   foreach($app->top_level_tasks as $task_name)
   {
     if( in_array($role,$app->resolve($task_name)->dependencies()) )
+      return inject_multi_role_after($role,$task_name);
+    else
     {
-      after($task_name,function($app) use($task_name,$role) {
-        global $deploy;
-        if( $deploy->env->next_role($role) )
-        {
-          warn("multi_role","I have another target for $role");
-          $app->reset();
-          $app->invoke($task_name);
-        }
-      });
+      foreach($app->resolve($task_name)->dependencies() as $dependency)
+      {
+        if( in_array($role,$app->resolve($dependency)->dependencies()) )
+          return inject_multi_role_after($role,$dependency);
+      }
     }
   }
+}
+
+function inject_multi_role_after($role,$task_name)
+{
+  after($task_name,function($app) use($task_name,$role) {
+    global $deploy;
+    if( $deploy->env->next_role($role) )
+    {
+      $app->reset();
+      $app->invoke($task_name);
+    }
+  });
 }
 
 require_once('defaults.php');
