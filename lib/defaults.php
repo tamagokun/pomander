@@ -24,7 +24,7 @@ group('deploy', function() {
     $cmd = array(
       "svn export http://svn.automattic.com/wordpress/tags/{$deploy->env->wordpress["version"]} {$deploy->env->deploy_to}/wordpress --force --quiet",
       "rm -rf {$deploy->env->deploy_to}/wordpress/public",
-      "ls -s {$deploy->env->deploy_to}/public {$deploy->env->deploy_to}/wordpress/public",
+      "ln -s {$deploy->env->deploy_to}/public {$deploy->env->deploy_to}/wordpress/public",
       "mkdir -p {$deploy->env->deploy_to}/public/uploads",
       "touch {$deploy->env->deploy_to}/wordpress/.htaccess"
     );
