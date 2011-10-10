@@ -32,7 +32,7 @@ group('deploy', function() {
   });
 
   desc("Deploy MSL Toolkit in environment.");
-  task('toolkit','app', function() {
+  task('toolkit',':toolkit','app', function() {
     
   });
 
@@ -94,6 +94,11 @@ task('config', function($app) {
     warn("config.yml","Already exists, skipping");
   else
     put("lib/Template/config.yml","./config.yml");
+});
+
+desc("Update MSL toolkit");
+task('toolkit',function($app) {
+    
 });
 
 ?>
