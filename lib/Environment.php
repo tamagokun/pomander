@@ -35,15 +35,13 @@ class Environment
     if( !$this->current_role )
     {
       $this->current_role = $this->$key;
-      $this->target = $this->current_role[0];
-      return $this->new_target();
+      return $this->update_target($this->current_role[0]);
     }else
     {
       $index = array_search($this->target,$this->current_role);
       if( isset($this->current_role[$index+1]))
       {
-        $this->target = $this->current_role[$index+1];
-        return $this->new_target();
+        return $this->update_target($this->current_role[$index+1]);
       }
       else
         $this->current_role = false;
@@ -62,7 +60,6 @@ class Environment
     if( !isset($this->target) ) return false;
     include_once('Net/SSH2.php');
     include_once('Crypt/RSA.php');
-    define('NET_SSH2_LOGGING', NET_SSH2_LOG_COMPLEX);
     $this->shell = new Net_SSH2($this->target);
     $key_path = home()."/.ssh/id_rsa";
     if( file_exists($key_path) )
@@ -117,8 +114,13 @@ class Environment
     mysql_query($query,$this->mysql);
   }
 
-  private function new_target()
+  private function update_target($target)
   {
+    if( $this->target == $target )
+      return true;
+    if( $this->shell )
+      $this->shell = null;
+    $this->target = $target;
     info("target",$this->target);
     return true;
   }
