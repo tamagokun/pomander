@@ -113,10 +113,11 @@ function multi_role_support($role,$app)
   {
     if( in_array($role,$app->resolve($task_name)->dependencies()) )
     {
-      after($task_name,function($app) use($task_name) {
+      after($task_name,function($app) use($task_name,$role) {
         global $deploy;
-        if( $deploy->env->next_role() )
+        if( $deploy->env->next_role($role) )
         {
+          warn("multi_role","I have another target for $role");
           $app->reset();
           $app->invoke($task_name);
         }

@@ -2,13 +2,15 @@
 class Environment
 {
   public $name,$target,$scm;
-  private $config,$shell,$current_role,$mysql;
+  private $config,$shell,$mysql;
+  private $roles;
 
   public function __construct($env_name,$args=null)
   {
     $this->deploy_to = "./";
     $this->name = $env_name;
     $this->config = (array) $args;
+    $this->roles = array("app"=>null,"db"=>null);
     $this->init_scm();
   }
 
@@ -31,28 +33,22 @@ class Environment
 
   public function role($key)
   {
+    require_once("Role.php");
     if(!$this->$key) return false;
-    if( !$this->current_role )
+    if( !$this->roles[$key] )
     {
-      $this->current_role = $this->$key;
-      return $this->update_target($this->current_role[0]);
+      $this->roles[$key] = new Role($this->$key);
+      return $this->update_target($this->roles[$key]->target());
     }else
     {
-      $index = array_search($this->target,$this->current_role);
-      if( isset($this->current_role[$index+1]))
-      {
-        return $this->update_target($this->current_role[$index+1]);
-      }
-      else
-        $this->current_role = false;
+      return $this->update_target($this->roles[$key]->next());
     }
   }
 
-  public function next_role()
+  public function next_role($key)
   {
-    if(!isset($this->target) || !isset($this->current_role)) return false;
-    $index = array_search($this->target,$this->current_role);
-    return isset($this->current_role[$index+1]);
+    if( !$this->roles[$key]) return false;
+    return $this->roles[$key]->has_target($this->roles[$key]->current+1);
   }
 
   public function connect()
@@ -116,8 +112,8 @@ class Environment
 
   private function update_target($target)
   {
-    if( $this->target == $target )
-      return true;
+    if( !$target ) return false;
+    if( $this->target == $target ) return true;
     if( $this->shell )
       $this->shell = null;
     $this->target = $target;

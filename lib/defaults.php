@@ -37,7 +37,7 @@ group('deploy', function() {
   });
 
   desc("Complete deployment stack (1 and done)");
-  task('initial','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit','db:create');
+  task('initial','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit','db','db:create');
 });
 task('deploy','deploy:update');
 
@@ -47,7 +47,7 @@ group('db', function() {
   task('create','db', function() {
     global $deploy;
     info("create","database {$deploy->env->wordpress["db"]}");
-    query("create database if not exists {$deploy->env->wordpress["db"]}", false);
+    //query("create database if not exists {$deploy->env->wordpress["db"]}", false);
   });
 
   desc("Perform a backup of environment's database for use in merging");
