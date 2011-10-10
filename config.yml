@@ -34,3 +34,12 @@ production:
     - web-02.mslideas.com
   db:
     - web-01.mslideas.com
+  wordpress:
+    version: 3.2.1
+    db: JUST_TESTING
+    db_user: vanpools
+    db_password: vanpools!
+    db_host: vip-db
+    db_prefix: wp_
+    db_charset: utf8
+    base_uri:

@@ -108,7 +108,7 @@ class Environment
   public function query($query,$select_db)
   {
     if(!$this->mysql)
-      $this->db_connect();
+      if(!$this->db_connect()) return false;
     if( $select_db )
       mysql_select_db($this->wordpress["db"],$this->mysql);
     mysql_query($query,$this->mysql);
@@ -136,7 +136,10 @@ class Environment
 
   private function db_connect()
   {
-    $this->mysql = mysql_connect($this->wordpress["db_host"],$this->wordpress["db_user"],$this->wordpress["db_password"]);  
+    $this->mysql = @mysql_connect($this->wordpress["db_host"],$this->wordpress["db_user"],$this->wordpress["db_password"]);
+    if( !$this->mysql )
+      warn("mysql","there was a problem establishing a connection");
+    return $this->mysql;
   }
 
 }
