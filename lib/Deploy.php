@@ -87,6 +87,18 @@ function run()
   echo $deploy->env->exec($cmd);
 }
 
+function put($what,$where)
+{
+  global $deploy;
+  $deploy->env->put($what,$where);
+}
+
+function get($what,$where)
+{
+  global $deploy;
+  $deploy->env->get($what,$where);
+}
+
 function query($query,$select_db = true)
 {
   global $deploy;
