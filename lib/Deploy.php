@@ -1,5 +1,6 @@
 <?php
 require_once("Environment.php");
+require_once("helpers.php");
 
 class Deploy
 {
@@ -103,15 +104,6 @@ function query($query,$select_db = true)
 {
   global $deploy;
   $deploy->env->query($query,$select_db);
-}
-
-function flatten($array)
-{
-  if(!$array) return false;
-  $flattened = array();
-  foreach( new RecursiveIteratorIterator(new RecursiveArrayIterator($array)) as $value)
-    $flattened[] = $value;
-  return $flattened;
 }
 
 function multi_role_support($role,$app)
