@@ -14,5 +14,10 @@ class Git extends Scm
     return "git fetch origin && git reset --hard $revision";
   }
 
+  public function revision()
+  {
+    return "echo -e `git log --pretty=format:'%H%d' -n 1`";
+  }
+
 }
 ?>

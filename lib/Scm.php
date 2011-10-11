@@ -17,5 +17,10 @@ abstract class Scm
   {
     return "";  
   }
+
+  public function revision()
+  {
+    return "";  
+  }
 }
 ?>

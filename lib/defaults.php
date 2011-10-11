@@ -42,6 +42,11 @@ group('deploy', function() {
   task('initial','deploy:all','db:create');
 });
 task('deploy','deploy:update');
+task('deployed','app',function() {
+  global $deploy;
+  info("deployed","checking the current deployed revision");
+  run("cd {$deploy->env->deploy_to}",$deploy->env->scm->revision());
+});
 
 //db
 group('db', function() {

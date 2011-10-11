@@ -12,5 +12,10 @@ class Svn extends Scm
     return "svn update";
   }
 
+  public function revision()
+  {
+    return "svn info | grep 'Revision:' | cut -f2 -d\\";
+  }
+
 }
 ?>
