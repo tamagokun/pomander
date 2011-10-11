@@ -33,7 +33,8 @@ group('deploy', function() {
 
   desc("Deploy MSL Toolkit in environment.");
   task('toolkit',':toolkit','app', function() {
-    
+    info("deploy","injecting toolkit");
+    put("./.toolkit/","{$deploy->env->deploy_to}/public/");
   });
 
   task('all','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit');
@@ -103,7 +104,13 @@ task('config', function($app) {
 
 desc("Update MSL toolkit");
 task('toolkit',function($app) {
-    
+    info("git","updating toolkit");
+    if( file_exists("./.toolkit") )
+      shell_exec("git clone cap@git.msltechdev.com:skeleton/toolkit.git ./.toolkit");
+    else
+      shell_exec("cd ./.toolkit && git pull");
+    info("toolkit","injecting to public/");
+    shell_exec("yes | cp -r ./.toolkit/public/* ./public");
 });
 
 ?>
