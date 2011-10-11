@@ -33,8 +33,9 @@ group('deploy', function() {
 
   desc("Deploy MSL Toolkit in environment.");
   task('toolkit',':toolkit','app', function() {
+    global $deploy;
     info("deploy","injecting toolkit");
-    put("./.toolkit/","{$deploy->env->deploy_to}/public/");
+    put("./.toolkit/public/","{$deploy->env->deploy_to}/public/");
   });
 
   task('all','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit');
@@ -85,11 +86,11 @@ group('uploads', function() {
 //wordpress
 desc("Create and deploy wp-config.php for environment");
 task('wp_config','app', function($app) {
-  
+  file_put_contents("./wp-config.php",include("Template/wp-config.php"));
 });
 
 desc("Wordpress task stack for local machine (1 and done)");
-task('wpify','config','deploy:wordpress','deploy:toolkit','db:create', function($app) {
+task('wpify','config','deploy:wordpress','toolkit','db:create', function($app) {
   
 });
 

@@ -15,7 +15,7 @@ development: &defaults
     db_host: localhost
     db_prefix: wp_
     db_charset: utf8
-    base_uri: 
+    base_uri: /php/deploy/wordpress
 staging:
   <<:   *defaults
   user: cap
