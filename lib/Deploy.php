@@ -76,10 +76,7 @@ function puts($text)
 function home()
 {
   if(!Deploy::$home)
-  {
     Deploy::$home = trim(shell_exec("cd ~ && pwd"),"\r\n");
-    shell_exec("cd ".getcwd());
-  }
   return Deploy::$home;
 }
 
