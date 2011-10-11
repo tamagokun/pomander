@@ -36,4 +36,33 @@ function flatten($array)
   return $flattened;
 }
 
+function info($status,$msg)
+{
+  puts(" * ".colorize("info ",32).colorize($status." ",35).$msg);
+}
+
+function warn($status,$msg)
+{
+  puts(" * ".colorize("warn ",31).colorize($status." ",35).$msg);
+}
+
+function puts($text)
+{
+  echo $text."\n";  
+}
+
+function colorize($text,$color)
+{
+  #31 red
+  #32 green
+  #35 purple
+  return "\033[{$color}m{$text}\033[0m";
+}
+
+function home()
+{
+  if(!isset(builder()->get_application()->home))
+    builder()->get_application()->home = trim(shell_exec("cd ~ && pwd"),"\r\n");
+  return builder()->get_application()->home;
+}
 ?>

@@ -4,38 +4,34 @@
 group('deploy', function() {
   
   desc("Setup application directory in environment.");
-  task('setup','app', function() {
-    global $deploy;
+  task('setup','app', function($app) {
     info("deploy","setting up environment");
-    run("umask 002","rm -rf {$deploy->env->deploy_to}",$deploy->env->scm->create());
+    run("umask 002","rm -rf {$app->env->deploy_to}",$app->env->scm->create());
   });
   
   desc("Update code to latest changes.");
   task('update','app', function($app) {
-    global $deploy;
     info("deploy","updating code");
-    run("cd {$deploy->env->deploy_to}",$deploy->env->scm->update());
+    run("cd {$app->env->deploy_to}",$app->env->scm->update());
   });
 
   desc("Deploy Wordpress in environment.");
   task('wordpress','app', function() {
-    global $deploy;
-    info("fetch","Wordpress {$deploy->env->wordpress["version"]}");
+    info("fetch","Wordpress {$app->env->wordpress["version"]}");
     $cmd = array(
-      "svn export http://svn.automattic.com/wordpress/tags/{$deploy->env->wordpress["version"]} {$deploy->env->deploy_to}/wordpress --force --quiet",
-      "rm -rf {$deploy->env->deploy_to}/wordpress/public",
-      "ln -s {$deploy->env->deploy_to}/public {$deploy->env->deploy_to}/wordpress/public",
-      "mkdir -p {$deploy->env->deploy_to}/public/uploads",
-      "touch {$deploy->env->deploy_to}/wordpress/.htaccess"
+      "svn export http://svn.automattic.com/wordpress/tags/{$app->env->wordpress["version"]} {$app->env->deploy_to}/wordpress --force --quiet",
+      "rm -rf {$app->env->deploy_to}/wordpress/public",
+      "ln -s {$app->env->deploy_to}/public {$app->env->deploy_to}/wordpress/public",
+      "mkdir -p {$app->env->deploy_to}/public/uploads",
+      "touch {$app->env->deploy_to}/wordpress/.htaccess"
     );
     run($cmd);
   });
 
   desc("Deploy MSL Toolkit in environment.");
-  task('toolkit',':toolkit','app', function() {
-    global $deploy;
+  task('toolkit',':toolkit','app', function($app) {
     info("deploy","injecting toolkit");
-    put("./.toolkit/public/","{$deploy->env->deploy_to}/public/");
+    put("./.toolkit/public/","{$app->env->deploy_to}/public/");
   });
 
   task('all','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit');
@@ -44,18 +40,16 @@ group('deploy', function() {
   task('initial','deploy:all','db:create');
 });
 task('deploy','deploy:update');
-task('deployed','app',function() {
-  global $deploy;
+task('deployed','app',function($app) {
   info("deployed","checking the current deployed revision");
-  run("cd {$deploy->env->deploy_to}",$deploy->env->scm->revision());
+  run("cd {$app->env->deploy_to}",$app->env->scm->revision());
 });
 
 //db
 group('db', function() {
   desc("Create database in environment if it doesn't already exist");
-  task('create','db', function() {
-    global $deploy;
-    info("create","database {$deploy->env->wordpress["db"]}");
+  task('create','db', function($app) {
+    info("create","database {$app->env->wordpress["db"]}");
     //query("create database if not exists {$deploy->env->wordpress["db"]}", false);
   });
 
