@@ -25,7 +25,7 @@ function load_environments($config)
 
 //core tasks
 task("environment",function($app) {
-  if(!$app->env)
+  if(!isset($app->env))
     $app->invoke($app->default_env);
 });
 

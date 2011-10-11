@@ -16,7 +16,7 @@ group('deploy', function() {
   });
 
   desc("Deploy Wordpress in environment.");
-  task('wordpress','app', function() {
+  task('wordpress','app', function($app) {
     info("fetch","Wordpress {$app->env->wordpress["version"]}");
     $cmd = array(
       "svn export http://svn.automattic.com/wordpress/tags/{$app->env->wordpress["version"]} {$app->env->deploy_to}/wordpress --force --quiet",
@@ -51,6 +51,7 @@ group('db', function() {
   task('create','db', function($app) {
     info("create","database {$app->env->wordpress["db"]}");
     //query("create database if not exists {$deploy->env->wordpress["db"]}", false);
+    run("cd {$app->env->deploy_to}","./phake production db:create");
   });
 
   desc("Perform a backup of environment's database for use in merging");
@@ -68,23 +69,26 @@ group('db', function() {
 group('uploads', function() {
   desc("Download uploads from environment");
   task('pull','app', function($app) {
-    
+    puts info("uploads","backing up environment uploads");
+    get("{$app->env->deploy_to}/public/uploads","./public/uploads");
   });
 
   desc("Place all local uploads into environment");
   task('push','app', function($app) {
-    
+    puts info("uploads","deploying");
+    put("./public/uploads","{$app->env->deploy_to}/public/uploads");
   });
 });
 
 //wordpress
 desc("Create and deploy wp-config.php for environment");
 task('wp_config','app', function($app) {
+  info("config","creating wp-config.php");
   file_put_contents("./wp-config.php",include("Template/wp-config.php"));
 });
 
 desc("Wordpress task stack for local machine (1 and done)");
-task('wpify','config','deploy:wordpress','toolkit','db:create', function($app) {
+task('wpify','environment','config','deploy:wordpress','toolkit','db:create','wp_config', function($app) {
   
 });
 
@@ -105,7 +109,7 @@ task('toolkit',function($app) {
     else
       shell_exec("git clone cap@git.msltechdev.com:skeleton/toolkit.git ./.toolkit");
     info("toolkit","injecting to public/");
-    shell_exec("cp -r ./.toolkit/public/* ./public");
+    if(!copy_r("./.toolkit/public","./public")) warn("copy","there was a problem injecting the toolkit");
 });
 
 ?>
