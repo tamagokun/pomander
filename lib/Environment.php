@@ -11,7 +11,7 @@ class Environment
     $this->name = $env_name;
     $this->config = (array) $args;
     $this->roles = array("app"=>null,"db"=>null);
-    $this->init_scm();
+    $this->init_scm_adapter();
   }
 
   public function __get($prop)
@@ -121,13 +121,18 @@ class Environment
     return true;
   }
 
-  private function init_scm()
+  private function init_scm_adapter()
   {
     require_once("Scm.php");
     foreach(glob("lib/Scm/*.php") as $file) require_once "Scm/".basename($file);
     $this->config["scm"] = (!isset($this->config["scm"]))? "Git" : ucwords(strtolower($this->config["scm"]));
     if( !$this->scm = new $this->config["scm"]($this->repository) )
-      warn("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");  
+      warn("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
+    require_once("Db.php");
+    foreach(glob("lib/Db/*.php") as $file) require_once "Db/".basename($file);
+    $this->config["adapter"] = (!isset($this->config["adapter"]))? "Mysql" : ucwords(strtolower($this->config["adapter"]));
+    if( !$this->adapter = new $this->config["adapter"]($this->wordpress) )
+      warn("db","There is no recipe for {$this->config["adapter"]}, perhaps create your own?");
   }
 
   private function db_connect()
