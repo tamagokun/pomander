@@ -1,17 +1,18 @@
 <?php
 class Environment
 {
-  public $name,$target,$scm;
+  public $name,$target,$scm,$adapter;
   private $config,$shell,$mysql;
   private $roles;
 
   public function __construct($env_name,$args=null)
   {
-    $this->deploy_to = "./";
     $this->name = $env_name;
     $this->config = (array) $args;
     $this->roles = array("app"=>null,"db"=>null);
     $this->init_scm_adapter();
+    if(!isset($this->deploy_to) || empty($this->deploy_to))
+      $this->deploy_to = ".";
   }
 
   public function __get($prop)

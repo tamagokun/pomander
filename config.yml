@@ -4,14 +4,14 @@ development: &defaults
   repository: cap@git.msltechdev.com:vpsi/wordpress.git
   revision: 
   deploy_to:
-  backup: false
+  backup: true
   app:
   db:
   wordpress:
     version: 3.2.1
     db: wp_vpsi
     db_user: root
-    db_password:
+    db_password: bananaphone
     db_host: localhost
     db_prefix: wp_
     db_charset: utf8
@@ -26,9 +26,11 @@ staging:
     - stage1.mslideas.com
 production:
   <<:   *defaults
+  url: justtesting.mslideas.com
   user: cap
   deploy_to: /msl/php/TESTING
   revision: origin/master
+  backup: true
   app:
     - web-01.mslideas.com
     - web-02.mslideas.com

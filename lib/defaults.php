@@ -34,7 +34,7 @@ group('deploy', function() {
     put("./.toolkit/public/","{$app->env->deploy_to}/public/");
   });
 
-  task('all','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit');
+  task('all','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit','wp_config');
 
   desc("Complete deployment stack (1 and done)");
   task('initial','deploy:all','db:create');
@@ -50,18 +50,53 @@ group('db', function() {
   desc("Create database in environment if it doesn't already exist");
   task('create','db', function($app) {
     info("create","database {$app->env->wordpress["db"]}");
-    //query("create database if not exists {$deploy->env->wordpress["db"]}", false);
-    run("cd {$app->env->deploy_to}","./phake production db:create");
+    run($app->env->adapter->create());
   });
 
   desc("Perform a backup of environment's database for use in merging");
   task('backup','db', function($app) {
-    
+    info("backup",$app->env->wordpress["db"]);
+    $cmd = array(
+      "touch {$app->env->deploy_to}/dump.sql",
+      $app->env->adapter->dump($app->env->deploy_to."/dump.sql")
+    );
+    run($cmd);
+    info("fetch","{$app->env->deploy_to}/dump.sql");
+    get("{$app->env->deploy_to}/dump.sql","./tmpdump.sql");
+    $app->old_url = $app->env->url;
   });
 
   desc("Merge a backed up database into environment");
   task('merge','db', function($app) {
-    
+    info("merge","database {$app->env->wordpress["db"]}");
+    $file = $app->env->deploy_to."/deploy/dump.sql";
+    if(!file_exists("./tmpdump.sql"))
+      warn("merge","i need a backup to merge with (dump.sql). Try running db:backup first");
+    if(isset($app->old_url))
+    {
+      info("premerge","replace {$app->old_url} with {$app->env->url}");
+      shell_exec("sed -e 's|http://{$app->old_url}|http://{$app->env->url}|g' ./tmpdump.sql > ./dump.sql.changed");
+      shell_exec("rm ./tmpdump.sql && mv ./dump.sql.changed ./tmpdump.sql");
+    }
+    if( isset($app->env->backup) && $app->env->backup)
+      $app->invoke("db:full");
+    info("merge","dump.sql");
+    put("./tmpdump.sql",$file);
+    run($app->env->adapter->merge($file),"rm -rf $file");
+    info("clean","dump.sql");
+    unlink("./tmpdump.sql");
+  });
+
+  desc("Store a full database backup");
+  task('full','db',function($app) {
+    $file = $app->env->wordpress["db"]."_".@date('Ymd_His').".bak.sql.bz2";
+    info("full backup",$file);
+    $cmd = array(
+      "umask 002",
+      "mkdir -p {$app->env->deploy_to}/backup",
+      $app->env->adapter->backup($app->env->deploy_to."/backup/".$file)
+    );
+    run($cmd);
   });
 });
 
@@ -69,13 +104,13 @@ group('db', function() {
 group('uploads', function() {
   desc("Download uploads from environment");
   task('pull','app', function($app) {
-    puts info("uploads","backing up environment uploads");
+    info("uploads","backing up environment uploads");
     get("{$app->env->deploy_to}/public/uploads","./public/uploads");
   });
 
   desc("Place all local uploads into environment");
   task('push','app', function($app) {
-    puts info("uploads","deploying");
+    info("uploads","deploying");
     put("./public/uploads","{$app->env->deploy_to}/public/uploads");
   });
 });
