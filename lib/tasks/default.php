@@ -76,10 +76,10 @@ group('db', function() {
 //local
 desc("Create default deployment config.yml for project");
 task('config', function($app) {
-  if( file_exists("./config.yml"))
-    warn("config.yml","Already exists, skipping");
+  if( file_exists("./deploy/development.yml"))
+    warn("development.yml","Already exists, skipping");
   else
-    put("lib/Template/config.yml","./config.yml");
+    put("lib/Template/config.yml","./deploy/development.yml");
 });
 
 //build

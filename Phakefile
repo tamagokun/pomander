@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__FILE__).'/lib/penkai/penkai.php');
-if( file_exists(builder()->get_application()->config_path) )
+if( has_environments() )
   config();
 else
-  warn("config","unable to locate config.yml");
+  warn("config","unable to locate any environments. try running 'config'");
 ?>

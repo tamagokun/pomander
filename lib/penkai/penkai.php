@@ -7,9 +7,20 @@ require_once("spyc.php");
 builder()->get_application()->config_path = getcwd()."/config.yml";
 builder()->get_application()->default_env = "development";
 
+function has_environments()
+{
+  $environments = glob("deploy/*.yml");
+  return (count($environments) > 0);
+}
+
 function config()
 {
-  load_environments(Spyc::YAMLLoad(builder()->get_application()->config_path));
+  $environments = glob("deploy/*.yml");
+  foreach($environments as $config)
+  {
+    $configs[basename($config,".yml")] = Spyc::YAMLLoad($config);
+  }
+  load_environments($configs);
 }
 
 function load_environments($config)
