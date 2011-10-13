@@ -1,13 +1,14 @@
 <?php
-require_once("helpers.php");
-require_once("Environment.php");
+set_include_path("lib");
+require_once("penkai/helpers.php");
+require_once("penkai/Environment.php");
+require_once("spyc.php");
 
 builder()->get_application()->config_path = getcwd()."/config.yml";
 builder()->get_application()->default_env = "development";
 
 function config()
 {
-  require_once("spyc.php");
   load_environments(Spyc::YAMLLoad(builder()->get_application()->config_path));
 }
 
@@ -85,5 +86,5 @@ function inject_multi_role_after($role,$task_name)
   });
 }
 
-require_once('defaults.php');
+require_once('lib/tasks/default.php');
 ?>

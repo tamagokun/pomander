@@ -55,6 +55,7 @@ class Environment
   public function connect()
   {
     if( !isset($this->target) ) return false;
+    set_include_path("lib/phpseclib");
     include_once('Net/SSH2.php');
     include_once('Crypt/RSA.php');
     $this->shell = new Net_SSH2($this->target);
@@ -124,13 +125,13 @@ class Environment
 
   private function init_scm_adapter()
   {
-    require_once("Scm.php");
-    foreach(glob("lib/Scm/*.php") as $file) require_once "Scm/".basename($file);
+    require_once("penkai/Scm.php");
+    foreach(glob("lib/penkai/Scm/*.php") as $file) require_once "penkai/Scm/".basename($file);
     $this->config["scm"] = (!isset($this->config["scm"]))? "Git" : ucwords(strtolower($this->config["scm"]));
     if( !$this->scm = new $this->config["scm"]($this->repository) )
       warn("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
-    require_once("Db.php");
-    foreach(glob("lib/Db/*.php") as $file) require_once "Db/".basename($file);
+    require_once("penkai/Db.php");
+    foreach(glob("lib/penkai/Db/*.php") as $file) require_once "penkai/Db/".basename($file);
     $this->config["adapter"] = (!isset($this->config["adapter"]))? "Mysql" : ucwords(strtolower($this->config["adapter"]));
     if( !$this->adapter = new $this->config["adapter"]($this->wordpress) )
       warn("db","There is no recipe for {$this->config["adapter"]}, perhaps create your own?");

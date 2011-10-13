@@ -1,10 +1,11 @@
 #!/usr/bin/env php
 <?php
-require dirname(__FILE__) . '/lib/phake.php';
-require dirname(__FILE__) . '/lib/utils.php';
-require dirname(__FILE__) . '/lib/global_helpers.php';
-require dirname(__FILE__) . '/lib/option_parser.php';
-require dirname(__FILE__) . '/lib/builder.php';
+set_include_path(dirname(__FILE__).'/lib/phake');
+require 'phake.php';
+require 'utils.php';
+require 'global_helpers.php';
+require 'option_parser.php';
+require 'builder.php';
 
 phake\Builder::$global = new phake\Builder;
 
