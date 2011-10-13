@@ -21,7 +21,7 @@ group('deploy',function() {
     put("./.toolkit/public/","{$app->env->deploy_to}/public/");
   });
 
-  task('all','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit','wp_config');
+  task('all','app','deploy:setup','deploy:update','deploy:wordpress','deploy:toolkit','wp_config','htaccess');
 
   desc("Complete Wordpress deployment stack (1 and done)");
   task('initial','deploy:all','db:create');
@@ -47,7 +47,17 @@ group('uploads', function() {
 desc("Create and deploy wp-config.php for environment");
 task('wp_config','app', function($app) {
   info("config","creating wp-config.php");
-  file_put_contents("./wp-config.php",include("Template/wp-config.php"));
+  file_put_contents("./tmp-wp-config",template("lib/penkai/Template/wp-config.php"));
+  put("./tmp-wp-config","{$app->env->deploy_to}/wp-config.php");
+  unlink("./tmp-wp-config");
+});
+
+desc("Create and deploy .htaccess for environments");
+task('htaccess','app', function($app) {
+  info("htaccess","creating .htaccess");
+  file_put_contents("./tmp-htaccess",template("lib/penkai/Template/htaccess.php"));
+  put("./tmp-htaccess","{$app->env->deploy_to}/wordpress/.htaccess");
+  unlink("./tmp-htaccess");
 });
 
 desc("Wordpress task stack for local machine (1 and done)");

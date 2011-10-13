@@ -101,7 +101,6 @@ task('_build', function($app) {
   }
   
   var_dump($files);
-  
 });
 
 task('update', function($app) {

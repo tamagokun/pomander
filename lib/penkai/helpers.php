@@ -41,6 +41,12 @@ function require_once_dir($dir)
   foreach(glob(get_include_path().DIRECTORY_SEPARATOR.$dir) as $file) require_once $file;
 }
 
+function template($file)
+{
+  set_include_path(".");
+  return include($file);
+}
+
 function info($status,$msg)
 {
   puts(" * ".colorize("info ",32).colorize($status." ",35).$msg);
