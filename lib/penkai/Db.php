@@ -1,11 +1,11 @@
 <?php
 abstract class Db
 {
-  public $wordpress;
+  public $config;
 
-  public function __construct($wordpress)
+  public function __construct($config)
   {
-    $this->wordpress = $wordpress;
+    $this->config = $config;
   }
 
   public function create()
