@@ -85,11 +85,32 @@ task('config', function($app) {
 //build
 task('_build', function($app) {
   
-  $dir = dirname(__FILE__);
+  //$dir = dirname(__FILE__);
 
-  $files = array(
-    
-  );
+  /*$files = glob("lib/*.php");
+  $files = array_merge($files,glob("lib/penkai/*.php"));
+  $files = array_merge($files,glob("lib/phake/*.php"));
+  $files = array_merge($files,glob("lib/phpseclib/*.php"));
+  $files = array_merge($files,glob("lib/tasks/*.php"));
+  */
+
+  $paths[] = "lib/*";
+  $files = array();
+
+  while(count($paths) != 0)
+  {
+    $i = array_shift($paths);
+    foreach(glob($i) as $file)
+    {
+      if(is_dir($file))
+        $paths[] = $file . '/*';
+      else
+        $files[] = $file;
+    }
+  }
+  
+  var_dump($files);
+  
 });
 
 ?>

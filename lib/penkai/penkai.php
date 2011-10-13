@@ -86,5 +86,5 @@ function inject_multi_role_after($role,$task_name)
   });
 }
 
-require_once('lib/tasks/default.php');
+require_once_dir("tasks/*.php");
 ?>
