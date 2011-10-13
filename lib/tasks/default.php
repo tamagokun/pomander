@@ -85,15 +85,6 @@ task('config', function($app) {
 //build
 task('_build', function($app) {
   
-  //$dir = dirname(__FILE__);
-
-  /*$files = glob("lib/*.php");
-  $files = array_merge($files,glob("lib/penkai/*.php"));
-  $files = array_merge($files,glob("lib/phake/*.php"));
-  $files = array_merge($files,glob("lib/phpseclib/*.php"));
-  $files = array_merge($files,glob("lib/tasks/*.php"));
-  */
-
   $paths[] = "lib/*";
   $files = array();
 
