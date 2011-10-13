@@ -104,4 +104,11 @@ task('_build', function($app) {
   
 });
 
+task('update', function($app) {
+  $dir = dirname(__FILE__)."/../../";
+  info("update","updating penkai to latest version");
+  echo shell_exec("cd $dir && git pull");
+  info("update","all done!");
+});
+
 ?>
