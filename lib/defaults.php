@@ -56,11 +56,7 @@ group('db', function() {
   desc("Perform a backup of environment's database for use in merging");
   task('backup','db', function($app) {
     info("backup",$app->env->wordpress["db"]);
-    $cmd = array(
-      "touch {$app->env->deploy_to}/dump.sql",
-      $app->env->adapter->dump($app->env->deploy_to."/dump.sql")
-    );
-    run($cmd);
+    run($app->env->adapter->dump($app->env->deploy_to."/dump.sql"));
     info("fetch","{$app->env->deploy_to}/dump.sql");
     get("{$app->env->deploy_to}/dump.sql","./tmpdump.sql");
     $app->old_url = $app->env->url;
