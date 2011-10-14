@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+define('PENKAI_PATH',dirname(__FILE__));
+set_include_path(PENKAI_PATH.'/lib/');
+require 'phake/phake.php';
+require 'phake/utils.php';
+require 'phake/global_helpers.php';
+require 'phake/option_parser.php';
+require 'phake/builder.php';
+
+$has_runfile = (file_exists(getcwd()."/Phakefile") || file_exists(getcwd()."/Phakefile.php"));
+if($has_runfile === true)
+  die();
+$directory = getcwd();
+if (!@chdir($directory)) {
+  throw new Exception("Couldn't change to directory '$directory'");
+} else {
+  echo "(in $directory)\n";
+}
+copy(PENKAI_PATH."/Phakefile","./Phakefile");
+?>
