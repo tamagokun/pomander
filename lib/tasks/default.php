@@ -79,7 +79,7 @@ task('config', function($app) {
   if( file_exists("./deploy/development.yml"))
     warn("development.yml","Already exists, skipping");
   else
-    put("lib/Template/config.yml","./deploy/development.yml");
+    copy(PENKAI_PATH."/lib/penkai/Template/config.yml","./deploy/development.yml");
 });
 
 //build

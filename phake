@@ -1,11 +1,12 @@
 #!/usr/bin/env php
 <?php
-set_include_path(dirname(__FILE__).'/lib/phake');
-require 'phake.php';
-require 'utils.php';
-require 'global_helpers.php';
-require 'option_parser.php';
-require 'builder.php';
+define('PENKAI_PATH',dirname(__FILE__));
+set_include_path(PENKAI_PATH.'/lib/');
+require 'phake/phake.php';
+require 'phake/utils.php';
+require 'phake/global_helpers.php';
+require 'phake/option_parser.php';
+require 'phake/builder.php';
 
 phake\Builder::$global = new phake\Builder;
 

@@ -1,5 +1,5 @@
 <?php
-set_include_path("lib");
+set_include_path(dirname(__FILE__)."/../");
 require_once("penkai/helpers.php");
 require_once("penkai/Environment.php");
 require_once("spyc.php");
@@ -37,6 +37,8 @@ function load_environments($config)
 
 //core tasks
 task("environment",function($app) {
+  if(!has_environments())
+    warn("config","unable to locate any environments. try running 'config'");
   if(!isset($app->env))
     $app->invoke($app->default_env);
 });
@@ -54,7 +56,6 @@ task('db','environment',function($app) {
 function run()
 {
   $cmd = implode(" && ",flatten(func_get_args()));
-  //echo $deploy->env->exec($cmd);
   echo builder()->get_application()->env->exec($cmd);
 }
 
