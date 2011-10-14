@@ -114,7 +114,7 @@ task('htaccess','app', function($app) {
 });
 
 desc("Wordpress task stack for local machine (1 and done)");
-task('wpify','wpify:new','environment','config','deploy:wordpress','toolkit','db:create','wp_config', function($app) {
+task('wpify','wpify:new','config','environment','deploy:wordpress','toolkit','db:create','wp_config', function($app) {
   info("wpify","success");
 });
 
