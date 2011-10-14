@@ -6,19 +6,20 @@ class Mysql extends Db
     return "mysql {$this->connect()} -e 'create database if not exists {$this->config["db"]}'";
   }
 
-  public function dump($file)
+  public function dump($file, $args = "")
   {
-    return "mysqldump {$this->connect()} {$this->config["db"]} --lock-tables=FALSE --skip-add-drop-table | sed -e 's|INSERT INTO|REPLACE INTO|' -e 's|CREATE TABLE|CREATE TABLE IF NOT EXISTS|' > $file";  
+    return "mysqldump {$this->connect()} {$this->config["db"]} $args > $file";  
   }
 
-  public function backup($file)
+  public function backup($file, $args = "")
   {
-    return "mysqldump {$this->connect()} {$this->config["db"]} --add-drop-table | bzip2 -c > $file";
+    return "mysqldump {$this->connect()} {$this->config["db"]} $args | bzip2 -c > $file";
   }
 
-  public function merge($file)
+  public function merge($file, $args = "")
   {
-    return "mysql {$this->connect()} {$this->config["db"]} --force < $file";
+    $args.= " --force";
+    return "mysql {$this->connect()} {$this->config["db"]} $args < $file";
   }
 
   public function connect()

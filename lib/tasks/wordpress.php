@@ -28,6 +28,57 @@ group('deploy',function() {
 
 });
 
+//db
+group('db', function() {
+  desc("Create database in environment if it doesn't already exist");
+  task('create','db', function($app) {
+    info("create","database {$app->env->wordpress["db"]}");
+    run($app->env->adapter->create());
+  });
+
+  desc("Perform a backup of environment's database for use in merging");
+  task('backup','db', function($app) {
+    info("backup",$app->env->wordpress["db"]);
+    run($app->env->adapter->dump($app->env->deploy_to."/dump.sql","--lock-tables=FALSE --skip-add-drop-table | sed -e 's|INSERT INTO|REPLACE INTO|' -e 's|CREATE TABLE|CREATE TABLE IF NOT EXISTS|'"));
+    info("fetch","{$app->env->deploy_to}/dump.sql");
+    get("{$app->env->deploy_to}/dump.sql","./tmpdump.sql");
+    $app->old_url = $app->env->url;
+  });
+
+  desc("Merge a backed up database into environment");
+  task('merge','db', function($app) {
+    info("merge","database {$app->env->wordpress["db"]}");
+    $file = $app->env->deploy_to."/deploy/dump.sql";
+    if(!file_exists("./tmpdump.sql"))
+      warn("merge","i need a backup to merge with (dump.sql). Try running db:backup first");
+    if(isset($app->old_url))
+    {
+      info("premerge","replace {$app->old_url} with {$app->env->url}");
+      shell_exec("sed -e 's|http://{$app->old_url}|http://{$app->env->url}|g' ./tmpdump.sql > ./dump.sql.changed");
+      shell_exec("rm ./tmpdump.sql && mv ./dump.sql.changed ./tmpdump.sql");
+    }
+    if( isset($app->env->backup) && $app->env->backup)
+      $app->invoke("db:full");
+    info("merge","dump.sql");
+    put("./tmpdump.sql",$file);
+    run($app->env->adapter->merge($file),"rm -rf $file");
+    info("clean","dump.sql");
+    unlink("./tmpdump.sql");
+  });
+
+  desc("Store a full database backup");
+  task('full','db',function($app) {
+    $file = $app->env->wordpress["db"]."_".@date('Ymd_His').".bak.sql.bz2";
+    info("full backup",$file);
+    $cmd = array(
+      "umask 002",
+      "mkdir -p {$app->env->deploy_to}/backup",
+      $app->env->adapter->backup($app->env->deploy_to."/backup/".$file, "--add-drop-table")
+    );
+    run($cmd);
+  });
+});
+
 //wordpress uploads
 group('uploads', function() {
   desc("Download uploads from environment");
@@ -69,13 +120,13 @@ task('wpify','environment','config','deploy:wordpress','toolkit','db:create','wp
 
 desc("Update MSL toolkit");
 task('toolkit',function($app) {
-    info("git","updating toolkit");
-    if( file_exists("./.toolkit") )
-      shell_exec("cd ./.toolkit && git pull");
-    else
-      shell_exec("git clone cap@git.msltechdev.com:skeleton/toolkit.git ./.toolkit");
-    info("toolkit","injecting to public/");
-    if(!copy_r("./.toolkit/public","./public")) warn("copy","there was a problem injecting the toolkit");
+  info("git","updating toolkit");
+  if( file_exists("./.toolkit") )
+    shell_exec("cd ./.toolkit && git pull");
+  else
+    shell_exec("git clone cap@git.msltechdev.com:skeleton/toolkit.git ./.toolkit");
+  info("toolkit","injecting to public/");
+  if(!copy_r("./.toolkit/public","./public")) warn("copy","there was a problem injecting the toolkit");
 });
 
 ?>
