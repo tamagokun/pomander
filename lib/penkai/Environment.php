@@ -55,7 +55,7 @@ class Environment
   public function connect()
   {
     if( !isset($this->target) ) return false;
-    set_include_path("lib/phpseclib");
+    set_include_path(PENKAI_PATH."/lib/phpseclib");
     include_once('Net/SSH2.php');
     include_once('Crypt/RSA.php');
     $this->shell = new Net_SSH2($this->target);

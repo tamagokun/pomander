@@ -43,7 +43,7 @@ function require_once_dir($dir)
 
 function template($file)
 {
-  set_include_path(".");
+  set_include_path(PENKAI_PATH);
   return include($file);
 }
 

@@ -1,5 +1,4 @@
 <?php
-set_include_path(dirname(__FILE__)."/../");
 require_once("penkai/helpers.php");
 require_once("penkai/Environment.php");
 require_once("spyc.php");

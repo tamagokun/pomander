@@ -33,13 +33,15 @@ group('uploads', function() {
   desc("Download uploads from environment");
   task('pull','app', function($app) {
     info("uploads","backing up environment uploads");
-    get("{$app->env->deploy_to}/public/uploads","./public/uploads");
+    umask(002);
+    if(!file_exists("./public/uploads")) @mkdir("./public/uploads");
+    get("{$app->env->deploy_to}/public/uploads/","./public/uploads/");
   });
 
   desc("Place all local uploads into environment");
   task('push','app', function($app) {
     info("uploads","deploying");
-    put("./public/uploads","{$app->env->deploy_to}/public/uploads");
+    put("./public/uploads/","{$app->env->deploy_to}/public/uploads");
   });
 });
 
