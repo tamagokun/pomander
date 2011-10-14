@@ -58,5 +58,4 @@ task('update', function($app) {
   echo shell_exec("cd $dir && git pull");
   info("update","all done!");
 });
-
 ?>

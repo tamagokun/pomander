@@ -114,8 +114,23 @@ task('htaccess','app', function($app) {
 });
 
 desc("Wordpress task stack for local machine (1 and done)");
-task('wpify','environment','config','deploy:wordpress','toolkit','db:create','wp_config', function($app) {
+task('wpify','wpify:new','environment','config','deploy:wordpress','toolkit','db:create','wp_config', function($app) {
   info("wpify","success");
+});
+
+group("wpify", function() {
+  task("new",function($app) {
+    umask(002);
+    info("create","deploy/");
+    @mkdir("./deploy");
+    info("create","public/");
+    @mkdir("./public");
+    info("create","wordpress/");
+    @mkdir("./wordpress");
+    info("create",".gitignore");
+    @file_put_contents("./.gitignore",template("lib/penkai/Template/gitignore.php"));
+    info("success","project structure created");
+  });
 });
 
 desc("Update MSL toolkit");
