@@ -88,7 +88,7 @@ class Environment
   public function put($what,$where)
   {
     if($this->target)
-      $cmd = "rsync -avuz --quiet $what {$this->user}@{$this->target}:$where";
+      $cmd = "rsync -avuzPO --quiet $what {$this->user}@{$this->target}:$where";
     else
       $cmd = "cp $what $where";
     return shell_exec($cmd);
@@ -97,7 +97,7 @@ class Environment
   public function get($what,$where)
   {
     if($this->target)
-      $cmd = "rsync -avuz --quiet {$this->user}@{$this->target}:$what $where";
+      $cmd = "rsync -avuzPO --quiet {$this->user}@{$this->target}:$what $where";
     else
       $cmd = "cp $what $where";
     return shell_exec($cmd);
