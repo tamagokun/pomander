@@ -11,5 +11,5 @@ if (!@chdir($directory)) {
 } else {
   echo "(in $directory)\n";
 }
-copy(POMANDER_PATH."/src/Template/Pomfile","./Pomfile");
+copy(POMANDER_PATH."pomander/Template/Pomfile","./Pomfile");
 ?>
