@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
-define('PENKAI_PATH',dirname(__FILE__));
-set_include_path(PENKAI_PATH.'/lib/');
+define('POMANDER_PATH',dirname(__FILE__).'/../lib/');
+set_include_path(POMANDER_PATH);
 require 'phake/phake.php';
 require 'phake/utils.php';
 require 'phake/global_helpers.php';
 require 'phake/option_parser.php';
 require 'phake/builder.php';
-
+require 'phake/phake.php';
 phake\Builder::$global = new phake\Builder;
 
 try {

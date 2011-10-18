@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+define('POMANDER_PATH',dirname(__FILE__).'/../lib/');
+
+$has_runfile = (file_exists(getcwd()."/Pomfile") || file_exists(getcwd()."/Pomfile.php"));
+if($has_runfile === true)
+  die();
+$directory = getcwd();
+if (!@chdir($directory)) {
+  throw new Exception("Couldn't change to directory '$directory'");
+} else {
+  echo "(in $directory)\n";
+}
+copy(POMANDER_PATH."/src/Template/Pomfile","./Pomfile");
+?>

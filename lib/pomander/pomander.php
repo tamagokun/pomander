@@ -1,6 +1,6 @@
 <?php
-require_once("penkai/helpers.php");
-require_once("penkai/Environment.php");
+require_once("pomander/helpers.php");
+require_once("pomander/Environment.php");
 require_once("spyc.php");
 
 builder()->get_application()->config_path = getcwd()."/config.yml";

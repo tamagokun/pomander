@@ -2,7 +2,7 @@
 namespace phake;
 
 function resolve_runfile($directory) {
-    $runfiles = array('Phakefile', 'Phakefile.php');
+    $runfiles = array('Pomfile', 'Pomfile.php');
     do {
         foreach ($runfiles as $r) {
             $candidate = $directory . '/' . $r;
@@ -11,7 +11,7 @@ function resolve_runfile($directory) {
             }
         }
         if ($directory == '/') {
-            throw new \Exception("No Phakefile found");
+            throw new \Exception("No Pomfile found");
         }
         $directory = dirname($directory);
     } while (true);

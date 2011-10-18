@@ -2,13 +2,13 @@
 
 //deploy
 group('deploy', function() {
-  
+
   desc("Setup application directory in environment.");
   task('setup','app', function($app) {
     info("deploy","setting up environment");
     run("umask 002","rm -rf {$app->env->deploy_to}",$app->env->scm->create());
   });
-  
+
   desc("Update code to latest changes.");
   task('update','app', function($app) {
     info("deploy","updating code");
@@ -28,12 +28,12 @@ task('config', function($app) {
   if( file_exists("./deploy/development.yml"))
     warn("development.yml","Already exists, skipping");
   else
-    copy(PENKAI_PATH."/lib/penkai/Template/config.yml","./deploy/development.yml");
+    copy(POMANDER_PATH."pomander/Template/config.yml","./deploy/development.yml");
 });
 
 //build
 task('_build', function($app) {
-  
+
   $paths[] = "lib/*";
   $files = array();
 
@@ -48,7 +48,7 @@ task('_build', function($app) {
         $files[] = $file;
     }
   }
-  
+
   var_dump($files);
 });
 

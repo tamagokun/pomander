@@ -1,0 +1,4 @@
+<?php
+require_once(get_include_path().'pomander/pomander.php');
+if(has_environments()) config();
+?>

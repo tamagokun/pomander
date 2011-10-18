@@ -1,7 +1,7 @@
 <?php
 
 group('deploy',function() {
-  
+
   desc("Deploy Wordpress in environment.");
   task('wordpress','app', function($app) {
     info("fetch","Wordpress {$app->env->wordpress["version"]}");
@@ -100,7 +100,7 @@ group('uploads', function() {
 desc("Create and deploy wp-config.php for environment");
 task('wp_config','app', function($app) {
   info("config","creating wp-config.php");
-  file_put_contents("./tmp-wp-config",template("lib/penkai/Template/wp-config.php"));
+  file_put_contents("./tmp-wp-config",template("pomander/Template/wp-config.php"));
   put("./tmp-wp-config","{$app->env->deploy_to}/wp-config.php");
   unlink("./tmp-wp-config");
 });
@@ -108,7 +108,7 @@ task('wp_config','app', function($app) {
 desc("Create and deploy .htaccess for environments");
 task('htaccess','app', function($app) {
   info("htaccess","creating .htaccess");
-  file_put_contents("./tmp-htaccess",template("lib/penkai/Template/htaccess.php"));
+  file_put_contents("./tmp-htaccess",template("pomander/Template/htaccess.php"));
   put("./tmp-htaccess","{$app->env->deploy_to}/wordpress/.htaccess");
   unlink("./tmp-htaccess");
 });
@@ -128,7 +128,7 @@ group("setup", function() {
     info("create","wordpress/");
     @mkdir("./wordpress");
     info("create",".gitignore");
-    @file_put_contents("./.gitignore",template("lib/penkai/Template/gitignore.php"));
+    @file_put_contents("./.gitignore",template("pomander/Template/gitignore.php"));
     info("success","project structure created");
   });
 });

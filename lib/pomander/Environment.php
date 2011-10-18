@@ -55,7 +55,7 @@ class Environment
   public function connect()
   {
     if( !isset($this->target) ) return false;
-    set_include_path(PENKAI_PATH."/lib/phpseclib");
+    set_include_path(POMANDER_PATH."phpseclib");
     include_once('Net/SSH2.php');
     include_once('Crypt/RSA.php');
     $this->shell = new Net_SSH2($this->target);
@@ -125,13 +125,13 @@ class Environment
 
   private function init_scm_adapter()
   {
-    require_once("penkai/Scm.php");
-    require_once_dir("penkai/Scm/*.php");
+    require_once("pomander/Scm.php");
+    require_once_dir("pomander/Scm/*.php");
     $this->config["scm"] = (!isset($this->config["scm"]))? "Git" : ucwords(strtolower($this->config["scm"]));
     if( !$this->scm = new $this->config["scm"]($this->repository) )
       warn("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
-    require_once("penkai/Db.php");
-    require_once_dir("penkai/Db/*.php");
+    require_once("pomander/Db.php");
+    require_once_dir("pomander/Db/*.php");
     $this->config["adapter"] = (!isset($this->config["adapter"]))? "Mysql" : ucwords(strtolower($this->config["adapter"]));
     if( !$this->adapter = new $this->config["adapter"]($this->wordpress) )
       warn("db","There is no recipe for {$this->config["adapter"]}, perhaps create your own?");

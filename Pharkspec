@@ -1,0 +1,13 @@
+<?php
+
+Phark::spec()
+  ->name('pomander')
+  ->authors('Mike Kruk <tamagokun@gmail.com>')
+  ->homepage('http://github.com/tamagokun/pomander')
+  ->version('1.0')
+  ->phpVersion('>=5.3')
+  ->summary('A command line tool for deploying PHP applications')
+  ->description('Pomander is a PHP-based command line tool for deploying applications. It is inspired by Rake/Capistrano, and is built on top of the Rake clone, Phake.')
+  ->classes('lib/**')
+  ;
+?>

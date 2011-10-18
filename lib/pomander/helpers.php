@@ -43,7 +43,7 @@ function require_once_dir($dir)
 
 function template($file)
 {
-  set_include_path(PENKAI_PATH);
+  set_include_path(POMANDER_PATH);
   return include($file);
 }
 
@@ -59,7 +59,7 @@ function warn($status,$msg)
 
 function puts($text)
 {
-  echo $text."\n";  
+  echo $text."\n";
 }
 
 function colorize($text,$color)
