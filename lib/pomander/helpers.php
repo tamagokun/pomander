@@ -38,13 +38,12 @@ function flatten($array)
 
 function require_once_dir($dir)
 {
-  foreach(glob(get_include_path().DIRECTORY_SEPARATOR.$dir) as $file) require_once $file;
+  foreach(glob(POMANDER_PATH.$dir) as $file) require_once $file;
 }
 
 function template($file)
 {
-  set_include_path(POMANDER_PATH);
-  return include($file);
+  return include(POMANDER_PATH.$file);
 }
 
 function info($status,$msg)

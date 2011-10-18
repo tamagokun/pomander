@@ -1,4 +1,5 @@
 <?php
-require_once(get_include_path().'pomander/pomander.php');
+require_once('pomander/lib/pomander/pomander.php');
+//plugins go here
 if(has_environments()) config();
 ?>

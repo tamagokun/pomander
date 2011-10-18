@@ -1,13 +1,12 @@
 #!/usr/bin/env php
 <?php
 define('POMANDER_PATH',dirname(__FILE__).'/../lib/');
-set_include_path(POMANDER_PATH);
-require_once 'phake/phake.php';
-require_once 'phake/utils.php';
-require_once 'phake/global_helpers.php';
-require_once 'phake/option_parser.php';
-require_once 'phake/builder.php';
-require_once 'phake/phake.php';
+require_once __DIR__.'/../lib/phake/phake.php';
+require_once __DIR__.'/../lib/phake/utils.php';
+require_once __DIR__.'/../lib/phake/global_helpers.php';
+require_once __DIR__.'/../lib/phake/option_parser.php';
+require_once __DIR__.'/../lib/phake/builder.php';
+require_once __DIR__.'/../lib/phake/phake.php';
 phake\Builder::$global = new phake\Builder;
 
 try {

@@ -125,12 +125,12 @@ class Environment
 
   private function init_scm_adapter()
   {
-    require_once("pomander/Scm.php");
+    require_once(__DIR__."/Scm.php");
     require_once_dir("pomander/Scm/*.php");
     $this->config["scm"] = (!isset($this->config["scm"]))? "Git" : ucwords(strtolower($this->config["scm"]));
     if( !$this->scm = new $this->config["scm"]($this->repository) )
       warn("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
-    require_once("pomander/Db.php");
+    require_once(__DIR__."/Db.php");
     require_once_dir("pomander/Db/*.php");
     $this->config["adapter"] = (!isset($this->config["adapter"]))? "Mysql" : ucwords(strtolower($this->config["adapter"]));
     if( !$this->adapter = new $this->config["adapter"]($this->wordpress) )

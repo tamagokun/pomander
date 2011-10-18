@@ -1,7 +1,7 @@
 <?php
-require_once("pomander/helpers.php");
-require_once("pomander/Environment.php");
-require_once("spyc.php");
+require_once(__DIR__."/helpers.php");
+require_once(__DIR__."/Environment.php");
+require_once(__DIR__."/../spyc.php");
 
 builder()->get_application()->config_path = getcwd()."/config.yml";
 builder()->get_application()->default_env = "development";
