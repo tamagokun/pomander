@@ -8,11 +8,11 @@ class Environment
   public function __construct($env_name,$args=null)
   {
     $this->name = $env_name;
-    $this->config = (array) $args;
+    $this->config = $this->defaults();
+    foreach((array) $args as $key=>$arg)
+      if($arg && !empty($arg)) $this->config[$key] = $arg;
     $this->roles = array("app"=>null,"db"=>null);
     $this->init_scm_adapter();
-    if(!isset($this->deploy_to) || empty($this->deploy_to))
-      $this->deploy_to = ".";
   }
 
   public function __get($prop)
@@ -52,6 +52,24 @@ class Environment
     return $this->roles[$key]->has_target($this->roles[$key]->current+1);
   }
 
+  public function multi_role_support($role,$app)
+  {
+    $this->role($role);
+    foreach($app->top_level_tasks as $task_name)
+    {
+      if( in_array($role,$app->resolve($task_name)->dependencies()) )
+        return $this->inject_multi_role_after($role,$task_name);
+      else
+      {
+        foreach($app->resolve($task_name)->dependencies() as $dependency)
+        {
+          if( in_array($role,$app->resolve($dependency)->dependencies()) )
+            return $this->inject_multi_role_after($role,$dependency);
+        }
+      }
+    }
+  }
+
   public function connect()
   {
     if( !isset($this->target) ) return false;
@@ -70,7 +88,6 @@ class Environment
       if( isset($this->password) )
         $key = $this->password;
     }
-
     if(!$this->shell->login($this->user,$key))
       warn("ssh","Login failed");
   }
@@ -88,7 +105,7 @@ class Environment
   public function put($what,$where)
   {
     if($this->target)
-      $cmd = "rsync -avuzPO --quiet $what {$this->user}@{$this->target}:$where";
+      $cmd = "{$this->rsync_cmd} {$this->rsync_flags} $what {$this->user}@{$this->target}:$where";
     else
       $cmd = "cp $what $where";
     return shell_exec($cmd);
@@ -97,19 +114,30 @@ class Environment
   public function get($what,$where)
   {
     if($this->target)
-      $cmd = "rsync -avuzPO --quiet {$this->user}@{$this->target}:$what $where";
+      $cmd = "{$this->rsync_cmd} {$this->rsync_flags} {$this->user}@{$this->target}:$what $where";
     else
       $cmd = "cp $what $where";
     return shell_exec($cmd);
   }
 
-  public function query($query,$select_db)
+  private function defaults()
   {
-    if(!$this->mysql)
-      if(!$this->db_connect()) return false;
-    if( $select_db )
-      mysql_select_db($this->wordpress["db"],$this->mysql);
-    mysql_query($query,$this->mysql);
+    $defaults = array(
+      "url"=>"",
+      "user"=>"",
+      "repository"=>"",
+      "revision"=>"origin/master",
+      "deploy_to"=>".",
+      "backup"=>false,
+      "app"=>"",
+      "db"=>"",
+      "scm"=>"git",
+      "adapter"=>"mysql",
+      "rsync_cmd"=>"rsync",
+      "umask"=>"002",
+      "rsync_flags"=>"-avuzPO --quiet"
+    );
+    return $defaults;
   }
 
   private function update_target($target)
@@ -127,22 +155,25 @@ class Environment
   {
     require_once(__DIR__."/Scm.php");
     require_once_dir("pomander/Scm/*.php");
-    $this->config["scm"] = (!isset($this->config["scm"]))? "Git" : ucwords(strtolower($this->config["scm"]));
+    $this->config["scm"] = ucwords(strtolower($this->config["scm"]));
     if( !$this->scm = new $this->config["scm"]($this->repository) )
       warn("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
     require_once(__DIR__."/Db.php");
     require_once_dir("pomander/Db/*.php");
-    $this->config["adapter"] = (!isset($this->config["adapter"]))? "Mysql" : ucwords(strtolower($this->config["adapter"]));
+    $this->config["adapter"] = ucwords(strtolower($this->config["adapter"]));
     if( !$this->adapter = new $this->config["adapter"]($this->wordpress) )
       warn("db","There is no recipe for {$this->config["adapter"]}, perhaps create your own?");
   }
 
-  private function db_connect()
+  private function inject_multi_role_after($role,$task_name)
   {
-    $this->mysql = @mysql_connect($this->wordpress["db_host"],$this->wordpress["db_user"],$this->wordpress["db_password"]);
-    if( !$this->mysql )
-      warn("mysql","there was a problem establishing a connection");
-    return $this->mysql;
+    after($task_name,function($app) use($task_name,$role) {
+      if( $app->env->next_role($role) )
+      {
+        $app->reset();
+        $app->invoke($task_name);
+      }
+    });
   }
 
 }

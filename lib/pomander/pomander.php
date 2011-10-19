@@ -3,7 +3,6 @@ require_once(__DIR__."/helpers.php");
 require_once(__DIR__."/Environment.php");
 require_once(__DIR__."/../spyc.php");
 
-builder()->get_application()->config_path = getcwd()."/config.yml";
 builder()->get_application()->default_env = "development";
 
 function has_environments()
@@ -30,6 +29,7 @@ function load_environments($config)
     task($env_name, function($app) use($env) {
       info("environment",$env->name);
       $app->env = $env;
+      $app->reset();
     });
   }
 }
@@ -43,11 +43,11 @@ task("environment",function($app) {
 });
 
 task('app','environment',function($app) {
-  multi_role_support("app",$app);
+  $app->env->multi_role_support("app",$app);
 });
 
 task('db','environment',function($app) {
-  multi_role_support("db",$app);
+  $app->env->multi_role_support("db",$app);
 });
 
 //utils
@@ -66,35 +66,6 @@ function put($what,$where)
 function get($what,$where)
 {
   builder()->get_application()->env->get($what,$where);
-}
-
-function multi_role_support($role,$app)
-{
-  $app->env->role($role);
-  foreach($app->top_level_tasks as $task_name)
-  {
-    if( in_array($role,$app->resolve($task_name)->dependencies()) )
-      return inject_multi_role_after($role,$task_name);
-    else
-    {
-      foreach($app->resolve($task_name)->dependencies() as $dependency)
-      {
-        if( in_array($role,$app->resolve($dependency)->dependencies()) )
-          return inject_multi_role_after($role,$dependency);
-      }
-    }
-  }
-}
-
-function inject_multi_role_after($role,$task_name)
-{
-  after($task_name,function($app) use($task_name,$role) {
-    if( $app->env->next_role($role) )
-    {
-      $app->reset();
-      $app->invoke($task_name);
-    }
-  });
 }
 
 require_once_dir("tasks/*.php");

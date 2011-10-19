@@ -12,7 +12,6 @@ function copy_r( $path, $dest )
       {
         if( $file == "." || $file == ".." )
           continue;
-        // go on
         if( is_dir( "$path/$file" ) )
           copy_r( "$path/$file", "$dest/$file" );
         else
@@ -39,11 +38,6 @@ function flatten($array)
 function require_once_dir($dir)
 {
   foreach(glob(POMANDER_PATH.$dir) as $file) require_once $file;
-}
-
-function template($file)
-{
-  return include(POMANDER_PATH.$file);
 }
 
 function info($status,$msg)
