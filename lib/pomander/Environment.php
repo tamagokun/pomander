@@ -127,7 +127,7 @@ class Environment
       "user"=>"",
       "repository"=>"",
       "revision"=>"origin/master",
-      "deploy_to"=>".",
+      "deploy_to"=>getcwd(),
       "backup"=>false,
       "app"=>"",
       "db"=>"",
