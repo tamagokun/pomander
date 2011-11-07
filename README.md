@@ -7,6 +7,7 @@ Installation
 ------------
 
 Requirements:
+
 * PHP 5.3.1+
 * [phark](https://github.com/lox/phark)
 
