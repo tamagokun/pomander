@@ -7,8 +7,8 @@ Installation
 ------------
 
 Requirements:
-- PHP 5.3.1+
-- [phark](https://github.com/lox/phark)
+* PHP 5.3.1+
+* [phark](https://github.com/lox/phark)
 
 Until phark is more developed to allow installation of remote packages, this is how we do it:
 
