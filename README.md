@@ -14,7 +14,7 @@ Requirements:
 Until phark is more developed to allow installation of remote packages, this is how we do it:
 
     git clone git://github.com/tamagokun/pomander.git
-    pomander/bin/phark-install
+    cd pomander && bin/phark-install
     
 Don't have phark? Here's a similar technique to install it:
 
@@ -38,18 +38,18 @@ Pomander uses YAML files to configure environments. `pom setup` will create a de
 
 Configuration reference:
 
-    url: 													# URL of application. Used primarily for database migration, and may not be needed.
-    user: 												# User for performing remote tasks.
-    repository:										# Repository for application.
-    revision:											# Desired revision/branch to be deployed.
-    scm: 													# SCM to use. Currently supports svn and git. Default: git
-    deploy_to:										# Path to deploy to.
-    backup: 											# Perform database backups on deployments. (true|false). Default: false
-    app: 													# List of application end-points for running deployment tasks.
-    	- node1.myapp.com
-    	- node2.myapp.com
-    db:														# List of database end-points for running database tasks.
-    	- db1.myapp.com
+    url: # URL of application. Used primarily for database migration, and may not be needed.
+    user: # User for performing remote tasks.
+    repository: # Repository for application.
+    revision: # Desired revision/branch to be deployed.
+    scm: # SCM to use. Currently supports svn and git. Default: git
+    deploy_to: # Path to deploy to.
+    backup: # Perform database backups on deployments. (true|false). Default: false
+    app: # List of application end-points for running deployment tasks.
+      - node1.myapp.com
+      - node2.myapp.com
+    db:	# List of database end-points for running database tasks.
+      - db1.myapp.com
 
 ### Deploying
 
@@ -72,4 +72,4 @@ Tasks
 Plugins
 -------
 
-* [pomander-wordpress] (https://github.com/tamagokun/pomander-wordpress)
+* [pomander-wordpress](https://github.com/tamagokun/pomander-wordpress)
