@@ -51,20 +51,26 @@ task('db','environment',function($app) {
 });
 
 //utils
-
 function run()
 {
   $cmd = implode(" && ",flatten(func_get_args()));
-  echo builder()->get_application()->env->exec($cmd);
+  if(!isset(builder()->get_application()->env))
+  	echo shell_exec($cmd);
+  else
+  	echo builder()->get_application()->env->exec($cmd);
 }
 
 function put($what,$where)
 {
+	if(!isset(builder()->get_application()->env))
+		return shell_exec("cp $what $where");
   builder()->get_application()->env->put($what,$where);
 }
 
 function get($what,$where)
 {
+	if(!isset(builder()->get_application()->env))
+		return shell_exec("cp $what $where");
   builder()->get_application()->env->get($what,$where);
 }
 
