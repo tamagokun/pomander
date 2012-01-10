@@ -1,7 +1,9 @@
 Pomander
 =======
 
-Stuff will go here!
+A light-weight flexible deployment tool for deploying web applications. This project was inspired by [Capistrano] and [Vlad the Deployer], as well as being built on top of [Phake], a [Rake] clone.
+
+This project came out of the need for a way to deploy Wordpress sites to multiple environments easily and without firing up FTP clients, etc. What started as a simple Rakefile, quickly grew into much more, and has been finally abstracted and ported to PHP to be able to fully integrate tasks with your application.
 
 Installation
 ------------
@@ -40,7 +42,7 @@ Pomander uses YAML files to configure environments. `pom config` will create a d
 Configuration reference:
 
 ```yaml
-url:                    # URL of application. Used primarily for database migration, and may not be needed.
+url:                    # Application URL. Used primarily for database migration and may not be needed.
 user:                   # User for performing remote tasks.
 repository:             # Repository for application.
 revision:               # Desired revision/branch to be deployed.
@@ -71,8 +73,7 @@ deployed          #  Tells you what revision/branch is currently deployed.
 config            # Attempts to create a default `development.yml` file.
 ```
 
-Custom Tasks
-------------
+### Custom Tasks
 
 Feel free to modify these existing tasks, as well as create your own!
 
