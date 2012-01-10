@@ -15,13 +15,13 @@ Requirements:
 
 Until phark is more developed to allow installation of remote packages, this is how we do it:
 
-    git clone git://github.com/tamagokun/pomander.git
-    cd pomander && bin/phark-install
+    $ git clone git://github.com/tamagokun/pomander.git && cd pomander
+    $ phark install .
     
-Don't have phark? Here's a similar technique to install it:
+Don't have phark? Here's an easy way to install it:
 
-    git clone git://github.com/lox/phark.git
-    cd phark && make
+    $ git clone git://github.com/lox/phark.git
+    $ cd phark && make
 
 Usage
 -----
