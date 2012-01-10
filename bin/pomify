@@ -12,4 +12,6 @@ if (!@chdir($directory)) {
   echo "(in $directory)\n";
 }
 copy(POMANDER_PATH."pomander/Template/Pomfile","./Pomfile");
+@mkdir("./deploy");
+copy(POMANDER_PATH."pomander/Template/config.yml","./deploy/development.yml");
 ?>
