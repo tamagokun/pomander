@@ -28,6 +28,6 @@ task('config', function($app) {
   if( file_exists("./deploy/development.yml"))
     warn("development.yml","Already exists, skipping");
   else
-    copy(POMANDER_PATH."pomander/Template/config.yml","./deploy/development.yml");
+    copy(POMANDER_PATH."pomander/generators/config.yml","./deploy/development.yml");
 });
 ?>
