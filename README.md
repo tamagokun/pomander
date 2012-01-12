@@ -1,7 +1,7 @@
 Pomander
 =======
 
-A light-weight flexible deployment tool for deploying web applications. This project was inspired by [Capistrano] and [Vlad the Deployer], as well as being built on top of [Phake], a [Rake] clone.
+A light-weight flexible deployment tool for deploying web applications. This project was inspired by [Capistrano](https://github.com/capistrano/capistrano) and [Vlad the Deployer](http://rubyhitsquad.com/Vlad_the_Deployer.html), as well as being built on top of [Phake](https://github.com/jaz303/phake), a [Rake](http://rake.rubyforge.org/) clone.
 
 This project came out of the need for a way to deploy Wordpress sites to multiple environments easily and without firing up FTP clients, etc. What started as a simple Rakefile, quickly grew into much more, and has been finally abstracted and ported to PHP to be able to fully integrate tasks with your application.
 
