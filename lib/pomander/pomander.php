@@ -62,15 +62,15 @@ function run()
 
 function put($what,$where)
 {
-	if(!isset(builder()->get_application()->env))
-		return shell_exec("cp $what $where");
+  if(!isset(builder()->get_application()->env))
+    return shell_exec("cp -r $what $where");
   builder()->get_application()->env->put($what,$where);
 }
 
 function get($what,$where)
 {
-	if(!isset(builder()->get_application()->env))
-		return shell_exec("cp $what $where");
+  if(!isset(builder()->get_application()->env))
+    return shell_exec("cp -r $what $where");
   builder()->get_application()->env->get($what,$where);
 }
 

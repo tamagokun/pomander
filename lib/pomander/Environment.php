@@ -107,7 +107,7 @@ class Environment
     if($this->target)
       $cmd = "{$this->rsync_cmd} {$this->rsync_flags} $what {$this->user}@{$this->target}:$where";
     else
-      $cmd = "cp $what $where";
+      $cmd = "cp -r $what $where";
     return shell_exec($cmd);
   }
 
@@ -116,7 +116,7 @@ class Environment
     if($this->target)
       $cmd = "{$this->rsync_cmd} {$this->rsync_flags} {$this->user}@{$this->target}:$what $where";
     else
-      $cmd = "cp $what $where";
+      $cmd = "cp -r $what $where";
     return shell_exec($cmd);
   }
 
