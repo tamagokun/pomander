@@ -4,7 +4,7 @@
   ->name('pomander')
   ->authors('Mike Kruk <tamagokun@gmail.com>')
   ->homepage('http://github.com/tamagokun/pomander')
-  ->version('0.1.8')
+  ->version('0.1.9')
   ->phpVersion('>=5.3.1')
   ->summary('A command line tool for deploying PHP applications')
   ->description('Pomander is a PHP-based command line tool for deploying applications. It is inspired by Rake/Capistrano, and is built on top of the Rake clone, Phake.')
