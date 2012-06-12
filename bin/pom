@@ -1,12 +1,22 @@
 #!/usr/bin/env php
 <?php
 define('POMANDER_PATH',dirname(__DIR__).'/lib/');
-require dirname(__DIR__).'/vendor/autoload.php';
+$autoload = pom_autoload(__DIR__);
+require $autoload? $autoload : dirname(__DIR__).'/vendor/autoload.php';
 require dirname(__DIR__) . '/vendor/jaz303/phake/lib/phake.php';
 require dirname(__DIR__) . '/vendor/jaz303/phake/lib/utils.php';
 require dirname(__DIR__) . '/vendor/jaz303/phake/lib/global_helpers.php';
 require dirname(__DIR__) . '/vendor/jaz303/phake/lib/option_parser.php';
 require dirname(__DIR__) . '/vendor/jaz303/phake/lib/builder.php';
+
+function pom_autoload($dir)
+{
+	$dir = rtrim($dir,'/').'/';
+	if(!is_dir($dir)) return false;
+	if(file_exists("$dir.autoload.php")) return "$dir.autoload.php";
+	if($dir == '/') return false;
+	return pom_autoload(dirname($dir));
+}
 
 phake\Builder::$global = new phake\Builder;
 
