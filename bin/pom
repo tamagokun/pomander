@@ -13,7 +13,7 @@ function pom_autoload($dir)
 {
 	$dir = rtrim($dir,'/').'/';
 	if(!is_dir($dir)) return false;
-	if(file_exists("$dir.autoload.php")) return "$dir.autoload.php";
+	if(file_exists("{$dir}autoload.php")) return "{$dir}autoload.php";
 	if($dir == '/') return false;
 	return pom_autoload(dirname($dir));
 }
