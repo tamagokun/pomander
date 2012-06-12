@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-define('POMANDER_PATH',dirname(__FILE__).'/../lib/');
+define('POMANDER_PATH',dirname(__DIR__).'/lib/');
 
 $has_runfile = (file_exists(getcwd()."/Pomfile") || file_exists(getcwd()."/Pomfile.php"));
 if($has_runfile === true)
@@ -11,7 +11,7 @@ if (!@chdir($directory)) {
 } else {
   echo "(in $directory)\n";
 }
-copy(POMANDER_PATH."pomander/generators/Pomfile","./Pomfile");
+copy(POMANDER_PATH."generators/Pomfile","./Pomfile");
 @mkdir("./deploy");
-copy(POMANDER_PATH."pomander/generators/config.yml","./deploy/development.yml");
+copy(POMANDER_PATH."generators/config.yml","./deploy/development.yml");
 ?>

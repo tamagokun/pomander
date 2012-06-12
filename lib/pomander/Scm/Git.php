@@ -1,5 +1,7 @@
 <?php
-class Git extends Scm
+namespace Pomander\Scm;
+
+class Git extends \Pomander\Scm
 {
   public function create()
   {

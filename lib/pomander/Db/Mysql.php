@@ -1,5 +1,7 @@
 <?php
-class Mysql extends Db
+namespace Pomander\Db;
+
+class Mysql extends \Pomander\Db
 {
   public function create()
   {

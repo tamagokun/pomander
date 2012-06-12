@@ -1,4 +1,6 @@
 <?php
+namespace Pomander;
+
 class Role
 {
   public $targets,$current;
@@ -26,7 +28,7 @@ class Role
 
   public function has_target($index)
   {
-    return array_key_exists($index,$this->targets);  
+    return array_key_exists($index,$this->targets);
   }
 }
 ?>

@@ -1,12 +1,13 @@
 #!/usr/bin/env php
 <?php
-define('POMANDER_PATH',dirname(__FILE__).'/../lib/');
-require_once __DIR__.'/../lib/phake/phake.php';
-require_once __DIR__.'/../lib/phake/utils.php';
-require_once __DIR__.'/../lib/phake/global_helpers.php';
-require_once __DIR__.'/../lib/phake/option_parser.php';
-require_once __DIR__.'/../lib/phake/builder.php';
-require_once __DIR__.'/../lib/phake/phake.php';
+define('POMANDER_PATH',dirname(__DIR__).'/lib/');
+require dirname(__DIR__).'/vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/jaz303/phake/lib/phake.php';
+require dirname(__DIR__) . '/vendor/jaz303/phake/lib/utils.php';
+require dirname(__DIR__) . '/vendor/jaz303/phake/lib/global_helpers.php';
+require dirname(__DIR__) . '/vendor/jaz303/phake/lib/option_parser.php';
+require dirname(__DIR__) . '/vendor/jaz303/phake/lib/builder.php';
+
 phake\Builder::$global = new phake\Builder;
 
 try {
@@ -54,7 +55,7 @@ try {
   //
   // Locate runfile
 
-  $runfile = phake\resolve_runfile(getcwd());
+  $runfile = \Pomander::resolve_runfile(getcwd());
   $directory = dirname($runfile);
 
   if (!@chdir($directory)) {

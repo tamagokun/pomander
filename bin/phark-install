@@ -1,8 +1,0 @@
-#!/usr/bin/env php
-<?php
-  $package = new \Phark\LocalPackage(__DIR__.'/../');
-  $package
-    ->install()
-    ->activate()
-    ;
-?>

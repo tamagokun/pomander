@@ -1,4 +1,6 @@
 <?php
+namespace Pomander;
+
 abstract class Db
 {
   public $config;
@@ -15,17 +17,17 @@ abstract class Db
 
   public function dump()
   {
-    return "";  
+    return "";
   }
 
   public function backup()
   {
-    return "";  
+    return "";
   }
 
   public function merge()
   {
-    return "";  
+    return "";
   }
 }
 ?>

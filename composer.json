@@ -13,11 +13,12 @@
 		}
 	],
 	"require": {
-	  
+		"jaz303/phake": "dev-master",
+		"phpseclib/phpseclib": "dev-master"
 	},
 	"autoload": {
 		"psr-0": {
-			
+			"Pomander": "lib"
 		}
 	},
 	"bin": ["bin/pom","bin/pomify"]

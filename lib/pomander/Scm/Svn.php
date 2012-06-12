@@ -1,5 +1,7 @@
 <?php
-class Svn extends Scm
+namespace Pomander\Scm;
+
+class Svn extends \Pomander\Scm
 {
   public function create()
   {

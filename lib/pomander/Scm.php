@@ -1,4 +1,6 @@
 <?php
+namespace Pomander;
+
 abstract class Scm
 {
   public $repository,$app;
@@ -16,12 +18,12 @@ abstract class Scm
 
   public function update()
   {
-    return "";  
+    return "";
   }
 
   public function revision()
   {
-    return "";  
+    return "";
   }
 }
 ?>

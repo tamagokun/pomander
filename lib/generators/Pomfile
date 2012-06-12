@@ -1,0 +1,6 @@
+<?php
+$pom = new \Pomander\Builder();
+/* plugins
+ * $pom->load('pomander/wordpress'); */
+$pom->run();
+?>
