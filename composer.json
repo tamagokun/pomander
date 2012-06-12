@@ -1,0 +1,24 @@
+{
+	"name": "pomander/pomander",
+	"type": "library",
+	"description": "Deployment for PHP",
+	"keywords": ["deploy","git","svn"],
+	"homepage": "http://github.com/tamagokun/pomander",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Mike Kruk",
+			"email": "tamagokun@gmail.com",
+			"homepage": "http://ripeworks.com"
+		}
+	],
+	"require": {
+	  
+	},
+	"autoload": {
+		"psr-0": {
+			
+		}
+	},
+	"bin": ["bin/pom","bin/pomify"]
+}
