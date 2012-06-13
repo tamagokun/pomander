@@ -11,17 +11,19 @@ Installation
 Requirements:
 
 * PHP 5.3.1+
-* [phark](https://github.com/lox/phark)
+* [composer](http://getcomposer.org/)
 
-Until phark is more developed to allow installation of remote packages, this is how we do it:
+```json
+{
+	"require": {
+		"pomander/pomander": "dev-master"
+	}
+}
+```
 
-    $ git clone git://github.com/tamagokun/pomander.git && cd pomander
-    $ phark install .
-    
-Don't have phark? Here's an easy way to install it:
-
-    $ git clone git://github.com/lox/phark.git
-    $ cd phark && make
+```
+$ composer install
+```
 
 Usage
 -----
@@ -81,10 +83,10 @@ e.g.
 
 ```php
 <?php
-require_once('pomander/lib/pomander/pomander.php');
-//plugins go here
-include('./lib/tasks/mytasks.php');
-if(has_environments()) config();
+$pom = new \Pomander\Builder();
+/* plugins
+ * $pom->load('pomander/wordpress'); */
+$pom->run();
 ```
 
 ```php
