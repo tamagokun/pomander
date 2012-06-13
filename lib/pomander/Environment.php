@@ -66,11 +66,11 @@ class Environment
 	public function connect()
 	{
 		if( !isset($this->target) ) return false;
-		$this->shell = new \Net\SSH2($this->target);
+		$this->shell = new \Net_SSH2($this->target);
 		$key_path = home()."/.ssh/id_rsa";
 		if( file_exists($key_path) )
 		{
-			$key = new \Crypt\RSA();
+			$key = new \Crypt_RSA();
 			$key_status = $key->loadKey(file_get_contents($key_path));
 			if(!$key_status) warn("ssh","Unable to load RSA key");
 		}else
