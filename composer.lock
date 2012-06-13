@@ -1,11 +1,6 @@
 {
-    "hash": "5a3e0952ee3e69256b7b5beceed2ab0b",
+    "hash": "495a6257f06bb58d507e176c956cfc90",
     "packages": [
-        {
-            "package": "jaz303/phake",
-            "version": "dev-master",
-            "source-reference": "b3ddad39997a5a5d9606ff6f11c8bb577b35a9b4"
-        },
         {
             "package": "phpseclib/phpseclib",
             "version": "dev-master",
@@ -18,7 +13,6 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "jaz303/phake": 20,
         "phpseclib/phpseclib": 20
     }
 }

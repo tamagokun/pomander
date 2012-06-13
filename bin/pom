@@ -3,11 +3,11 @@
 define('POMANDER_PATH',dirname(__DIR__).'/lib/');
 $autoload = pom_autoload(__DIR__);
 require $autoload? $autoload : dirname(__DIR__).'/vendor/autoload.php';
-require dirname(__DIR__) . '/vendor/jaz303/phake/lib/phake.php';
-require dirname(__DIR__) . '/vendor/jaz303/phake/lib/utils.php';
-require dirname(__DIR__) . '/vendor/jaz303/phake/lib/global_helpers.php';
-require dirname(__DIR__) . '/vendor/jaz303/phake/lib/option_parser.php';
-require dirname(__DIR__) . '/vendor/jaz303/phake/lib/builder.php';
+require dirname(__DIR__) . '/lib/phake/phake.php';
+require dirname(__DIR__) . '/lib/phake/utils.php';
+require dirname(__DIR__) . '/lib/phake/global_helpers.php';
+require dirname(__DIR__) . '/lib/phake/option_parser.php';
+require dirname(__DIR__) . '/lib/phake/builder.php';
 
 function pom_autoload($dir)
 {
