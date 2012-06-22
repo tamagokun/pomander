@@ -30,7 +30,9 @@ class Builder
 
 	public function load($plugin)
 	{
-		
+		if(!class_exists($plugin))
+			$plugin = "\\Pomander\\$plugin";
+		return $plugin::load();
 	}
 
 	public function run()
