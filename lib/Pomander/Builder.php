@@ -32,7 +32,7 @@ class Builder
 	{
 		if(!class_exists($plugin))
 			$plugin = "\\Pomander\\$plugin";
-		return $plugin::load();
+		$plugin::load();
 	}
 
 	public function run()
