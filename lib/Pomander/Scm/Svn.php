@@ -5,7 +5,6 @@ class Svn extends \Pomander\Scm
 {
   public function create()
   {
-    global $deploy;
     return "svn co {$this->repository} {$this->app->env->deploy_to} --quiet";
   }
 

@@ -10,7 +10,6 @@ class Git extends \Pomander\Scm
 
   public function update()
   {
-    global $deploy;
     $revision = ( isset($this->app->env->revision))? $this->app->env->revision : "origin/master";
     return "git fetch origin && git reset --hard $revision";
   }

@@ -6,7 +6,7 @@ group('deploy', function() {
   desc("Setup application directory in environment.");
   task('setup','app', function($app) {
     info("deploy","setting up environment");
-    run("umask {$app->env->umask}","rm -rf {$app->env->deploy_to}",$app->env->scm->create());
+    run("umask {$app->env->umask}","mkdir -p {$app->env->deploy_to}","rm -rf {$app->env->deploy_to}/*",$app->env->scm->create());
   });
 
   desc("Update code to latest changes.");
