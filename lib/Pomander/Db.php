@@ -15,17 +15,17 @@ abstract class Db
     return "";
   }
 
-  public function dump()
+  public function dump($file, $args="")
   {
     return "";
   }
 
-  public function backup()
+  public function backup($file, $args="")
   {
     return "";
   }
 
-  public function merge()
+  public function merge($file, $args="")
   {
     return "";
   }
