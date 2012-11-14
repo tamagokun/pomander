@@ -1,8 +1,11 @@
 #!/usr/bin/env php
 <?php
 define('POMANDER_PATH',dirname(__DIR__).'/lib/');
-$autoload = pom_autoload(__DIR__);
-require $autoload? $autoload : dirname(__DIR__).'/vendor/autoload.php';
+if(!class_exists("\\Pomander"))
+{
+	$autoload = pom_autoload(__DIR__);
+	require $autoload? $autoload : dirname(__DIR__).'/vendor/autoload.php';
+}
 require dirname(__DIR__) . '/lib/phake/phake.php';
 require dirname(__DIR__) . '/lib/phake/utils.php';
 require dirname(__DIR__) . '/lib/phake/global_helpers.php';
