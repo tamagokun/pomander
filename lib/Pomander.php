@@ -37,6 +37,12 @@ function warn($status,$msg)
 	puts(" * ".colorize("warn ",31).colorize($status." ",35).$msg);
 }
 
+function abort($status, $msg)
+{
+	warn($status,$msg);
+	exit();
+}
+
 function colorize($text,$color)
 {
 	#31 red
