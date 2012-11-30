@@ -40,7 +40,7 @@ function warn($status,$msg)
 function abort($status, $msg)
 {
 	warn($status,$msg);
-	exit();
+	die(1);
 }
 
 function colorize($text,$color)

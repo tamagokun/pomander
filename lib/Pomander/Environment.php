@@ -72,14 +72,14 @@ class Environment
 		{
 			$key = new \Crypt_RSA();
 			$key_status = $key->loadKey(file_get_contents($key_path));
-			if(!$key_status) warn("ssh","Unable to load RSA key");
+			if(!$key_status) abort("ssh","Unable to load RSA key");
 		}else
 		{
 			if( isset($this->password) )
 			$key = $this->password;
 		}
 		if(!$this->shell->login($this->user,$key))
-			warn("ssh","Login failed");
+			abort("ssh","Login failed");
 	}
 
 	public function exec($cmd)
