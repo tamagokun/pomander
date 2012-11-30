@@ -12,7 +12,7 @@ group('deploy', function() {
   desc("Update code to latest changes.");
   task('update','app', function($app) {
     info("deploy","updating code");
-    run("cd {$app->env->deploy_to}",$app->env->scm->update());
+    run("cd {$app->env->deploy_to}",$app->env->scm->last_revision(),$app->env->scm->update());
   });
 
 });
@@ -20,6 +20,12 @@ task('deploy','deploy:update');
 task('deployed','app',function($app) {
   info("deployed","checking the current deployed revision");
   run("cd {$app->env->deploy_to}",$app->env->scm->revision());
+});
+
+desc("Rollback to the previous revision");
+task('rollback', function($app) {
+	if($app->resolve('update','deploy')->has_run || in_array('rollback',$app->top_level_tasks))
+		run("cd {$app->env->deploy_to}",$app->env->scm->rollback());	
 });
 
 //local

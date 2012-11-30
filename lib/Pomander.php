@@ -67,22 +67,34 @@ function run()
 		$args[] = $value;
 	$cmd = implode(" && ",$args);
 	if(!isset(builder()->get_application()->env))
-		echo shell_exec($cmd);
+		echo exec_cmd($cmd);
 	else
 		echo builder()->get_application()->env->exec($cmd);
+}
+
+function exec_cmd($cmd)
+{
+	$cmd = is_array($cmd)? implode(" && ",$cmd) : $cmd;
+	exec($cmd,$out,$status);
+	if($status > 0) {
+		warn("fail","Deployment failed. Rolling back...");
+		builder()->get_application()->invoke('rollback');
+		abort("complete","Rolled back.");
+	}
+	return implode("\n",$out);
 }
 
 function put($what,$where)
 {
 	if(!isset(builder()->get_application()->env))
-		return shell_exec("cp -r $what $where");
+		return exec_cmd("cp -r $what $where");
 	builder()->get_application()->env->put($what,$where);
 }
 
 function get($what,$where)
 {
 	if(!isset(builder()->get_application()->env))
-		return shell_exec("cp -r $what $where");
+		return exec_cmd("cp -r $what $where");
 	builder()->get_application()->env->get($what,$where);
 }
 

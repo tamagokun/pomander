@@ -21,9 +21,19 @@ abstract class Scm
     return "";
   }
 
+	public function last_revision()
+	{
+		return "";
+	}
+
   public function revision()
   {
     return "";
   }
+
+	public function rollback()
+	{
+		return "";
+	}
 }
 ?>

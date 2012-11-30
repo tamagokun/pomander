@@ -88,7 +88,9 @@ class Environment
 		if($this->shell)
 			return $this->shell->exec($cmd);
 		else
-			return shell_exec($cmd);
+		{
+			return exec_cmd($cmd);
+		}
 	}
 
 	public function put($what,$where)
@@ -97,7 +99,7 @@ class Environment
 			$cmd = "{$this->rsync_cmd} {$this->rsync_flags} $what {$this->user}@{$this->target}:$where";
 		else
 			$cmd = "cp -r $what $where";
-		return shell_exec($cmd);
+		return exec_cmd($cmd);
 	}
 
 	public function get($what,$where)
@@ -106,7 +108,7 @@ class Environment
 			$cmd = "{$this->rsync_cmd} {$this->rsync_flags} {$this->user}@{$this->target}:$what $where";
 		else
 			$cmd = "cp -r $what $where";
-		return shell_exec($cmd);
+		return exec_cmd($cmd);
 	}
 
 	private function defaults()
@@ -143,10 +145,10 @@ class Environment
 	{
 		$this->config["scm"] = "\\Pomander\\Scm\\".ucwords(strtolower($this->config["scm"]));
 		if( !$this->scm = new $this->config["scm"]($this->repository) )
-			warn("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
+			abort("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
 		$this->config["adapter"] = "\\Pomander\\Db\\".ucwords(strtolower($this->config["adapter"]));
 		if( !$this->adapter = new $this->config["adapter"]($this->wordpress) )
-			warn("db","There is no recipe for {$this->config["adapter"]}, perhaps create your own?");
+			abort("db","There is no recipe for {$this->config["adapter"]}, perhaps create your own?");
 	}
 
 	private function inject_multi_role_after($role,$task_name)
