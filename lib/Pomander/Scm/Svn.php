@@ -5,7 +5,7 @@ class Svn extends \Pomander\Scm
 {
   public function create()
   {
-    return "svn co {$this->repository} {$this->app->env->deploy_to} --quiet";
+    return "svn co {$this->repository} {$this->app->env->cache_dir} --quiet";
   }
 
   public function update()

@@ -19,12 +19,21 @@ class Environment
 
 	public function __get($prop)
 	{
+		if($prop == 'current_dir')  return $this->deploy_to.'current/';
+		if($prop == 'releases_dir') return $this->deploy_to.'releases/';
+		if($prop == 'shared_dir')   return $this->deploy_to.'shared/';
+		if($prop == 'cache_dir')    return $this->deploy_to.'shared/cached_copy/';
 		if(array_key_exists($prop, $this->config)) return $this->config[$prop];
 		return null;
 	}
 
 	public function __isset($prop) { return isset($this->config[$prop]); }
 	public function __set($prop,$value) { $this->config[$prop] = $value; }
+
+	public function new_release()
+	{
+		return date('Ymdhis');
+	}
 
 	public function role($key)
 	{
