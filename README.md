@@ -39,40 +39,51 @@ Use `pom -T` to see your available tasks.
     
 ### Configure environments
 
-Pomander uses YAML files to configure environments. `pom config` will create a development.yml file to get you going if you don't already have one. You can create as many environments as you want.
+To configure an environment, just drop a `.yml` or `.php` file named the environment you want to create in the deploy folder. `pom config` will create a development.yml file to get you going if you don't already have one. You can create as many environments as you want.
 
 Configuration reference:
 
-url
-: Application URL. Used primarily for databse migration and isn't always needed.
-user
-: SSH user for performing remote tasks.
-repository
-: Repository url.
-revision
-: Revision/branch to deploy. _Default: origin/master, trunk_
-scm
-: SCM to use. Currently supports svn and git. _Default: git_
-releases
-: Use current/releases/shared structure. (true|false|number of releases to keep) _Default: false_
-adapter
-: Data adapter to use for databases. Currently supports MySQL. _Default: mysql_
-remote\_cache
-: Cache repository for faster deploys. (true|false) _Default: true when releases isn't false_
-deploy\_to
-: Application is deployed here. _Default: cwd_
-backup
-: Perform backup (database) on deployments. (true|false). _Default: false_
-umask
-: Umask to use for remote tasks. _Default: 002_
-rsync_cmd
-: Command to use for file syncing. _Default: rsync_
-rsync_flags
-: Extra flags to use for file syncing. _Default: -avuzPO --quiet_
-app
-: String or Array of application hosts to deploy to.
-db
-: String or Array of database hosts to deploy to.
+<dl>
+<dt>url</dt>
+<dd>Application URL. Used primarily for databse migration and isn't always needed.</dd>
+<dt>user</dt>
+<dd>SSH user for performing remote tasks.</dd>
+<dt>repository</dt>
+<dd>Repository url.</dd>
+<dt>revision</dt>
+<dd>Revision/branch to deploy. _Default: origin/master, trunk_</dd>
+<dt>scm</dt>
+<dd>SCM to use. Currently supports svn and git. _Default: git_</dd>
+<dt>releases</dt>
+<dd>Use current/releases/shared structure. (true|false|number of releases to keep) _Default: false_</dd>
+<dt>adapter</dt>
+<dd>Data adapter to use for databases. Currently supports MySQL. _Default: mysql_</dd>
+<dt>remote\_cache</dt>
+<dd>Cache repository for faster deploys. (true|false) _Default: true when releases isn't false_</dd>
+<dt>deploy\_to</dt>
+<dd>Application is deployed here. _Default: cwd_</dd>
+<dt>backup</dt>
+<dd>Perform backup (database) on deployments. (true|false). _Default: false_</dd>
+<dt>umask</dt>
+<dd>Umask to use for remote tasks. _Default: 002_</dd>
+<dt>rsync_cmd</dt>
+<dd>Command to use for file syncing. _Default: rsync_</dd>
+<dt>rsync_flags</dt>
+<dd>Extra flags to use for file syncing. _Default: -avuzPO --quiet_</dd>
+<dt>app</dt>
+<dd>String or Array of application hosts to deploy to.</dd>
+<dt>db</dt>
+<dd>String or Array of database hosts to deploy to.</dd>
+</dl>
+
+__PHP configurations look like this:__
+
+```php
+<?php
+	$env->user('deploy')
+	    ->repository('git@github.com:tamagokun/pomander.git')
+			->deploy_to('/var/www/html')
+```
 
 ### Deploying
 
