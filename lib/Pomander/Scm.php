@@ -11,7 +11,7 @@ abstract class Scm
     $this->app = builder()->get_application();
   }
 
-  public function create()
+  public function create($location)
   {
     return "";
   }
@@ -21,19 +21,9 @@ abstract class Scm
     return "";
   }
 
-	public function last_revision()
-	{
-		return "";
-	}
-
   public function revision()
   {
     return "";
   }
-
-	public function rollback()
-	{
-		return "";
-	}
 }
 ?>

@@ -3,33 +3,61 @@
 //deploy
 group('deploy', function() {
 
-  desc("Setup application directory in environment.");
+  desc("Setup application in environment.");
   task('setup','app', function($app) {
     info("deploy","setting up environment");
 		$cmd = array(
 			"umask {$app->env->umask}",
-			"mkdir -p {$app->env->deploy_to}",
-			"mkdir {$app->env->current_dir} {$app->env->releases_dir} {$app->env->shared_dir}",
-			$app->env->scm->create()
+			"mkdir -p {$app->env->deploy_to}"
 		);
+
+		if($app->env->releases === false)
+		{
+			$cmd[] = "find {$app->env->deploy_to} -type f -delete";
+			$cmd[] = $app->env->scm->create($app->env->deploy_to);
+		}else
+		{
+			$cmd[] = "mkdir {$app->env->current_dir} {$app->env->releases_dir} {$app->env->shared_dir}";
+		}
 		run($cmd);
   });
 
   desc("Update code to latest changes.");
   task('update','app', function($app) {
     info("deploy","updating code");
-		$app->env->release_dir = $app->env->deploy_to.$app->env->new_release();
-		$cmd = array(
-			"cd {$app->env->cache_dir}",
-			$app->env->scm->update(),
-			"cp -R {$app->env->shared_dir}cached_copy {$app->env->release_dir}",
-			"ln -s {$app->env->releases_dir}`ls {$app->env->releases_dir} | sort -nr | head -1` {$app->env->current_dir}"
-		);
+		$cmd = array();
+		if($app->env->releases === false)
+		{
+			$cmd[] = "cd {$app->env->deploy_to}";
+			$cmd[] = $app->env->scm->update();
+		}else
+		{
+			$app->env->release_dir = $app->env->deploy_to.$app->env->new_release();
+			if($app->env->remote_cache)
+			{
+				$cmd[] = "cd {$app->env->cache_dir}";
+				$cmd[] = $app->env->scm->update();
+				$cmd[] = "cp -R {$app->env->shared_dir}cached_copy {$app->env->release_dir}";
+			}else
+			{
+				$cmd[] = $app->env->scm->create($app->env->release_dir);
+				$cmd[] = "cd {$app->env->release_dir}";
+				$cmd[] = $app->env->scm->update();
+			}
+		}
 		run($cmd);
   });
 
+	task('finalize', function($app) {
+		if($app->env->releases !== false)
+			run("ln -s {$app->env->releases_dir}`ls {$app->env->releases_dir} | sort -nr | head -1` {$app->env->current_dir}");
+	});
+
+	desc("First time deployment.");
+	task('cold','deploy:setup','deploy:update','finalize');
+
 });
-task('deploy','deploy:update');
+task('deploy','deploy:update','finalize');
 
 desc("Rollback to the previous revision");
 task('rollback', function($app) {

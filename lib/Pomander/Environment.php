@@ -7,14 +7,18 @@ class Environment
 	private $config,$shell,$mysql;
 	private $roles;
 
-	public function __construct($env_name,$args=null)
+	public function __construct($env_name)
 	{
 		$this->name = $env_name;
 		$this->config = $this->defaults();
-		foreach((array) $args as $key=>$arg)
-			if($arg && !empty($arg)) $this->config[$key] = $arg;
 		$this->roles = array("app"=>null,"db"=>null);
 		$this->init_scm_adapter();
+	}
+
+	public function set($options)
+	{
+		foreach((array) $options as $key=>$option)
+			if($option && !empty($option)) $this->config[$key] = $option;
 	}
 
 	public function __get($prop)
@@ -127,6 +131,8 @@ class Environment
 			"user"=>"",
 			"repository"=>"",
 			"revision"=>"origin/master",
+			"remote_cache"=>true,
+			"releases"=>false,
 			"deploy_to"=>getcwd(),
 			"backup"=>false,
 			"app"=>"",

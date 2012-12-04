@@ -3,9 +3,9 @@ namespace Pomander\Scm;
 
 class Git extends \Pomander\Scm
 {
-  public function create()
-  {
-    return "git clone {$this->repository} {$this->app->env->cache_dir}";
+  public function create($location)
+	{
+    return "git clone {$this->repository} {$location}";
   }
 
   public function update()

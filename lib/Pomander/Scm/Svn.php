@@ -3,9 +3,9 @@ namespace Pomander\Scm;
 
 class Svn extends \Pomander\Scm
 {
-  public function create()
+  public function create($location)
   {
-    return "svn co {$this->repository} {$this->app->env->cache_dir} --quiet";
+    return "svn co {$this->repository} {$location} --quiet";
   }
 
   public function update()

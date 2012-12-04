@@ -37,10 +37,10 @@ function warn($status,$msg)
 	puts(" * ".colorize("warn ",31).colorize($status." ",35).$msg);
 }
 
-function abort($status, $msg)
+function abort($status, $msg, $code=1)
 {
 	warn($status,$msg);
-	die(1);
+	die($code);
 }
 
 function colorize($text,$color)
@@ -87,14 +87,14 @@ function exec_cmd($cmd)
 function put($what,$where)
 {
 	if(!isset(builder()->get_application()->env))
-		return exec_cmd("cp -r $what $where");
+		return exec_cmd("cp -R $what $where");
 	builder()->get_application()->env->put($what,$where);
 }
 
 function get($what,$where)
 {
 	if(!isset(builder()->get_application()->env))
-		return exec_cmd("cp -r $what $where");
+		return exec_cmd("cp -R $what $where");
 	builder()->get_application()->env->get($what,$where);
 }
 

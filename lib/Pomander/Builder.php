@@ -7,6 +7,8 @@ class Builder
 	{
 		foreach(glob("deploy/*.yml") as $config)
 			$configs[basename($config,".yml")] = \Spyc::YAMLLoad($config);
+		foreach(glob("deploy/*.php") as $config)
+			$configs[basename($config,".php")] = $config;
 		$this->load_environments($configs);
 	}
 
@@ -19,9 +21,13 @@ class Builder
 	{
 		foreach($config as $env_name=>$environment)
 		{
-			$env = new Environment($env_name,$environment);
-			task($env_name, function($app) use($env) {
+			$env = new Environment($env_name);
+			if(is_string($environment)) include($env);
+			else $env->set($environment);
+			task($env_name, function($app) use($env,$environment) {
 				info("environment",$env->name);
+				if(is_string($environment)) include($environment);
+				else $env->set($environment);
 				$app->env = $env;
 				$app->reset();
 			});
