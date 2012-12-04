@@ -17,9 +17,8 @@ group('deploy', function() {
 			$cmd[] = $app->env->scm->create($app->env->deploy_to);
 		}else
 		{
-			$cmd[] = "mkdir {$app->env->current_dir} {$app->env->releases_dir} {$app->env->shared_dir}";
-			if($app->env->remote_cache)
-				$cmd[] = $app->env->scm->create($app->env->cache_dir);
+			$cmd[] = "mkdir -p {$app->env->current_dir} {$app->env->releases_dir} {$app->env->shared_dir}";
+			if($app->env->remote_cache === true) $cmd[] = $app->env->scm->create($app->env->cache_dir);
 		}
 		run($cmd);
   });
@@ -35,7 +34,7 @@ group('deploy', function() {
 		}else
 		{
 			$app->env->release_dir = $app->env->releases_dir.'/'.$app->env->new_release();
-			if($app->env->remote_cache)
+			if($app->env->remote_cache === true)
 			{
 				$cmd[] = "cd {$app->env->cache_dir}";
 				$cmd[] = $app->env->scm->update();
