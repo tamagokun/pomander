@@ -51,25 +51,25 @@ Configuration reference:
 <dt>repository</dt>
 <dd>Repository url.</dd>
 <dt>revision</dt>
-<dd>Revision/branch to deploy. _Default: origin/master, trunk_</dd>
+<dd>Revision/branch to deploy. <em>Default: origin/master, trunk</em></dd>
 <dt>scm</dt>
-<dd>SCM to use. Currently supports svn and git. _Default: git_</dd>
+<dd>SCM to use. Currently supports svn and git. <em>Default: git</em></dd>
 <dt>releases</dt>
-<dd>Use current/releases/shared structure. (true|false|number of releases to keep) _Default: false_</dd>
+<dd>Use current/releases/shared structure. (true|false|number of releases to keep) <em>Default: false</em></dd>
 <dt>adapter</dt>
-<dd>Data adapter to use for databases. Currently supports MySQL. _Default: mysql_</dd>
-<dt>remote\_cache</dt>
-<dd>Cache repository for faster deploys. (true|false) _Default: true when releases isn't false_</dd>
-<dt>deploy\_to</dt>
-<dd>Application is deployed here. _Default: cwd_</dd>
+<dd>Data adapter to use for databases. Currently supports MySQL. <em>Default: mysql</em></dd>
+<dt>remote_cache</dt>
+<dd>Cache repository for faster deploys. (true|false) <em>Default: true when releases are set</em></dd>
+<dt>deploy_to</dt>
+<dd>Application is deployed here. <em>Default: cwd</em></dd>
 <dt>backup</dt>
-<dd>Perform backup (database) on deployments. (true|false). _Default: false_</dd>
+<dd>Perform backup (database) on deployments. (true|false). <em>Default: false</em></dd>
 <dt>umask</dt>
-<dd>Umask to use for remote tasks. _Default: 002_</dd>
+<dd>Umask to use for remote tasks. <em>Default: 002</em></dd>
 <dt>rsync_cmd</dt>
-<dd>Command to use for file syncing. _Default: rsync_</dd>
+<dd>Command to use for file syncing. <em>Default: rsync</em></dd>
 <dt>rsync_flags</dt>
-<dd>Extra flags to use for file syncing. _Default: -avuzPO --quiet_</dd>
+<dd>Extra flags to use for file syncing. <em>Default: -avuzPO --quiet</em></dd>
 <dt>app</dt>
 <dd>String or Array of application hosts to deploy to.</dd>
 <dt>db</dt>
@@ -80,9 +80,9 @@ __PHP configurations look like this:__
 
 ```php
 <?php
-	$env->user('deploy')
-	    ->repository('git@github.com:tamagokun/pomander.git')
-			->deploy_to('/var/www/html')
+  $env->user('deploy')
+      ->repository('git@github.com:tamagokun/pomander.git')
+      ->deploy_to('/var/www/html')
 ```
 
 ### Deploying
