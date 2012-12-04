@@ -60,7 +60,8 @@ class Environment
 		if(!$this->$key) return false;
 		if( !$this->roles[$key] )
 		{
-			$this->roles[$key] = new Role($this->$key);
+			$targets = is_array($this->$key)? $this->$key : array($this->$key);
+			$this->roles[$key] = new Role($targets);
 			return $this->update_target($this->roles[$key]->target());
 		}else
 		{

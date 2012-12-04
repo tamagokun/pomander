@@ -43,20 +43,36 @@ Pomander uses YAML files to configure environments. `pom config` will create a d
 
 Configuration reference:
 
-```yaml
-url:                    # Application URL. Used primarily for database migration and may not be needed.
-user:                   # User for performing remote tasks.
-repository:             # Repository for application.
-revision:               # Desired revision/branch to be deployed.
-scm:                    # SCM to use. Currently supports svn and git. Default: git
-deploy_to:              # Path to deploy to.
-backup:                 # Perform database backups on deployments. (true|false). Default: false
-app:                    # List of application end-points for running deployment tasks.
-  - node1.myapp.com
-  - node2.myapp.com
-db:	                    # List of database end-points for running database tasks.
-  - db1.myapp.com
-```
+url
+: Application URL. Used primarily for databse migration and isn't always needed.
+user
+: SSH user for performing remote tasks.
+repository
+: Repository url.
+revision
+: Revision/branch to deploy. _Default: origin/master, trunk_
+scm
+: SCM to use. Currently supports svn and git. _Default: git_
+releases
+: Use current/releases/shared structure. (true|false|number of releases to keep) _Default: false_
+adapter
+: Data adapter to use for databases. Currently supports MySQL. _Default: mysql_
+remote\_cache
+: Cache repository for faster deploys. (true|false) _Default: true when releases isn't false_
+deploy\_to
+: Application is deployed here. _Default: cwd_
+backup
+: Perform backup (database) on deployments. (true|false). _Default: false_
+umask
+: Umask to use for remote tasks. _Default: 002_
+rsync_cmd
+: Command to use for file syncing. _Default: rsync_
+rsync_flags
+: Extra flags to use for file syncing. _Default: -avuzPO --quiet_
+app
+: String or Array of application hosts to deploy to.
+db
+: String or Array of database hosts to deploy to.
 
 ### Deploying
 
@@ -70,8 +86,8 @@ Tasks
 
 ```
 deploy:setup      # Creates deploy_to folder, and checks out code.
+deploy:cold       # Alias for deploy:setup
 delpoy:update     # Updates code to current revision/branch.
-deployed          #  Tells you what revision/branch is currently deployed.
 config            # Attempts to create a default `development.yml` file.
 ```
 
