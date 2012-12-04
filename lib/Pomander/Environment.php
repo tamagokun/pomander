@@ -41,6 +41,12 @@ class Environment
 		$this->init_scm_adapter();
 	}
 
+	public function __call($name, $arguments)
+	{
+		$this->config[$name] = array_shift($arguments);
+		return $this;
+	}
+
 	public function __get($prop)
 	{
 		if(array_key_exists($prop, $this->config)) return $this->config[$prop];
