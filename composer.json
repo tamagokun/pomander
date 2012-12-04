@@ -20,5 +20,6 @@
 			"Pomander": "lib"
 		}
 	},
+	"minimum-stability": "dev",
 	"bin": ["bin/pom","bin/pomify"]
 }
