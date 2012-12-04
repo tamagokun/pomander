@@ -54,10 +54,10 @@ group('deploy', function() {
 	});
 
 	desc("First time deployment.");
-	task('cold','deploy:setup','deploy:update','finalize');
+	task('cold','deploy:setup','deploy:update','deploy:finalize');
 
 });
-task('deploy','deploy:update','finalize');
+task('deploy','deploy:update','deploy:finalize');
 
 desc("Rollback to the previous revision");
 task('rollback', function($app) {
