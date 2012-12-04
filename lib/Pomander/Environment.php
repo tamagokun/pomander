@@ -21,12 +21,27 @@ class Environment
 			if($option && !empty($option)) $this->config[$key] = $option;
 	}
 
+	public function setup()
+	{
+		if($this->name == "development") $this->releases = false;
+		if($this->releases === false)
+		{
+			$this->current_dir = $this->deploy_to;
+			$this->releases_dir = $this->deploy_to;
+			$this->release_dir = $this->deploy_to;
+			$this->shared_dir = $this->deploy_to;
+			$this->cache_dir = $this->deploy_to;
+		}else
+		{
+			$this->current_dir = $this->deploy_to.'/current';
+			$this->releases_dir = $this->deploy_to.'/releases';
+			$this->shared_dir = $this->deploy_to.'/shared';
+			$this->cache_dir = $this->shared_dir.'/cached_copy';
+		}
+	}
+
 	public function __get($prop)
 	{
-		if($prop == 'current_dir')  return $this->deploy_to.'/current/';
-		if($prop == 'releases_dir') return $this->deploy_to.'/releases/';
-		if($prop == 'shared_dir')   return $this->deploy_to.'/shared/';
-		if($prop == 'cache_dir')    return $this->deploy_to.'/shared/cached_copy/';
 		if(array_key_exists($prop, $this->config)) return $this->config[$prop];
 		return null;
 	}

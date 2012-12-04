@@ -18,6 +18,8 @@ group('deploy', function() {
 		}else
 		{
 			$cmd[] = "mkdir {$app->env->current_dir} {$app->env->releases_dir} {$app->env->shared_dir}";
+			if($app->env->remote_cache)
+				$cmd[] = $app->env->scm->create($app->env->cache_dir);
 		}
 		run($cmd);
   });
@@ -32,12 +34,12 @@ group('deploy', function() {
 			$cmd[] = $app->env->scm->update();
 		}else
 		{
-			$app->env->release_dir = $app->env->deploy_to.'/'.$app->env->new_release();
+			$app->env->release_dir = $app->env->releases_dir.'/'.$app->env->new_release();
 			if($app->env->remote_cache)
 			{
 				$cmd[] = "cd {$app->env->cache_dir}";
 				$cmd[] = $app->env->scm->update();
-				$cmd[] = "cp -R {$app->env->shared_dir}cached_copy {$app->env->release_dir}";
+				$cmd[] = "cp -R {$app->env->cache_dir} {$app->env->release_dir}";
 			}else
 			{
 				$cmd[] = $app->env->scm->create($app->env->release_dir);
@@ -61,7 +63,7 @@ task('deploy','deploy:update','deploy:finalize');
 
 desc("Rollback to the previous revision");
 task('rollback', function($app) {
-	if($app->env->release_dir)
+	if($app->env->release_dir && $app->env->releases !== false)
 	{
 		$cmd = array(
 			"rm -rf {$app->env->release_dir}",

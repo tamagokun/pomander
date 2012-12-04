@@ -29,7 +29,7 @@ class Builder
 				if(is_string($environment)) include($environment);
 				else $env->set($environment);
 				$app->env = $env;
-				if($env->name == "development") $app->env->releases = false;
+				$app->env->setup();
 				$app->reset();
 			});
 		}
