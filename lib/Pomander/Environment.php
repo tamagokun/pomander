@@ -35,6 +35,7 @@ class Environment
 		{
 			$this->current_dir = $this->deploy_to.'/current';
 			$this->releases_dir = $this->deploy_to.'/releases';
+			$this->release_dir = $this->current_dir;
 			$this->shared_dir = $this->deploy_to.'/shared';
 			$this->cache_dir = $this->shared_dir.'/cached_copy';
 		}
