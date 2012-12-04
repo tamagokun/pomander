@@ -22,8 +22,6 @@ class Builder
 		foreach($config as $env_name=>$environment)
 		{
 			$env = new Environment($env_name);
-			if(is_string($environment)) include($env);
-			else $env->set($environment);
 			task($env_name, function($app) use($env,$environment) {
 				info("environment",$env->name);
 				if(is_string($environment)) include($environment);

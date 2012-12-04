@@ -18,7 +18,7 @@ class Environment
 	public function set($options)
 	{
 		foreach((array) $options as $key=>$option)
-			if($option && !empty($option)) $this->config[$key] = $option;
+			$this->config[$key] = $option;
 	}
 
 	public function setup()
