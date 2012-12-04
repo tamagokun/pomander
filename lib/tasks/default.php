@@ -32,7 +32,7 @@ group('deploy', function() {
 			$cmd[] = $app->env->scm->update();
 		}else
 		{
-			$app->env->release_dir = $app->env->deploy_to.$app->env->new_release();
+			$app->env->release_dir = $app->env->deploy_to.'/'.$app->env->new_release();
 			if($app->env->remote_cache)
 			{
 				$cmd[] = "cd {$app->env->cache_dir}";
