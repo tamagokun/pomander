@@ -12,7 +12,6 @@ class Environment
 		$this->name = $env_name;
 		$this->config = $this->defaults();
 		$this->roles = array("app"=>null,"db"=>null);
-		$this->init_scm_adapter();
 	}
 
 	public function set($options)
@@ -39,6 +38,7 @@ class Environment
 			$this->shared_dir = $this->deploy_to.'/shared';
 			$this->cache_dir = $this->shared_dir.'/cached_copy';
 		}
+		$this->init_scm_adapter();
 	}
 
 	public function __get($prop)
