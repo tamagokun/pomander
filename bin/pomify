@@ -1,17 +1,44 @@
 #!/usr/bin/env php
 <?php
-define('POMANDER_PATH',dirname(__DIR__).'/lib/');
 
-$has_runfile = (file_exists(getcwd()."/Pomfile") || file_exists(getcwd()."/Pomfile.php"));
-if($has_runfile === true)
-  die();
-$directory = getcwd();
-if (!@chdir($directory)) {
-  throw new Exception("Couldn't change to directory '$directory'");
-} else {
-  echo "(in $directory)\n";
+if(!class_exists("\\Pomander"))
+{
+	try {
+		$dir = dirname(dirname(dirname(__DIR__)));
+		require_once "{$dir}/autoload.php";
+	}catch(Exception $e)
+	{
+		echo "Failed to load Pomander library. Is pom installed in the proper location?\n";
+	}
 }
-copy(POMANDER_PATH."generators/Pomfile","./Pomfile");
-@mkdir("./deploy");
-copy(POMANDER_PATH."generators/config.yml","./deploy/development.yml");
+
+try
+{
+	$directory = getcwd();
+	if(\Pomander::resolve_runfile($directory))
+		abort("pomify","This directory has already been pomified. Bye!");
+	if (!@chdir($directory))
+		throw new Exception("Couldn't change to directory '$directory'");
+	else
+		echo "(in $directory)\n";
+	info("pomify","Creating Pomfile...");
+	copy(dirname(__DIR__)."/lib/generators/Pomfile","./Pomfile");
+	if(!file_exists("./deploy"))
+	{
+		info("pomify","Creating deploy directory...");
+		@mkdir("./deploy");
+	}
+	if(file_exists("./deploy/development.yml") || file_exists("./deploy/development.php"))
+	{
+		warn("pomify","Development configuration exists, skipping.");
+	}else
+	{
+		info("pomify","Creating development configuration...");
+		copy(dirname(__DIR__)."/lib/generators/config.yml","./deploy/development.yml");
+	}
+}catch(\Exception $e)
+{
+	abort("abort",$e->getMessage());
+}
+info("pomify","Finished!");
 ?>

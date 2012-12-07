@@ -14,8 +14,7 @@ class Pomander
 				$candidate = $directory.'/'.$r;
 				if(file_exists($candidate)) return $candidate;
 			}
-			if($directory == '/')
-				throw new \Exception("No Pomfile found");
+			if($directory == '/') return false;
 			$directory = dirname($directory);
 		} while (true);
 	}
@@ -24,7 +23,7 @@ class Pomander
 //utils
 function require_once_dir($dir)
 {
-	foreach(glob(POMANDER_PATH.$dir) as $file) require_once $file;
+	foreach(glob(builder()->get_application()->root.'/'.$dir) as $file) require_once $file;
 }
 
 function info($status,$msg)
@@ -51,12 +50,12 @@ function colorize($text,$color)
 	return "\033[{$color}m{$text}\033[0m";
 }
 
-function puts($text) { echo $text."\n"; }
+function puts($text) { echo $text.PHP_EOL; }
 
 function home()
 {
 	if(!isset(builder()->get_application()->home))
-		builder()->get_application()->home = trim(shell_exec("cd ~ && pwd"),"\r\n");
+		builder()->get_application()->home = trim(shell_exec("cd && pwd"),"\r\n");
 	return builder()->get_application()->home;
 }
 
@@ -76,9 +75,10 @@ function exec_cmd($cmd)
 {
 	$cmd = is_array($cmd)? implode(" && ",$cmd) : $cmd;
 	exec($cmd,$out,$status);
-	if($status > 0) {
+	$app = builder()->get_application();
+	if($status > 0 && in_array(array('deploy','deploy:cold','deploy:setup'), $app->top_level_tasks)) {
 		warn("fail","Deployment failed. Rolling back...");
-		builder()->get_application()->invoke('rollback');
+		$app->invoke('rollback');
 		abort("complete","Rolled back.");
 	}
 	return implode("\n",$out);

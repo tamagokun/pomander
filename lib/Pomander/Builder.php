@@ -36,7 +36,11 @@ class Builder
 	public function load($plugin)
 	{
 		if(!class_exists($plugin))
+		{
 			$plugin = "\\Pomander\\$plugin";
+			if(!class_exists($plugin))
+				return abort("load","Could not load plugin {$plugin}");
+		}
 		$plugin::load();
 	}
 
@@ -48,7 +52,7 @@ class Builder
 
 		task("environment",function($app) use($builder) {
 			if(!$builder->has_environments())
-				warn("config","unable to locate any environments. try running 'config'");
+				abort("config","unable to locate any environments. try running 'pom config'");
 			if(!isset($app->env)) $app->invoke($app->default_env);
 		});
 

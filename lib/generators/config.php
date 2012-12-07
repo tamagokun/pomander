@@ -1,7 +1,7 @@
 <?php
 
 $env->url('myapp.localhost')
-    ->user('cap')
+    ->user('')
 		->repository('')
 		->revision('')
 		->deploy_to('')

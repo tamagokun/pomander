@@ -1,5 +1,5 @@
-url: myapp.localhost
-user: cap
+url: localhost
+user:
 repository:
 revision:
 deploy_to:
