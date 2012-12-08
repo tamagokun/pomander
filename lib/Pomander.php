@@ -21,9 +21,17 @@ class Pomander
 }
 
 set_error_handler(function($errno,$errstr,$errfile,$errline) {
-	warn("php","uncaught exception.");
-	puts("Error! [$errno] $errstr");
-	puts("Fatal error on line $errline in $errfile");
+	puts("aborted!");
+	puts("$errstr\n");
+	global $trace;
+	if($trace)
+	{
+		$exception = new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+		puts($exception->getTraceAsString());
+	}else
+	{
+		puts("(See full trace by running task with --trace");
+	}
 	exit($errno);
 });
 
