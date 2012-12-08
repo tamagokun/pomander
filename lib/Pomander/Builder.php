@@ -23,7 +23,7 @@ class Builder
 		{
 			$env = new Environment($env_name);
 			if(is_string($environment)) require_once($environment);
-			else $env->set($environmet);
+			else $env->set($environment);
 
 			task($env_name, function($app) use($env) {
 				info("environment",$env->name);
