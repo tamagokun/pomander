@@ -19,10 +19,10 @@ $env->db(array(              // Your database server(s) host or IP
 ));
 
 // If your app uses a database uncomment this:
-$env->database(array(
-	'name' => '',
-	'user' => '',
-	'password' => '',
-	'host' => '127.0.0.1',
-	'charset' => 'utf8'
-));
+//$env->database(array(
+	//'name' => '',
+	//'user' => '',
+	//'password' => '',
+	//'host' => '127.0.0.1',
+	//'charset' => 'utf8'
+//));
