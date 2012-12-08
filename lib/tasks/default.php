@@ -76,14 +76,14 @@ task('rollback', function($app) {
 //local
 desc("Create default development.yml for project");
 task('config', function($app) {
-  if( file_exists("./deploy/development.yml"))
-    warn("development.yml","Already exists, skipping");
+  if( file_exists("./deploy/development.php"))
+    warn("development.php","Already exists, skipping");
   else
 	{
-    if( copy($app->dir."/generators/config.yml","./deploy/development.yml") )
-      info("config","Created deploy/development.yml");
+    if( copy($app->dir."/generators/config.php","./deploy/development.php") )
+      info("config","Created deploy/development.php");
     else
-      warn("config","Unable to create deploy/development.yml");
+      warn("config","Unable to create deploy/development.php");
   }
 });
 ?>
