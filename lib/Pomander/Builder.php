@@ -14,7 +14,7 @@ class Builder
 
 	public function has_environments()
 	{
-		return count(glob("deploy/*.yml")) > 0;
+		return count(glob("deploy/*{.php,.yml}", GLOB_BRACE)) > 0;
 	}
 
 	public function load_environments($config)
@@ -22,10 +22,11 @@ class Builder
 		foreach($config as $env_name=>$environment)
 		{
 			$env = new Environment($env_name);
-			task($env_name, function($app) use($env,$environment) {
+			if(is_string($environment)) require_once($environment);
+			else $env->set($environmet);
+
+			task($env_name, function($app) use($env) {
 				info("environment",$env->name);
-				if(is_string($environment)) include($environment);
-				else $env->set($environment);
 				$app->env = $env;
 				$app->env->setup();
 				$app->reset();

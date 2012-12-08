@@ -20,6 +20,13 @@ class Pomander
 	}
 }
 
+set_error_handler(function($errno,$errstr,$errfile,$errline) {
+	warn("php","uncaught exception.");
+	puts("Error! [$errno] $errstr");
+	puts("Fatal error on line $errline in $errfile");
+	exit($errno);
+});
+
 //utils
 function require_once_dir($dir)
 {
@@ -76,7 +83,7 @@ function exec_cmd($cmd)
 	$cmd = is_array($cmd)? implode(" && ",$cmd) : $cmd;
 	exec($cmd,$out,$status);
 	$app = builder()->get_application();
-	if($status > 0 && in_array(array('deploy','deploy:cold','deploy:setup'), $app->top_level_tasks)) {
+	if($status > 0 && $app->resolve('deploy:update')->resolve(array('deploy:update'))->has_run) {
 		warn("fail","Deployment failed. Rolling back...");
 		$app->invoke('rollback');
 		abort("complete","Rolled back.");

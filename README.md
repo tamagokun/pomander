@@ -5,43 +5,69 @@ A light-weight flexible deployment tool for deploying web applications. This pro
 
 This project came out of the need for a way to deploy Wordpress sites to multiple environments easily and without firing up FTP clients, etc. What started as a simple Rakefile, quickly grew into much more, and has been finally abstracted and ported to PHP to be able to fully integrate tasks with your application.
 
+Getting Started
+---------------
+
+Make sure you have [composer](http://getcomposer.org/) installed:
+
+```bash
+$ curl -s https://getcomposer.org/installer | php
+$ sudo mv composer.phar /usr/local/bin/composer
+```
+
+[_Need help installing composer?_](http://getcomposer.org/doc/00-intro.md#installation-nix)
+
 Installation
 ------------
 
-Requirements:
+I like to install Pomander globally so I can user it in any project.
+Unfortunately, Composer does not have a way of doing this by default, 
+so here is an easy way to allow global package installtion:
 
-* PHP 5.3.1+
-* [composer](http://getcomposer.org/)
+### Setting up Composer for global installation
+
+```bash
+$ mkdir -p $HOME/.composer
+$ touch $HOME/.composer/composer.json
+```
+
+### Installing Pomander
+
+You need to add `pomander/pomander` to your composer.json:
 
 ```json
 {
 	"require": {
 		"pomander/pomander": "dev-master"
-	}
+	}	
 }
 ```
 
+You can also do this using Composer:
+
+```bash
+$ composer require pomander/pomander:dev-master
 ```
-$ composer install
+
+Setting up a project
+--------------------
+
+#### Step 1. Create a `deploy/development.php`
+
+```bash
+$ pom config
 ```
 
-Usage
------
+Once the file has been created, you will want to fill in the appropriate values.
+You can also check out the [options reference](#options-reference) for help.
 
-### Set up your project for use with Pomander
+_Pomander also supports YAML deploy environments, but recommends using php scripts for extra customization._
 
-    $ cd myproject
-    $ pomify
-
-This will give you `Pomfile` where you can configure plugins, and it will also create a default deployment configuration.
-    
 Use `pom -T` to see your available tasks.
     
-### Configure environments
 
-To configure an environment, just drop a `.yml` or `.php` file named the environment you want to create in the deploy folder. `pom config` will create a development.yml file to get you going if you don't already have one. You can create as many environments as you want.
-
-Configuration reference:
+Configuration Reference
+-----------------------
 
 <dl>
 <dt>url</dt>
@@ -83,11 +109,12 @@ __PHP configurations look like this:__
   $env->user('deploy')
       ->repository('git@github.com:tamagokun/pomander.git')
       ->deploy_to('/var/www/html')
+	;
 ```
 
 ### Deploying
 
-    pom deploy:setup # Just run this the first time
+    pom deploy:cold # Just run this the first time
     
     # All subsequent deployments use pom deploy (deploy defaults to deploy:update)
     pom deploy

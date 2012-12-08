@@ -24,7 +24,13 @@ $app = phake\Builder::$global->get_application();
 $app->top_level_tasks = count($tasks)? $tasks : array('default');
 $app->dir = __DIR__.'/lib';
 
-// load Pomfile
+// load Pomander/Pomfile
 $runfile = \Pomander::resolve_runfile(getcwd());
-if(!$runfile) throw new \Exception("No Pomfile found");
-phake\load_runfile($runfile);
+if(!$runfile)
+{
+	$pom = new \Pomander\Builder();
+	$pom->run();
+}else
+{
+	phake\load_runfile($runfile);
+}

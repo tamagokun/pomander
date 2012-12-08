@@ -14,6 +14,17 @@ class Environment
 		$this->roles = array("app"=>null,"db"=>null);
 	}
 
+	public function load($plugin)
+	{
+		if(!class_exists($plugin))
+		{
+			$plugin = "\\Pomander\\$plugin";
+			if(!class_exists($plugin))
+				return abort("load","Could not load plugin {$plugin}");
+		}
+		$plugin::load();
+	}
+
 	public function set($options)
 	{
 		foreach((array) $options as $key=>$option)
@@ -102,20 +113,25 @@ class Environment
 	public function connect()
 	{
 		if( !isset($this->target) ) return false;
-		$this->shell = new \Net_SSH2($this->target);
-		$key_path = home()."/.ssh/id_rsa";
-		if( file_exists($key_path) )
+		try
 		{
-			$key = new \Crypt_RSA();
-			$key_status = $key->loadKey(file_get_contents($key_path));
-			if(!$key_status) abort("ssh","Unable to load RSA key");
-		}else
+			$this->shell = new \Net_SSH2($this->target);
+			if( file_exists($this->key_path) )
+			{
+				$key = new \Crypt_RSA();
+				$key_status = $key->loadKey(file_get_contents($this->key_path));
+				if(!$key_status) abort("ssh","Unable to load RSA key");
+			}else
+			{
+				if( isset($this->password) )
+				$key = $this->password;
+			}
+			if(!$this->shell->login($this->user,$key))
+				abort("ssh","Login failed");
+		}catch(\Exception $e)
 		{
-			if( isset($this->password) )
-			$key = $this->password;
+			abort("ssh","Could not connect to server.");	
 		}
-		if(!$this->shell->login($this->user,$key))
-			abort("ssh","Login failed");
 	}
 
 	public function exec($cmd)
@@ -164,7 +180,8 @@ class Environment
 			"adapter"=>"mysql",
 			"rsync_cmd"=>"rsync",
 			"umask"=>"002",
-			"rsync_flags"=>"-avuzPO --quiet"
+			"rsync_flags"=>"-avuzPO --quiet",
+			"key_path"=>home()."/.ssh/id_rsa"
 		);
 		return $defaults;
 	}
@@ -185,7 +202,7 @@ class Environment
 		if( !$this->scm = new $this->config["scm"]($this->repository) )
 			abort("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
 		$this->config["adapter"] = "\\Pomander\\Db\\".ucwords(strtolower($this->config["adapter"]));
-		if( !$this->adapter = new $this->config["adapter"]($this->wordpress) )
+		if( !$this->adapter = new $this->config["adapter"]($this->database) )
 			abort("db","There is no recipe for {$this->config["adapter"]}, perhaps create your own?");
 	}
 
