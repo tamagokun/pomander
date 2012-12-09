@@ -27,16 +27,22 @@ so here is an easy way to allow global package installtion:
 ### Setting up Composer for global installation
 
 ```bash
-$ mkdir -p $HOME/.composer
-$ touch $HOME/.composer/composer.json
+$ curl https://raw.github.com/gist/4242494/5d6344d2976e07d051ace18d41fa035113353e90/global_composer.sh | sh
 ```
 
 ### Installing Pomander
 
-You need to add `pomander/pomander` to your composer.json:
+If you are using the global installation method from above, you can easily do:
+
+```bash
+$ cd ~/.pomander && composer require pomander/pomander:dev-master
+```
+
+Otherwise, you need to add `pomander/pomander` to your project's composer.json:
 
 ```json
 {
+	"minimum-stability": "dev",
 	"require": {
 		"pomander/pomander": "dev-master"
 	}	
