@@ -3,6 +3,7 @@
 $env->repository('set your repository location here')
     ->url('set your application url here')
 		->deploy_to('set your application location on server')
+		->releases(true)
 		//->user('set your ssh user')
 		//->scm('set your scm. defaults to git')
 		//->revision('')
