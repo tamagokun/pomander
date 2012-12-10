@@ -10,7 +10,7 @@ class Mysql extends \Pomander\Db
 
   public function dump($file, $args = "")
   {
-    return "mysqldump {$this->connect()} {$this->config["name"]} $args > $file";  
+    return "mysqldump {$this->connect()} {$this->config["name"]} $args > $file";
   }
 
   public function backup($file, $args = "")
@@ -26,7 +26,7 @@ class Mysql extends \Pomander\Db
 
   public function connect()
   {
-    return "-u {$this->config["user"]} -p --password={$this->config["password"]} --host={$this->config["host"]}"; 
+    return "-u {$this->config["user"]} -p --password={$this->config["password"]} --host={$this->config["host"]}";
   }
 }
 ?>

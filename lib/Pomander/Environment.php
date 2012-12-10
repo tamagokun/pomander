@@ -198,11 +198,11 @@ class Environment
 
 	private function init_scm_adapter()
 	{
-		$this->config["scm"] = "\\Pomander\\Scm\\".ucwords(strtolower($this->config["scm"]));
-		if( !$this->scm = new $this->config["scm"]($this->repository) )
+		$scm = "\\Pomander\\Scm\\".ucwords(strtolower($this->config["scm"]));
+		if( !$this->scm = new $scm($this->repository) )
 			abort("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
-		$this->config["adapter"] = "\\Pomander\\Db\\".ucwords(strtolower($this->config["adapter"]));
-		if( !$this->adapter = new $this->config["adapter"]($this->database) )
+		$adapter = "\\Pomander\\Db\\".ucwords(strtolower($this->config["adapter"]));
+		if( !$this->adapter = new $adapter($this->database) )
 			abort("db","There is no recipe for {$this->config["adapter"]}, perhaps create your own?");
 	}
 
