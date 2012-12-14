@@ -1,7 +1,6 @@
 <?php
 $pom = new \Pomander\Builder();
 /* plugins
- * require 'vendor/autoload.php';
  * $pom->load('Wordpress'); */
 $pom->run();
 ?>

@@ -1,5 +1,5 @@
 {
-    "hash": "41ed41bca4a469749c01e597628d92df",
+    "hash": "b7454149573583d2e66a20bc9e5ff9b3",
     "packages": [
         {
             "name": "jaz303/phake",
@@ -47,12 +47,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib",
-                "reference": "27f6012d623997b1fb2b37c4be98023326d44cfd"
+                "reference": "a7312207856bf1494a0f3c3176dd84dee9125483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/phpseclib/phpseclib/archive/27f6012d623997b1fb2b37c4be98023326d44cfd.zip",
-                "reference": "27f6012d623997b1fb2b37c4be98023326d44cfd",
+                "url": "https://github.com/phpseclib/phpseclib/archive/a7312207856bf1494a0f3c3176dd84dee9125483.zip",
+                "reference": "a7312207856bf1494a0f3c3176dd84dee9125483",
                 "shasum": ""
             },
             "require": {
@@ -63,7 +63,7 @@
                 "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
                 "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP >= 4.3.3."
             },
-            "time": "2012-12-01 16:52:10",
+            "time": "2012-12-14 14:45:35",
             "type": "library",
             "installation-source": "source",
             "autoload": {

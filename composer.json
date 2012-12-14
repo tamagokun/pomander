@@ -12,6 +12,12 @@
 			"homepage": "http://ripeworks.com"
 		}
 	],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/tamagokun/phake"
+		}
+	],
 	"require": {
 		"jaz303/phake": "dev-master",
 		"phpseclib/phpseclib": "dev-master"

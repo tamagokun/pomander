@@ -19,14 +19,17 @@ class Builder
 
 	public function load_environments($config)
 	{
+		$builder = $this;
 		foreach($config as $env_name=>$environment)
 		{
 			$env = new Environment($env_name);
-			if(is_string($environment)) require_once($environment);
-			else $env->set($environment);
 
-			task($env_name, function($app) use($env) {
+			task($env_name, function($app) use($env, $environment, $builder) {
 				info("environment",$env->name);
+				\phake\Builder::$global->clear();
+				$builder->run();
+				if(is_string($environment)) require_once($environment);
+				else $env->set($environment);
 				$app->env = $env;
 				$app->env->setup();
 				$app->reset();
