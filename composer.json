@@ -19,7 +19,7 @@
 		}
 	],
 	"require": {
-		"jaz303/phake": "dev-master",
+		"jaz303/phake": "dev-clear-phake",
 		"phpseclib/phpseclib": "dev-master"
 	},
 	"autoload": {
