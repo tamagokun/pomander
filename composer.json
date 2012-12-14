@@ -12,14 +12,8 @@
 			"homepage": "http://ripeworks.com"
 		}
 	],
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/tamagokun/phake"
-		}
-	],
 	"require": {
-		"jaz303/phake": "dev-clear-phake",
+		"tamagokun/phake": "dev-clear-phake",
 		"phpseclib/phpseclib": "dev-master"
 	},
 	"autoload": {

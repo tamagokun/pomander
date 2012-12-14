@@ -1,48 +1,6 @@
 {
-    "hash": "aaac10b6497fdc7cd486c977ec35317b",
+    "hash": "4f4a21bce9d2ce07e8de3571706af06c",
     "packages": [
-        {
-            "name": "jaz303/phake",
-            "version": "dev-clear-phake",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tamagokun/phake",
-                "reference": "2c7b149c67410e8e02e8cabc1165b0269e5e7a98"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tamagokun/phake/zipball/2c7b149c67410e8e02e8cabc1165b0269e5e7a98",
-                "reference": "2c7b149c67410e8e02e8cabc1165b0269e5e7a98",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "time": "2012-12-14 18:17:10",
-            "bin": [
-                "bin/phake"
-            ],
-            "type": "library",
-            "installation-source": "source",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jason Frame",
-                    "email": "jason@onehackoranother.com"
-                }
-            ],
-            "description": "A wee clone of Ruby's rake for PHP 5.3. Uses closures for ultimate coolness.",
-            "homepage": "http://github.com/jaz303/phake",
-            "keywords": [
-                "Tasks",
-                "CLI"
-            ],
-            "support": {
-                "source": "https://github.com/tamagokun/phake/tree/clear-phake"
-            }
-        },
         {
             "name": "phpseclib/phpseclib",
             "version": "dev-master",
@@ -109,6 +67,46 @@
                 "asn.1",
                 "BigInteger"
             ]
+        },
+        {
+            "name": "tamagokun/phake",
+            "version": "dev-clear-phake",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tamagokun/phake",
+                "reference": "2c7b149c67410e8e02e8cabc1165b0269e5e7a98"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/tamagokun/phake/archive/2c7b149c67410e8e02e8cabc1165b0269e5e7a98.zip",
+                "reference": "2c7b149c67410e8e02e8cabc1165b0269e5e7a98",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2012-12-14 18:17:10",
+            "bin": [
+                "bin/phake"
+            ],
+            "type": "library",
+            "installation-source": "source",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jason Frame",
+                    "email": "jason@onehackoranother.com"
+                }
+            ],
+            "description": "A wee clone of Ruby's rake for PHP 5.3. Uses closures for ultimate coolness.",
+            "homepage": "http://github.com/jaz303/phake",
+            "keywords": [
+                "cli",
+                "Tasks"
+            ]
         }
     ],
     "packages-dev": null,
@@ -117,7 +115,7 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "jaz303/phake": 20,
+        "tamagokun/phake": 20,
         "phpseclib/phpseclib": 20
     }
 }
