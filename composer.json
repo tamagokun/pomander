@@ -13,7 +13,7 @@
 		}
 	],
 	"require": {
-		"tamagokun/phake": "dev-clear-phake",
+		"jaz303/phake": "dev-master",
 		"phpseclib/phpseclib": "dev-master"
 	},
 	"autoload": {
