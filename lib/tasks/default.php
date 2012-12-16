@@ -17,7 +17,7 @@ group('deploy', function() {
 			$cmd[] = $app->env->scm->create($app->env->deploy_to);
 		}else
 		{
-			$cmd[] = "mkdir -p {$app->env->current_dir} {$app->env->releases_dir} {$app->env->shared_dir}";
+			$cmd[] = "mkdir -p {$app->env->releases_dir} {$app->env->shared_dir}";
 			if($app->env->remote_cache === true) $cmd[] = $app->env->scm->create($app->env->cache_dir);
 		}
 		run($cmd);
@@ -26,6 +26,7 @@ group('deploy', function() {
   desc("Update code to latest changes.");
   task('update','app', function($app) {
     info("deploy","updating code");
+		$app->can_rollback = true;
 		$cmd = array();
 		if($app->env->releases === false)
 		{
@@ -51,7 +52,7 @@ group('deploy', function() {
 
 	task('finalize', function($app) {
 		if($app->env->releases !== false)
-			run("rm -rf {$app->env->current_dir}","ln -s {$app->env->releases_dir}/`ls {$app->env->releases_dir} | sort -nr | head -1` {$app->env->current_dir}");
+			run("ln -nfs {$app->env->releases_dir}/`ls {$app->env->releases_dir} | sort -nr | head -1` {$app->env->current_dir}");
 	});
 
 	desc("First time deployment.");
@@ -66,15 +67,14 @@ task('rollback', function($app) {
 	{
 		$cmd = array(
 			"rm -rf {$app->env->release_dir}",
-			"rm -rf {$app->env->current_dir}",
-			"ln -s {$app->env->releases_dir}/`ls {$app->env->releases_dir} | sort -nr | head -1` {$app->env->current_dir}"
+			"ln -nfs {$app->env->releases_dir}/`ls {$app->env->releases_dir} | sort -nr | head -1` {$app->env->current_dir}"
 		);
 		run($cmd);
 	}
 });
 
 //local
-desc("Create default development.yml for project");
+desc("Create development environment configuration");
 task('config', function($app) {
   if( file_exists("./deploy/development.php"))
     warn("development.php","Already exists, skipping");
@@ -85,5 +85,14 @@ task('config', function($app) {
     else
       warn("config","Unable to create deploy/development.php");
   }
+});
+
+desc("Set it up");
+task('init', function($app) {
+	info("init","Creating deploy directory");
+	exec_cmd("mkdir -p ./deploy");
+	info("init","Creating development configuration");
+	$app->invoke("config");
+	info("init","Done!");
 });
 ?>

@@ -52,7 +52,9 @@ class Builder
 	{
 		$builder = $this;
 		if($this->has_environments()) $this->config();
-		builder()->get_application()->default_env = "development";
+		$app = builder()->get_application();
+		$app->default_env = "development";
+		$app->can_rollback = false;
 
 		task("environment",function($app) use($builder) {
 			if(!$builder->has_environments())

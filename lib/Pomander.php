@@ -36,11 +36,6 @@ set_error_handler(function($errno,$errstr,$errfile,$errline) {
 });
 
 //utils
-function require_once_dir($dir)
-{
-	foreach(glob(builder()->get_application()->root.'/'.$dir) as $file) require_once $file;
-}
-
 function info($status,$msg)
 {
 	puts(" * ".colorize("info ",32).colorize($status." ",35).$msg);
@@ -89,14 +84,19 @@ function run()
 function exec_cmd($cmd)
 {
 	$cmd = is_array($cmd)? implode(" && ",$cmd) : $cmd;
-	exec($cmd,$out,$status);
+	passthru($cmd,$status);
 	$app = builder()->get_application();
-	if($status > 0 && $app->resolve('deploy:update')->resolve(array('deploy:update'))->has_run) {
-		warn("fail","Deployment failed. Rolling back...");
-		$app->invoke('rollback');
-		abort("complete","Rolled back.");
+	if($status > 0)
+	{
+		if($app->can_rollback)
+		{
+			warn("fail","Rolling back...");
+			$app->invoke('rollback');
+			abort("complete","Rolled back.",$status);
+			return;
+		}
+		abort("fail","aborted!",$status);
 	}
-	return implode("\n",$out);
 }
 
 function put($what,$where)
@@ -111,31 +111,4 @@ function get($what,$where)
 	if(!isset(builder()->get_application()->env))
 		return exec_cmd("cp -R $what $where");
 	builder()->get_application()->env->get($what,$where);
-}
-
-//To Deprecate
-function copy_r( $path, $dest )
-{
-  if( is_dir($path) )
-  {
-    @mkdir( $dest );
-    $objects = scandir($path);
-    if( sizeof($objects) > 0 )
-    {
-      foreach( $objects as $file )
-      {
-        if( $file == "." || $file == ".." )
-          continue;
-        if( is_dir( "$path/$file" ) )
-          copy_r( "$path/$file", "$dest/$file" );
-        else
-          copy( "$path/$file", "$dest/$file" );
-      }
-    }
-    return true;
-  }
-  elseif( is_file($path) )
-    return copy($path, $dest);
-  else
-    return false;
 }

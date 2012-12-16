@@ -110,36 +110,13 @@ class Environment
 		}
 	}
 
-	public function connect()
-	{
-		if( !isset($this->target) ) return false;
-		try
-		{
-			$this->shell = new \Net_SSH2($this->target);
-			if( file_exists($this->key_path) )
-			{
-				$key = new \Crypt_RSA();
-				$key_status = $key->loadKey(file_get_contents($this->key_path));
-				if(!$key_status) abort("ssh","Unable to load RSA key");
-			}else
-			{
-				if( isset($this->password) )
-				$key = $this->password;
-			}
-			if(!$this->shell->login($this->user,$key))
-				abort("ssh","Login failed");
-		}catch(\Exception $e)
-		{
-			abort("ssh","Could not connect to server.");	
-		}
-	}
-
 	public function exec($cmd)
 	{
-		if($this->target && !$this->shell) $this->connect();
-		if($this->shell)
-			return $this->shell->exec($cmd);
-		else
+		if($this->target)
+		{
+			$host = isset($this->user)? "{$this->user}@{$this->target}" : $this->target;
+			return exec_cmd("ssh -t $host '$cmd'");
+		}else
 		{
 			return exec_cmd($cmd);
 		}
@@ -180,8 +157,7 @@ class Environment
 			"adapter"=>"mysql",
 			"rsync_cmd"=>"rsync",
 			"umask"=>"002",
-			"rsync_flags"=>"-avuzPO --quiet",
-			"key_path"=>home()."/.ssh/id_rsa"
+			"rsync_flags"=>"-avuzPO --quiet"
 		);
 		return $defaults;
 	}

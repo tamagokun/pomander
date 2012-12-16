@@ -4,4 +4,4 @@
 array_shift($GLOBALS['argv']);
 $arg_list = implode(' ', $GLOBALS['argv']);
 $file = dirname(__DIR__).'/Phakefile';
-system("phake -f $file $arg_list");
+passthru("phake -f $file $arg_list");
