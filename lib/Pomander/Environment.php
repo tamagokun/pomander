@@ -115,7 +115,7 @@ class Environment
 		if($this->target)
 		{
 			$host = isset($this->user)? "{$this->user}@{$this->target}" : $this->target;
-			return exec_cmd("ssh -t $host '$cmd'");
+			return exec_cmd("ssh -tq $host '$cmd'");
 		}else
 		{
 			return exec_cmd($cmd);
