@@ -58,7 +58,7 @@ $ composer require pomander/pomander:dev-master
 Setting up a project
 --------------------
 
-#### Step 1. Create a `deploy/development.php`
+### Step 1. Create a `deploy/development.php`
 
 ```bash
 $ pom init
@@ -69,7 +69,7 @@ You can also check out the [options reference](#options-reference) for help.
 
 _Pomander also supports YAML deploy environments, but recommends using php scripts for extra customization._
 
-#### Step 2. Set up environment for deployment
+### Step 2. Set up environment for deployment
 
 ```bash
 $ pom staging deploy:setup  # staging is the environment name and uses deploy/staging.php
