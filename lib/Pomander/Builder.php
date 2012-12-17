@@ -5,36 +5,17 @@ class Builder
 {
 	public function config()
 	{
-		foreach(glob("deploy/*.yml") as $config)
-			$configs[basename($config,".yml")] = \Spyc::YAMLLoad($config);
-		foreach(glob("deploy/*.php") as $config)
-			$configs[basename($config,".php")] = $config;
-		$this->load_environments($configs);
+		foreach(glob("deploy/*{.php,.yml}", GLOB_BRACE) as $config)
+		{
+			$name = basename($config, ".".pathinfo($config, PATHINFO_EXTENSION));
+			$config = $this->is_yaml($config)? \Spyc::YAMLLoad($config) : $config;
+			$this->environment_task(new Environment($name), $config);
+		}
 	}
 
 	public function has_environments()
 	{
 		return count(glob("deploy/*{.php,.yml}", GLOB_BRACE)) > 0;
-	}
-
-	public function load_environments($config)
-	{
-		$builder = $this;
-		foreach($config as $env_name=>$environment)
-		{
-			$env = new Environment($env_name);
-
-			task($env_name, function($app) use($env, $environment, $builder) {
-				info("environment",$env->name);
-				\phake\Builder::$global->clear();
-				$builder->run();
-				if(is_string($environment)) require_once($environment);
-				else $env->set($environment);
-				$app->env = $env;
-				$app->env->setup();
-				$app->reset();
-			});
-		}
 	}
 
 	public function load($plugin)
@@ -48,7 +29,7 @@ class Builder
 		$plugin::load();
 	}
 
-	public function run()
+	public function run($first = true)
 	{
 		$builder = $this;
 		if($this->has_environments()) $this->config();
@@ -70,6 +51,44 @@ class Builder
 			$app->env->multi_role_support("db",$app);
 		});
 
+		if($first) $this->inject_default($app);
 		require dirname(__DIR__).'/tasks/default.php';
+	}
+
+/* protected */
+	protected function environment_task($env, $config)
+	{
+		$builder = $this;
+		task($env->name, function($app) use($env, $config, $builder) {
+			info("environment",$env->name);
+			\phake\Builder::$global->clear();
+			$builder->run(false);
+			if(is_string($config)) require($config);
+			else $env->set($config);
+			$app->env = $env;
+			$app->env->setup();
+			$app->reset();
+		});
+	}
+
+	protected function inject_default($app)
+	{
+		$env = new Environment($app->default_env);
+		$file = glob("deploy/{$env->name}.*");
+		if(count($file) < 1) return;
+		$file = array_shift($file);
+		$config = $this->is_yaml($file)? \Spyc::YAMLLoad($file) : $file;
+		if(is_string($config)) require($config);
+		else $env->set($config);
+		$app->env = $env;
+		$app->env->setup();
+		$app->reset();
+	}
+
+/* private */
+	private function is_yaml($file)
+	{
+		$ext = pathinfo($file, PATHINFO_EXTENSION);
+		return $ext == "yml" || $ext == "yaml";
 	}
 }

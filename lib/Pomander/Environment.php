@@ -120,7 +120,9 @@ class Environment
 			1 => array("pipe", "w"),
 			2 => array("pipe", "w")
 		);
-		$shell = proc_open("script -q /dev/null ssh -t -t -q $host '$cmd'", $spec, $pipes, null, null);
+
+		//$shell = proc_open("script -q /dev/null -c \"ssh -t -t -q $host '$cmd'\"", $spec, $pipes, null, null);
+		$shell = proc_open("ssh -t -t -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $host '$cmd'", $spec, $pipes, null, null);
 		if(!is_resource($shell))
 			throw new \Exception("could not start process.");
 
@@ -147,8 +149,9 @@ class Environment
 		}
 		foreach($pipes as $pipe) fclose($pipe);
 		fclose($stdin);
+		$proc_status = $status['exitcode'];
 
-		pcntl_waitpid($status['pid'], $status);
+		if(pcntl_waitpid($status['pid'], $status) < 0) $status = $proc_status;
 		proc_close($shell);
 
 		if($status > 0)

@@ -52,7 +52,7 @@ group('deploy', function() {
 
 	task('finalize', function($app) {
 		if($app->env->releases !== false)
-			run("ln -nfs {$app->env->releases_dir}/`ls {$app->env->releases_dir} | sort -nr | head -1` {$app->env->current_dir}");
+			run("ls {$app->env->releases_dir} | sort -nr | head -1 | xargs -I {} ln -nfs {$app->env->releases_dir}/{} {$app->env->current_dir}");
 	});
 
 	desc("First time deployment.");
@@ -67,7 +67,7 @@ task('rollback', function($app) {
 	{
 		$cmd = array(
 			"rm -rf {$app->env->release_dir}",
-			"ln -nfs {$app->env->releases_dir}/`ls {$app->env->releases_dir} | sort -nr | head -1` {$app->env->current_dir}"
+			"ls {$app->env->releases_dir} | sort -nr | head -1 | xargs -I {} ln -nfs {$app->env->releases_dir}/{} {$app->env->current_dir}"
 		);
 		run($cmd);
 	}
