@@ -112,13 +112,59 @@ class Environment
 
 	public function exec($cmd)
 	{
-		if($this->target)
+		if(!$this->target) return exec_cmd($cmd);
+		$host = isset($this->user)? "{$this->user}@{$this->target}" : $this->target;
+		$max_buffer = 16 * 1024;
+		$buff = '';
+		$errbuf = '';
+		$inbuf = '';
+		$spec = array(
+			0 => array("pipe", "r"),
+			1 => array("pipe", "w"),
+			2 => array("pipe", "w")
+		);
+		$shell = proc_open("ssh -t -t -q $host '$cmd'", $spec, $pipes, null, null);
+		if(!is_resource($shell))
+			throw new \Exception("could not start process.");
+
+		$stdin = fopen('php://stdin', 'r');
+		stream_set_blocking($stdin, 0);
+		stream_set_blocking($pipes[1], 0);
+		stream_set_blocking($pipes[2], 0);
+
+		while(!feof($pipes[1]) || !feof($pipes[2]))
 		{
-			$host = isset($this->user)? "{$this->user}@{$this->target}" : $this->target;
-			return exec_cmd("ssh -tq $host '$cmd'");
-		}else
+			$in = fgets($stdin, $max_buffer);
+			if(strlen($in)) fwrite($pipes[0], $in);
+
+			$out = fread($pipes[1], $max_buffer);
+			$err = fread($pipes[2], $max_buffer);
+			echo $out;
+			echo $err;
+			if(preg_match('/\(yes\/no\)/', $out) && strlen($out))
+			{
+				fwrite($pipes[0], "yes\n");
+			}
+			$status = proc_get_status($shell);
+			if($status['exitcode'] > -1) break;
+		}
+		foreach($pipes as $pipe) fclose($pipe);
+		fclose($stdin);
+		if($status['exitcode'] < 0) $status = proc_get_status($shell);
+		proc_close($shell);
+
+		$status = $status['exitcode'];
+		if($status > 0)
 		{
-			return exec_cmd($cmd);
+			$app = builder()->get_application();
+			if($app->can_rollback)
+			{
+				warn("fail","Rolling back...");
+				$app->invoke('rollback');
+				abort("complete","Rolled back.",$status);
+				return;
+			}
+			abort("fail","aborted!",$status);
 		}
 	}
 
