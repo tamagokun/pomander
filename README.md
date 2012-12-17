@@ -126,12 +126,12 @@ Options Reference
   $env->user('deploy')
       ->repository('git@github.com:github/teach.github.com.git')
       ->deploy_to('/var/www/html')
-			->releases(true)
-			->app(array(
-				'node-1.rackspace.com',
-				'node-2.rackspace.com'
-			))
-	;
+      ->releases(true)
+      ->app(array(
+        'node-1.rackspace.com',
+        'node-2.rackspace.com'
+      ))
+  ;
 ```
 
 Tasks
