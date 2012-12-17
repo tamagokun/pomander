@@ -115,9 +115,6 @@ class Environment
 		if(!$this->target) return exec_cmd($cmd);
 		$host = isset($this->user)? "{$this->user}@{$this->target}" : $this->target;
 		$max_buffer = 16 * 1024;
-		$buff = '';
-		$errbuf = '';
-		$inbuf = '';
 		$spec = array(
 			0 => array("pipe", "r"),
 			1 => array("pipe", "w"),
