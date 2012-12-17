@@ -21,5 +21,5 @@
 		}
 	},
 	"minimum-stability": "dev",
-	"bin": ["bin/pom","bin/pomify"]
+	"bin": ["bin/pom"]
 }
