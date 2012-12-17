@@ -120,7 +120,7 @@ class Environment
 			1 => array("pipe", "w"),
 			2 => array("pipe", "w")
 		);
-		$shell = proc_open("ssh -t -t -q $host '$cmd'", $spec, $pipes, null, null);
+		$shell = proc_open("script -q /dev/null ssh -t -t -q $host '$cmd'", $spec, $pipes, null, null);
 		if(!is_resource($shell))
 			throw new \Exception("could not start process.");
 
@@ -147,10 +147,10 @@ class Environment
 		}
 		foreach($pipes as $pipe) fclose($pipe);
 		fclose($stdin);
-		if($status['exitcode'] < 0) $status = proc_get_status($shell);
+
+		pcntl_waitpid($status['pid'], $status);
 		proc_close($shell);
 
-		$status = $status['exitcode'];
 		if($status > 0)
 		{
 			$app = builder()->get_application();
