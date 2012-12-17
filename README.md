@@ -20,7 +20,7 @@ $ sudo mv composer.phar /usr/local/bin/composer
 Installation
 ------------
 
-I like to install Pomander globally so I can user it in any project.
+I like to install Pomander globally so I can use it in any project.
 Unfortunately, Composer does not have a way of doing this by default, 
 so here is an easy way to allow global package installtion:
 
@@ -35,7 +35,7 @@ $ curl https://raw.github.com/gist/4242494/5d6344d2976e07d051ace18d41fa035113353
 If you are using the global installation method from above, you can easily do:
 
 ```bash
-$ cd ~/.pomander && composer require pomander/pomander:dev-master
+$ cd ~/.composer && composer require pomander/pomander:dev-master
 ```
 
 Otherwise, you need to add `pomander/pomander` to your project's composer.json:
@@ -61,7 +61,7 @@ Setting up a project
 #### Step 1. Create a `deploy/development.php`
 
 ```bash
-$ pom config
+$ pom init
 ```
 
 Once the file has been created, you will want to fill in the appropriate values.
@@ -69,15 +69,26 @@ You can also check out the [options reference](#options-reference) for help.
 
 _Pomander also supports YAML deploy environments, but recommends using php scripts for extra customization._
 
-Use `pom -T` to see your available tasks.
-    
+#### Step 2. Set up environment for deployment
 
-Configuration Reference
+```bash
+$ pom staging deploy:setup  # _staging_ is the environment name and uses deploy/staging.php
+```
+
+### Step 3. Deploy, and profit.
+
+```bash
+$ pom staging deploy
+```
+
+Use `pom -T` to see your available tasks.
+
+Options Reference
 -----------------------
 
 <dl>
 <dt>url</dt>
-<dd>Application URL. Used primarily for databse migration and isn't always needed.</dd>
+<dd>Application URL. Used primarily for database migration and isn't always needed.</dd>
 <dt>user</dt>
 <dd>SSH user for performing remote tasks.</dd>
 <dt>repository</dt>
@@ -108,22 +119,20 @@ Configuration Reference
 <dd>String or Array of database hosts to deploy to.</dd>
 </dl>
 
-__PHP configurations look like this:__
+### Example standard deployment script:
 
 ```php
 <?php
   $env->user('deploy')
-      ->repository('git@github.com:tamagokun/pomander.git')
+      ->repository('git@github.com:github/teach.github.com.git')
       ->deploy_to('/var/www/html')
+			->releases(true)
+			->app(array(
+				'node-1.rackspace.com',
+				'node-2.rackspace.com'
+			))
 	;
 ```
-
-### Deploying
-
-    pom deploy:cold # Just run this the first time
-    
-    # All subsequent deployments use pom deploy (deploy defaults to deploy:update)
-    pom deploy
 
 Tasks
 -----
@@ -140,14 +149,6 @@ config            # Attempts to create a default `development.yml` file.
 Feel free to modify these existing tasks, as well as create your own!
 
 e.g.
-
-```php
-<?php
-$pom = new \Pomander\Builder();
-/* plugins
- * $pom->load('pomander/wordpress'); */
-$pom->run();
-```
 
 ```php
 <?php
