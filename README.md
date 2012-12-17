@@ -72,7 +72,7 @@ _Pomander also supports YAML deploy environments, but recommends using php scrip
 #### Step 2. Set up environment for deployment
 
 ```bash
-$ pom staging deploy:setup  # _staging_ is the environment name and uses deploy/staging.php
+$ pom staging deploy:setup  # staging is the environment name and uses deploy/staging.php
 ```
 
 ### Step 3. Deploy, and profit.
