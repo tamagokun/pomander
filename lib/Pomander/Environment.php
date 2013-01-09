@@ -157,7 +157,9 @@ class Environment
 			"adapter"=>"mysql",
 			"rsync_cmd"=>"rsync",
 			"umask"=>"002",
-			"rsync_flags"=>"-avuzPO --quiet"
+			"rsync_flags"=>"-avuzPO --quiet",
+			"db_backup_flags"=>"--lock-tables=FALSE --skip-add-drop-table | sed -e 's|INSERT INTO|REPLACE INTO|' -e 's|CREATE TABLE|CREATE TABLE IF NOT EXISTS|'",
+			"db_swap_url"=>true
 		);
 		return $defaults;
 	}
