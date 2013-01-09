@@ -72,14 +72,17 @@ function home()
 
 function run()
 {
-	$args = array();
-	foreach( new RecursiveIteratorIterator(new RecursiveArrayIterator(func_get_args())) as $value)
-		$args[] = $value;
-	$cmd = implode(" && ",$args);
+	$cmd = array();
+	$silent = false;
+	$args = func_get_args();
+	if(is_bool($args[count($args)-1])) $silent = array_pop($args);
+	foreach( new RecursiveIteratorIterator(new RecursiveArrayIterator($args)) as $value)
+		$cmd[] = $value;
+	$cmd = implode(" && ",$cmd);
 	$app = builder()->get_application();
 
 	list($status, $output) = !isset($app->env)? exec_cmd($cmd) : $app->env->exec($cmd);
-	puts(implode("\n", $output));
+	if(!$silent && count($output)) puts(implode("\n", $output));
 
 	if($status > 0)
 	{
@@ -87,7 +90,8 @@ function run()
 		{
 			warn("fail","Rolling back...");
 			$app->invoke('rollback');
-			abort("complete","Rolled back.",$status);
+			info("rollback","rollback complete.");
+			exit($status);
 			return;
 		}
 		abort("fail","aborted!",$status);

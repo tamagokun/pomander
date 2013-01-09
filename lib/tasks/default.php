@@ -26,7 +26,6 @@ group('deploy', function() {
   desc("Update code to latest changes.");
   task('update','app', function($app) {
     info("deploy","updating code");
-		$app->can_rollback = true;
 		$cmd = array();
 		if($app->env->releases === false)
 		{
@@ -47,12 +46,16 @@ group('deploy', function() {
 				$cmd[] = $app->env->scm->update();
 			}
 		}
+		$app->can_rollback = true;
 		run($cmd);
   });
 
 	task('finalize', function($app) {
-		if($app->env->releases !== false)
-			run("ls {$app->env->releases_dir} | sort -nr | head -1 | xargs -I {} ln -nfs {$app->env->releases_dir}/{} {$app->env->current_dir}");
+		if($app->env->releases === false) return;
+		$releases = run("ls -1t {$app->env->releases_dir}", true);
+		if(!count($releases)) return;
+		run("ln -nfs {$app->env->releases_dir}/{$releases[0]} {$app->env->current_dir}");
+		$app->env->finalized = true;
 	});
 
 	desc("First time deployment.");
@@ -61,16 +64,49 @@ group('deploy', function() {
 });
 task('deploy','deploy:update','deploy:finalize');
 
-desc("Rollback to the previous revision");
-task('rollback', function($app) {
-	if($app->env->release_dir && $app->env->releases !== false)
+desc("Rollback to the previous release");
+task('rollback','app', function($app) {
+
+	$cmd = array();
+
+	if($app->env->releases)
 	{
-		$cmd = array(
-			"rm -rf {$app->env->release_dir}",
-			"ls {$app->env->releases_dir} | sort -nr | head -1 | xargs -I {} ln -nfs {$app->env->releases_dir}/{} {$app->env->current_dir}"
-		);
-		run($cmd);
+		$releases = run("ls -1t {$app->env->releases_dir}", true);
+		if(!count($releases)) return abort("rollback", "no releases to roll back to.");
+		
+		if($app->env->release_dir == $app->env->current_dir)
+		{
+			info("rollback", "pointing application to previous release.");
+			$cmd[] = "ln -nfs {$app->env->releases_dir}/{$releases[1]} {$app->env->current_dir}";
+		}else
+		{
+			info("rollback", "removing failed release.");
+			$cmd[] = "rm -rf {$app->env->releases_dir}/{$releases[0]}";
+			if($app->env->finalized)
+			{
+				info("rollback", "pointing application to last good release.");
+				$cmd[] = "ln -nfs {$app->env->releases_dir}/{$releases[1]} {$app->env->current_dir}";
+			}
+		}
+	}else
+	{
+		$revision = run("cat {$app->env->release_dir}/REVISION", true);
+		if(!count($revision)) return abort("rollback", "no releases to roll back to.");
+
+		$app->env->revision = $revision[0];
+		$cmd[] = $app->scm->update();
 	}
+
+	if($app->env->merged)
+	{
+		//if we don't have a backup file
+			// warn that we can't do a rollback
+
+		//restore newest backup
+	}
+
+	run($cmd);
+		
 });
 
 //local
