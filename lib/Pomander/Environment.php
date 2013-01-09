@@ -119,20 +119,7 @@ class Environment
 			$this->shell = new RemoteShell($host);
 		}
 
-		$status = $this->shell->run($cmd);
-
-		if($status > 0)
-		{
-			$app = builder()->get_application();
-			if($app->can_rollback)
-			{
-				warn("fail","Rolling back...");
-				$app->invoke('rollback');
-				abort("complete","Rolled back.",$status);
-				return;
-			}
-			abort("fail","aborted!",$status);
-		}
+		return $this->shell->run($cmd);
 	}
 
 	public function put($what,$where)

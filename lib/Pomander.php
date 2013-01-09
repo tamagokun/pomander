@@ -76,17 +76,11 @@ function run()
 	foreach( new RecursiveIteratorIterator(new RecursiveArrayIterator(func_get_args())) as $value)
 		$args[] = $value;
 	$cmd = implode(" && ",$args);
-	if(!isset(builder()->get_application()->env))
-		echo exec_cmd($cmd);
-	else
-		echo builder()->get_application()->env->exec($cmd);
-}
-
-function exec_cmd($cmd)
-{
-	$cmd = is_array($cmd)? implode(" && ",$cmd) : $cmd;
-	passthru($cmd,$status);
 	$app = builder()->get_application();
+
+	list($status, $output) = !isset($app->env)? exec_cmd($cmd) : $app->env->exec($cmd);
+	puts(implode("\n", $output));
+
 	if($status > 0)
 	{
 		if($app->can_rollback)
@@ -98,6 +92,14 @@ function exec_cmd($cmd)
 		}
 		abort("fail","aborted!",$status);
 	}
+	return $output;
+}
+
+function exec_cmd($cmd)
+{
+	$cmd = is_array($cmd)? implode(" && ",$cmd) : $cmd;
+	exec($cmd, $output, $status);
+	return array($status, $output);	
 }
 
 function put($what,$where)
