@@ -23,6 +23,7 @@ class Pomander
 set_error_handler(function($errno,$errstr,$errfile,$errline) {
 	puts("aborted!");
 	puts("$errstr\n");
+	if($errno <= 0) $errno = 1;
 	global $trace;
 	if($trace)
 	{
@@ -30,7 +31,7 @@ set_error_handler(function($errno,$errstr,$errfile,$errline) {
 		puts($exception->getTraceAsString());
 	}else
 	{
-		puts("(See full trace by running task with --trace");
+		puts("(See full trace by running task with --trace)");
 	}
 	exit($errno);
 });
