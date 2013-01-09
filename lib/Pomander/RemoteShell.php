@@ -13,7 +13,7 @@ class RemoteShell
 	public function run($cmd)
 	{
 		$status = 0;
-		passthru("ssh -t -t -q {$this->host} \"$cmd\"", $status);
+		passthru("ssh {$this->host} \"$cmd\"", $status);
 		return $status;	
 	}
 }
