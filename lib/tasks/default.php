@@ -17,7 +17,7 @@ group('deploy', function() {
 			$cmd[] = $app->env->scm->create($app->env->deploy_to);
 		}else
 		{
-			$deployed = run("ls {$app->env->deploy_to} | grep current", true);
+			$deployed = run("if test -d {$app->env->current_dir}; then echo \"exists\"; fi", true);
 			if(count($deployed)) return abort("setup", "application has already been deployed.");
 			$cmd[] = "mkdir -p {$app->env->releases_dir} {$app->env->shared_dir}";
 			if($app->env->remote_cache === true) $cmd[] = $app->env->scm->create($app->env->cache_dir);
