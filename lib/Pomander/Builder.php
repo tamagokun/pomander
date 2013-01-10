@@ -51,8 +51,8 @@ class Builder
 			$app->env->multi_role_support("db",$app);
 		});
 
-		if($first) $this->inject_default($app);
 		require dirname(__DIR__).'/tasks/default.php';
+		if($first) $this->inject_default($app);
 	}
 
 /* protected */
