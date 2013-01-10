@@ -17,6 +17,8 @@ group('deploy', function() {
 			$cmd[] = $app->env->scm->create($app->env->deploy_to);
 		}else
 		{
+			$releases = run("ls -1t {$app->env->releases_dir}", true);
+			if(count($releases)) return abort("setup", "application has already been deployed.");
 			$cmd[] = "mkdir -p {$app->env->releases_dir} {$app->env->shared_dir}";
 			if($app->env->remote_cache === true) $cmd[] = $app->env->scm->create($app->env->cache_dir);
 		}
@@ -78,7 +80,7 @@ task('rollback','app', function($app) {
 	if($app->env->releases)
 	{
 		$releases = run("ls -1t {$app->env->releases_dir}", true);
-		if(!count($releases)) return abort("rollback", "no releases to roll back to.");
+		if(count($releases) < 2) return abort("rollback", "no releases to roll back to.");
 		
 		if($app->env->release_dir == $app->env->current_dir)
 		{
