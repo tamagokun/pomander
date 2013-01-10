@@ -28,5 +28,10 @@ class Mysql extends \Pomander\Db
   {
     return "-u {$this->config["user"]} -p --password='{$this->config["password"]}' --host={$this->config["host"]}";
   }
+
+	public function restore($backup)
+	{
+		return "mysql {$this->connect()} {$this->config["name"]} < bzip2 -dc $backup";
+	}
 }
 ?>

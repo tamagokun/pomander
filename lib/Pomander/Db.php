@@ -29,5 +29,10 @@ abstract class Db
   {
     return "";
   }
+
+	public function restore($backup)
+	{
+		return "";
+	}
 }
 ?>

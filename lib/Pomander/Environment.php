@@ -115,7 +115,7 @@ class Environment
 		if(!$this->target) return exec_cmd($cmd);
 		if(!$this->shell)
 		{
-			$host = isset($this->user)? "{$this->user}@{$this->target}" : $this->target;
+			$host = $this->user? "{$this->user}@{$this->target}" : $this->target;
 			$this->shell = new RemoteShell($host);
 		}
 

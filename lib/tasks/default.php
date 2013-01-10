@@ -30,6 +30,7 @@ group('deploy', function() {
 		if($app->env->releases === false)
 		{
 			$cmd[] = "cd {$app->env->deploy_to}";
+			$cmd[] = "{$app->env->scm->revision()} > REVISION";
 			$cmd[] = $app->env->scm->update();
 		}else
 		{
@@ -51,10 +52,14 @@ group('deploy', function() {
   });
 
 	task('finalize', function($app) {
-		if($app->env->releases === false) return;
-		$releases = run("ls -1t {$app->env->releases_dir}", true);
-		if(!count($releases)) return;
-		run("ln -nfs {$app->env->releases_dir}/{$releases[0]} {$app->env->current_dir}");
+		$cmd = array();
+		//if($app->env->backup === false) $cmd[] = "rm -rf {$app->env->shared_dir}/backup/{$app->env->merged}";		
+		if($app->env->releases === true)
+		{
+			$releases = run("ls -1t {$app->env->releases_dir}", true);
+			if(count($releases)) $cmd[] = "ln -nfs {$app->env->releases_dir}/{$releases[0]} {$app->env->current_dir}";
+		}
+		run($cmd);
 		$app->env->finalized = true;
 	});
 
@@ -98,13 +103,13 @@ task('rollback','app', function($app) {
 		$cmd[] = $app->scm->update();
 	}
 
-	if($app->env->merged)
-	{
-		//if we don't have a backup file
-			// warn that we can't do a rollback
-
-		//restore newest backup
-	}
+	//if($app->env->merged)
+	//{
+		//info("rollback", "restoring database to before merge.");
+		//$backup = "{$app->env->shared_dir}/backup/{$app->env->merged}";
+		//$cmd[] = $app->env->adapter->restore($backup);
+		//if($app->env->backup === false) $cmd[] = "rm -rf $backup";
+	//}
 
 	run($cmd);
 
@@ -131,7 +136,7 @@ group('db', function() {
 
 	desc("Merge a backup into environment.");
 	task('merge','db', function($app) {
-	info("merge","database {$app->env->database["name"]}");
+		info("merge","database {$app->env->database["name"]}");
 		$file = $app->env->shared_dir."/dump.sql";
 		if(!file_exists("./tmpdump.sql"))
 			warn("merge","i need a backup to merge with (tmpdump.sql). Try running db:backup first");
@@ -146,7 +151,7 @@ group('db', function() {
 			fwrite($handle, $sql);
 			fclose($handle);
 		}
-		if( isset($app->env->backup) && $app->env->backup)
+		if(isset($app->env->backup) && $app->env->backup)
 			$app->invoke("db:full");
 		info("merge","dump.sql");
 		put("./tmpdump.sql",$file);
