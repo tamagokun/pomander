@@ -55,6 +55,13 @@ You can also do this using Composer:
 $ composer require pomander/pomander:dev-master
 ```
 
+Test that Pomander is working with ```$ pom -T ```. If you get an error, make sure that the following is added to your path:
+
+```bash
+~/.composer/bin
+```
+
+
 Setting up a project
 --------------------
 
