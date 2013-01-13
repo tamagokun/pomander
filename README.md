@@ -30,6 +30,12 @@ so here is an easy way to allow global package installtion:
 $ curl https://raw.github.com/gist/4242494/5d6344d2976e07d051ace18d41fa035113353e90/global_composer.sh | sh
 ```
 
+If you haven't added composer's bin folder to your `$PATH`, better do that now:
+
+```bash
+$ echo 'PATH=~/.composer/bin:$PATH' >> .bashrc
+```
+
 ### Installing Pomander
 
 If you are using the global installation method from above, you can easily do:
@@ -53,12 +59,6 @@ You can also do this using Composer:
 
 ```bash
 $ composer require pomander/pomander:dev-master
-```
-
-Test that Pomander is working with ```$ pom -T ```. If you get an error, make sure that the following is added to your path:
-
-```bash
-~/.composer/bin
 ```
 
 
