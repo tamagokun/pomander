@@ -33,7 +33,7 @@ $ curl https://raw.github.com/gist/4242494/5d6344d2976e07d051ace18d41fa035113353
 If you haven't added composer's bin folder to your `$PATH`, better do that now:
 
 ```bash
-$ echo 'PATH=~/.composer/bin:$PATH' >> .bashrc
+$ echo 'export PATH="$HOME/.composer/bin:$PATH"' >> .bashrc
 ```
 
 ### Installing Pomander
