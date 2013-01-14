@@ -97,6 +97,7 @@ class Environment
 		$this->role($role);
 		foreach($app->top_level_tasks as $task_name)
 		{
+			if(!in_array($task_name, $app->get_task_list())) continue;
 			if( in_array($role,$app->resolve($task_name)->dependencies()) )
 				return $this->inject_multi_role_after($role,$task_name);
 			else
