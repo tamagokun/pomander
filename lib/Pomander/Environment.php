@@ -116,10 +116,10 @@ class Environment
 		if(!$this->target) return exec_cmd($cmd);
 		if(!$this->shell)
 		{
-			$host = $this->user? "{$this->user}@{$this->target}" : $this->target;
-			$this->shell = new RemoteShell($host);
+			$auth = is_null($this->password)? $this->key_path : $this->password;
+			$user = is_null($this->user)? get_current_user : $this->user;
+			$this->shell = new RemoteShell($this->target, $user, $auth);
 		}
-
 		return $this->shell->run($cmd);
 	}
 
@@ -156,8 +156,10 @@ class Environment
 			"db"=>"",
 			"scm"=>"git",
 			"adapter"=>"mysql",
-			"rsync_cmd"=>"rsync",
 			"umask"=>"002",
+			"key_path"=>home()."/.ssh/id_rsa",
+			"password"=>null,
+			"rsync_cmd"=>"rsync",
 			"rsync_flags"=>"-avuzPO --quiet",
 			"db_backup_flags"=>"--lock-tables=FALSE --skip-add-drop-table | sed -e 's|INSERT INTO|REPLACE INTO|' -e 's|CREATE TABLE|CREATE TABLE IF NOT EXISTS|'",
 			"db_swap_url"=>true
@@ -187,6 +189,7 @@ class Environment
 
 	private function inject_multi_role_after($role,$task_name)
 	{
+		info("injecting after $task_name");
 		after($task_name,function($app) use($task_name,$role) {
 			if( $app->env->next_role($role) )
 			{
