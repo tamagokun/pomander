@@ -30,7 +30,8 @@ class RemoteShell
 			}
 		}
 		$status = isset($this->shell->exit_status)? $this->shell->exit_status : $status;
-		return array($status, array_filter(explode("\n",$output), 'trim'));
+		return array($status, array_filter(explode("\r\n",$output), 'trim'));
+		return array($status, $output);
 	}
 
 	public function write($cmd)
