@@ -103,11 +103,11 @@ Options Reference
 | revision | Revision/branch to deploy. _Default: origin/master, trunk_ |
 | branch | Alias of revision. |
 | scm | SCM to use. Currently support svn and git. _Default: git_ |
-| releases | Use current/releases/shared structure. (true|false|number of releases to keep) _Default: false_ |
+| releases | Use current/releases/shared structure. (true/false/number of releases to keep) _Default: false_ |
 | adapter | Data adapter to use for databases. Currently support MySQL _Defauly: mysql_ |
-| remote\_cache | Cache repository for faster deploys. (true|false) _Default: true when releases are set_ |
+| remote\_cache | Cache repository for faster deploys. (true/false) _Default: true when releases are set_ |
 | deploy\_to | Path to deploy application to. _Default: cwd_ |
-| backup | Perform database backup on deployments. (true|false). _Default: false_ |
+| backup | Perform database backup on deployments. (true/false). _Default: false_ |
 | umask | User's umask for remote tasks. _Default: 002_ |
 | rsync\_cmd | Command to use for file syncing. _Default: rsync_ |
 | rsync\_flags | Extra flags used for file syncing. _Default: -avuzPO --quiet_ |
