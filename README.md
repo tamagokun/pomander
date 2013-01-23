@@ -22,19 +22,21 @@ Installation
 
 I like to install Pomander globally so I can use it in any project.
 Unfortunately, Composer does not have a way of doing this by default, 
-so here is an easy way to allow global package installtion:
+so here is an easy way to allow global package installation:
 
 ### Setting up Composer for global installation
 
 ```bash
-$ curl https://raw.github.com/gist/4242494/5d6344d2976e07d051ace18d41fa035113353e90/global_composer.sh | sh
+$ curl https://gist.github.com/raw/4242494/35dde077b9d614d537b322c191fecf25ec74d1a5/global_composer.sh | sh
 ```
 
 If you haven't added composer's bin folder to your `$PATH`, better do that now:
 
 ```bash
-$ echo 'export PATH="$HOME/.composer/bin:$PATH"' >> .bashrc
+$ echo 'export PATH="$HOME/.composer/bin:$PATH"' >> ~/.bashrc
 ```
+
+_Substitute .bashrc with whatever you use._
 
 ### Installing Pomander
 
@@ -93,38 +95,24 @@ Use `pom -T` to see your available tasks.
 Options Reference
 -----------------------
 
-<dl>
-<dt>url</dt>
-<dd>Application URL. Used primarily for database migration and isn't always needed.</dd>
-<dt>user</dt>
-<dd>SSH user for performing remote tasks.</dd>
-<dt>repository</dt>
-<dd>Repository url.</dd>
-<dt>revision</dt>
-<dd>Revision/branch to deploy. <em>Default: origin/master, trunk</em></dd>
-<dt>scm</dt>
-<dd>SCM to use. Currently supports svn and git. <em>Default: git</em></dd>
-<dt>releases</dt>
-<dd>Use current/releases/shared structure. (true|false|number of releases to keep) <em>Default: false</em></dd>
-<dt>adapter</dt>
-<dd>Data adapter to use for databases. Currently supports MySQL. <em>Default: mysql</em></dd>
-<dt>remote_cache</dt>
-<dd>Cache repository for faster deploys. (true|false) <em>Default: true when releases are set</em></dd>
-<dt>deploy_to</dt>
-<dd>Application is deployed here. <em>Default: cwd</em></dd>
-<dt>backup</dt>
-<dd>Perform backup (database) on deployments. (true|false). <em>Default: false</em></dd>
-<dt>umask</dt>
-<dd>Umask to use for remote tasks. <em>Default: 002</em></dd>
-<dt>rsync_cmd</dt>
-<dd>Command to use for file syncing. <em>Default: rsync</em></dd>
-<dt>rsync_flags</dt>
-<dd>Extra flags to use for file syncing. <em>Default: -avuzPO --quiet</em></dd>
-<dt>app</dt>
-<dd>String or Array of application hosts to deploy to.</dd>
-<dt>db</dt>
-<dd>String or Array of database hosts to deploy to.</dd>
-</dl>
+| *Option* | *Description* |
+|----------|---------------|
+| url | Application URL. Used primarily for database migration and isn't always needed. |
+| user | SSH user for performing remote tasks. |
+| repository | Repository url. |
+| revision | Revision/branch to deploy. _Default: origin/master, trunk_ |
+| branch | Alias of revision. |
+| scm | SCM to use. Currently support svn and git. _Default: git_ |
+| releases | Use current/releases/shared structure. (true|false|number of releases to keep) _Default: false_ |
+| adapter | Data adapter to use for databases. Currently support MySQL _Defauly: mysql_ |
+| remote\_cache | Cache repository for faster deploys. (true|false) _Default: true when releases are set_ |
+| deploy\_to | Path to deploy application to. _Default: cwd_ |
+| backup | Perform database backup on deployments. (true|false). _Default: false_ |
+| umask | User's umask for remote tasks. _Default: 002_ |
+| rsync\_cmd | Command to use for file syncing. _Default: rsync_ |
+| rsync\_flags | Extra flags used for file syncing. _Default: -avuzPO --quiet_ |
+| app | String or Array of application hosts to deploy to. |
+| db | String or Array of database hosts to deploy to. |
 
 ### Example standard deployment script:
 
@@ -145,29 +133,33 @@ Tasks
 -----
 
 ```
-deploy:setup      # Creates deploy_to folder, and checks out code.
-deploy:cold       # Alias for deploy:setup
-delpoy:update     # Updates code to current revision/branch.
-config            # Attempts to create a default `development.yml` file.
+config            # Create development environment configuration
+db:backup         # Perform a backup suited for merging.
+db:create         # Create database.
+db:full           # Perform a full database backup.
+db:merge          # Merge a backup into environment.
+deploy:cold       # First time deployment.
+deploy:setup      # Setup application in environment.
+delpoy:update     # Update code to latest changes.
+init              # Set it up
+rollback          # Rollback to previous release
 ```
 
-### Custom Tasks
+### Adding Tasks
 
-Feel free to modify these existing tasks, as well as create your own!
+Adding tasks is easy, you can drop them right into your environment configurations.
 
-e.g.
+All of the tasks in Pomander are built using [Phake](https://github.com/jaz303/phake). A typical task looks something like this:
 
 ```php
 <?php
-
-task('my custom task',function($app) {
-  info("my task","Hello, World!");
-});
-
-after('deploy:update', function($app) {
-  warn("pomander","You can use after() / before() to customize tasks");
+task('task_name', function($app) {
+	//task actions
 });
 ```
+
+There are a lot of great things you can do with tasks, so please refer to [Phake's README](https://github.com/jaz303/phake) or the [Pomander Wiki](https://github.com/tamagokun/pomander/wiki).
+
 
 Plugins
 -------
