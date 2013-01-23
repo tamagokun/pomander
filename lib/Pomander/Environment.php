@@ -34,6 +34,7 @@ class Environment
 	public function setup()
 	{
 		if($this->name == "development") $this->releases = false;
+		if($this->branch) $this->revision = $this->branch;
 		if($this->releases === false)
 		{
 			$this->current_dir = $this->deploy_to;
