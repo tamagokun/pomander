@@ -39,18 +39,26 @@ set_error_handler(function($errno,$errstr,$errfile,$errline) {
 //utils
 function info($status,$msg)
 {
-	puts(" * ".green("info ").purple("$status ").$msg);
+	puts(" * ".ansicolor("info ",32).ansicolor("$status ",35).$msg);
 }
 
 function warn($status,$msg)
 {
-	puts(" * ".red("warn ").purple("$status ").$msg);
+	puts(" * ".ansicolor("warn ",31).ansicolor("$status ",35).$msg);
 }
 
 function abort($status, $msg, $code=1)
 {
 	warn($status,$msg);
 	die($code);
+}
+
+function ansicolor($text,$color)
+{
+	#31 red
+	#32 green
+	#35 purple
+	return "\033[{$color}m{$text}\033[0m";
 }
 
 function puts($text) { echo $text.PHP_EOL; }
