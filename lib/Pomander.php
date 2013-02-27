@@ -39,26 +39,18 @@ set_error_handler(function($errno,$errstr,$errfile,$errline) {
 //utils
 function info($status,$msg)
 {
-	puts(" * ".colorize("info ",32).colorize($status." ",35).$msg);
+	puts(" * ".green("info ").purple("$status ").$msg);
 }
 
 function warn($status,$msg)
 {
-	puts(" * ".colorize("warn ",31).colorize($status." ",35).$msg);
+	puts(" * ".red("warn ").purple("$status ").$msg);
 }
 
 function abort($status, $msg, $code=1)
 {
 	warn($status,$msg);
 	die($code);
-}
-
-function colorize($text,$color)
-{
-	#31 red
-	#32 green
-	#35 purple
-	return "\033[{$color}m{$text}\033[0m";
 }
 
 function puts($text) { echo $text.PHP_EOL; }
