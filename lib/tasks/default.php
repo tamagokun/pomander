@@ -3,9 +3,9 @@
 //deploy
 group('deploy', function() {
 
-  desc("Setup application in environment.");
-  task('setup','app', function($app) {
-    info("deploy","setting up environment");
+	desc("Setup application in environment.");
+	task('setup','app', function($app) {
+		info("deploy","setting up environment");
 		$cmd = array(
 			"umask {$app->env->umask}",
 			"mkdir -p {$app->env->deploy_to}"
@@ -23,11 +23,11 @@ group('deploy', function() {
 			if($app->env->remote_cache === true) $cmd[] = $app->env->scm->create($app->env->cache_dir);
 		}
 		run($cmd);
-  });
+	});
 
-  desc("Update code to latest changes.");
-  task('update','app', function($app) {
-    info("deploy","updating code");
+	desc("Update code to latest changes.");
+	task('update','app', function($app) {
+		info("deploy","updating code");
 		$cmd = array();
 		if($app->env->releases === false)
 		{
@@ -39,6 +39,8 @@ group('deploy', function() {
 			$app->env->release_dir = $app->env->releases_dir.'/'.$app->env->new_release();
 			if($app->env->remote_cache === true)
 			{
+				$frozen = run("if test -d {$app->env->cache_dir}; then echo \"ok\"; fi", true);
+				if(empty($frozen)) return abort("deploy", "you must run deploy:cold first.");
 				$cmd[] = "cd {$app->env->cache_dir}";
 				$cmd[] = $app->env->scm->update();
 				$cmd[] = "cp -R {$app->env->cache_dir} {$app->env->release_dir}";
@@ -51,7 +53,7 @@ group('deploy', function() {
 		}
 		$app->can_rollback = true;
 		run($cmd);
-  });
+	});
 
 	task('finalize', function($app) {
 		$cmd = array();
