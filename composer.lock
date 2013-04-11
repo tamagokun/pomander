@@ -6,19 +6,18 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git://github.com/jaz303/phake.git",
-                "reference": "cb311db67e2ac0e67fe590cfa726ff536e0f6a27"
+                "url": "https://github.com/jaz303/phake.git",
+                "reference": "8bf99fd8c5a49fbf2f27d8e50bfd902628e5ce05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/jaz303/phake/archive/cb311db67e2ac0e67fe590cfa726ff536e0f6a27.zip",
-                "reference": "cb311db67e2ac0e67fe590cfa726ff536e0f6a27",
+                "url": "https://api.github.com/repos/jaz303/phake/zipball/8bf99fd8c5a49fbf2f27d8e50bfd902628e5ce05",
+                "reference": "8bf99fd8c5a49fbf2f27d8e50bfd902628e5ce05",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "2012-12-15 11:17:25",
             "bin": [
                 "bin/phake"
             ],
@@ -36,33 +35,33 @@
             "description": "A wee clone of Ruby's rake for PHP 5.3. Uses closures for ultimate coolness.",
             "homepage": "http://github.com/jaz303/phake",
             "keywords": [
-                "cli",
-                "Tasks"
-            ]
+                "Tasks",
+                "cli"
+            ],
+            "time": "2013-02-07 00:29:57"
         },
         {
             "name": "phpseclib/phpseclib",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/phpseclib/phpseclib",
-                "reference": "ce22f11f7f9ef3bb07f98e44e329446c4a667566"
+                "url": "https://github.com/phpseclib/phpseclib.git",
+                "reference": "700d28f64296ae74542d5614e598dca6ecf9cc67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/phpseclib/phpseclib/archive/ce22f11f7f9ef3bb07f98e44e329446c4a667566.zip",
-                "reference": "ce22f11f7f9ef3bb07f98e44e329446c4a667566",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/700d28f64296ae74542d5614e598dca6ecf9cc67",
+                "reference": "700d28f64296ae74542d5614e598dca6ecf9cc67",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.0.0"
             },
             "suggest": {
-                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a wide variety of cryptographic operations.",
                 "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
+                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a wide variety of cryptographic operations.",
                 "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP >= 4.3.3."
             },
-            "time": "2013-01-17 15:58:23",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -70,7 +69,10 @@
                     "File": "phpseclib/",
                     "Math": "phpseclib/",
                     "Net": "phpseclib/"
-                }
+                },
+                "files": [
+                    "phpseclib/Crypt/Random.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "include-path": [
@@ -89,25 +91,28 @@
             "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
             "homepage": "http://phpseclib.sourceforge.net",
             "keywords": [
-                "security",
-                "cryptography",
-                "ssh",
-                "encryption",
+                "BigInteger",
+                "aes",
+                "asn.1",
+                "asn1",
                 "crypto",
+                "cryptography",
+                "encryption",
+                "rsa",
+                "security",
+                "sftp",
                 "signature",
                 "signing",
-                "rsa",
-                "aes",
-                "sftp",
-                "x509",
+                "ssh",
                 "x.509",
-                "asn1",
-                "asn.1",
-                "BigInteger"
-            ]
+                "x509"
+            ],
+            "time": "2013-04-08 06:04:52"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+
+    ],
     "aliases": [
 
     ],
@@ -115,5 +120,11 @@
     "stability-flags": {
         "jaz303/phake": 20,
         "phpseclib/phpseclib": 20
-    }
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
 }

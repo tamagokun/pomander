@@ -119,7 +119,7 @@ class Environment
 		{
 			$auth = is_null($this->password)? $this->key_path : $this->password;
 			$user = is_null($this->user)? get_current_user : $this->user;
-			$this->shell = new RemoteShell($this->target, $user, $auth);
+			$this->shell = new RemoteShell($this->target, $this->port, $user, $auth);
 		}
 		return $this->shell->run($cmd);
 	}
@@ -157,6 +157,7 @@ class Environment
 			"db"=>"",
 			"scm"=>"git",
 			"adapter"=>"mysql",
+			"port"=>22,
 			"umask"=>"002",
 			"key_path"=>home()."/.ssh/id_rsa",
 			"password"=>null,

@@ -3,11 +3,12 @@ namespace Pomander;
 
 class RemoteShell
 {
-	protected $host, $user, $auth, $shell;
+	protected $host, $port, $user, $auth, $shell;
 
-	public function __construct($host, $user, $auth)
+	public function __construct($host, $port, $user, $auth)
 	{
 		$this->host = $host;
+		$this->port = $port? $port : 22;
 		$this->user = $user;
 		$this->auth = $auth;
 		$this->connect();
@@ -15,35 +16,25 @@ class RemoteShell
 
 	public function run($cmd)
 	{
+		$this->shell->enablePTY();
+		$this->shell->setTimeout(0);
 		$this->shell->exec($cmd);
 
-		$status = -1;
-		$output = '';
-		while ($status < 0) {
-			$temp = $this->shell->_get_channel_packet(NET_SSH2_CHANNEL_EXEC);
-			if($temp === true) $status = 0;
-			elseif($temp === false) $status = 1;
-			else
-			{
-				$output .= $temp;
-				$this->handle_data($temp);
-			}
-		}
-		$status = isset($this->shell->exit_status)? $this->shell->exit_status : $status;
+		$output = $this->handle_data();
+		$status = $this->shell->getExitStatus();
+		if($status === false) $status = -1;
 		return array($status, array_filter(explode("\r\n",$output), 'trim'));
-		return array($status, $output);
 	}
 
 	public function write($cmd)
 	{
-		$this->shell->_send_channel_packet(NET_SSH2_CHANNEL_EXEC, "$cmd\n");
+		$this->shell->write("$cmd\n");
 	}
 
 /* protected */
 	protected function connect()
 	{
-		//TODO: Support other ports
-		$this->shell = new SSH2($this->host);
+		$this->shell = new \Net_SSH2($this->host, $this->port);
 		if(file_exists($this->auth))
 		{
 			$key = new \Crypt_RSA();
@@ -58,11 +49,17 @@ class RemoteShell
 			abort("ssh", "Login failed.");
 	}
 
-	protected function handle_data($output)
+	protected function handle_data($output = '')
 	{
-		if(preg_match('/(The authenticity of host .* \(yes\/no\))/s', $output))
+		$regex = '/(The authenticity of host .* \(yes\/no\))/s';
+		$res = $this->shell->read($regex, NET_SSH2_READ_REGEX);
+
+		if(preg_match($regex, $res) > 0)
 		{
+			$output .= $res;
 			$this->write("yes");
+			return $this->handle_data($output);
 		}
+		return $output.$res;
 	}
 }

@@ -46,6 +46,8 @@ group('deploy', function() {
 				$cmd[] = "cp -R {$app->env->cache_dir} {$app->env->release_dir}";
 			}else
 			{
+				$frozen = run("if test -d {$app->env->releases_dir}; then echo \"ok\"; fi", true);
+				if(empty($frozen)) return abort("deploy", "you must run deploy:cold first.");
 				$cmd[] = $app->env->scm->create($app->env->release_dir);
 				$cmd[] = "cd {$app->env->release_dir}";
 				$cmd[] = $app->env->scm->update();
