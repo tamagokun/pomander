@@ -85,11 +85,14 @@ task('rollback','app', function($app) {
 	{
 		$releases = run("ls -1t {$app->env->releases_dir}", true);
 		if(count($releases) < 2) return abort("rollback", "no releases to roll back to.");
-		
+
 		if($app->env->release_dir == $app->env->current_dir)
 		{
+			$count = isset($app['releases'])? $app['releases'] : 1;
+			if(count($releases) < $count + 1) return abort("rollback", "can't rollback that far.");
+			if($count > 1) info("rollback", "rolling back to {$releases[$count]}.");
 			info("rollback", "pointing application to previous release.");
-			$cmd[] = "ln -nfs {$app->env->releases_dir}/{$releases[1]} {$app->env->current_dir}";
+			$cmd[] = "ln -nfs {$app->env->releases_dir}/{$releases[$count]} {$app->env->current_dir}";
 		}else
 		{
 			info("rollback", "removing failed release.");
