@@ -53,8 +53,8 @@ group('deploy', function() {
 				$cmd[] = $app->env->scm->update();
 			}
 		}
-		$app->can_rollback = true;
 		run($cmd);
+		$app->can_rollback = true;
 	});
 
 	task('finalize', function($app) {
