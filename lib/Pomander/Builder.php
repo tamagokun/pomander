@@ -63,6 +63,7 @@ class Builder
 			info("environment",$env->name);
 			\phake\Builder::$global->clear();
 			$builder->run(false);
+			$app->env = $env;
 			if(is_string($config)) require($config);
 			else $env->set($config);
 			$app->env = $env;
@@ -77,6 +78,7 @@ class Builder
 		$file = glob("deploy/{$env->name}.*");
 		if(count($file) < 1) return;
 		$file = array_shift($file);
+		$app->env = $env;
 		$config = $this->is_yaml($file)? \Spyc::YAMLLoad($file) : $file;
 		if(is_string($config)) require($config);
 		else $env->set($config);
