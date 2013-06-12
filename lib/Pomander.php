@@ -76,8 +76,7 @@ function run()
 	$silent = false;
 	$args = func_get_args();
 	if(is_bool($args[count($args)-1])) $silent = array_pop($args);
-	foreach( new RecursiveIteratorIterator(new RecursiveArrayIterator($args)) as $value)
-		$cmd[] = $value;
+	array_walk_recursive($args, function($v) use(&$cmd) { $cmd[] = $v; });
 	$cmd = implode(" && ",$cmd);
 	$app = builder()->get_application();
 
