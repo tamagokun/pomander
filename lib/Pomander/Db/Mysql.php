@@ -8,6 +8,11 @@ class Mysql extends \Pomander\Db
     return "mysql {$this->connect()} -e 'create database if not exists {$this->config["name"]}'";
   }
 
+	public function destroy()
+	{
+		return "mysql {$this->connect()} -e 'drop database {$this->config["name"]}; create database {$this->config["name"]};'";
+	}
+
   public function dump($file, $args = "")
   {
     return "mysqldump {$this->connect()} {$this->config["name"]} $args > $file";
