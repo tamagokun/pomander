@@ -15,6 +15,11 @@ abstract class Db
     return "";
   }
 
+	public function destroy()
+	{
+		return "";
+	}
+
   public function dump($file, $args="")
   {
     return "";
