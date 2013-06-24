@@ -43,7 +43,7 @@ _Substitute .bashrc with whatever you use._
 If you are using the global installation method from above, you can easily do:
 
 ```bash
-$ cd ~/.composer && composer require pomander/pomander:dev-master
+$ cd ~/.composer && composer require pomander/pomander
 ```
 
 Otherwise, you need to add `pomander/pomander` to your project's composer.json:
