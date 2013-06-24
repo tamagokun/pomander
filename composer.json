@@ -13,14 +13,13 @@
 		}
 	],
 	"require": {
-		"jaz303/phake": "dev-master",
-		"phpseclib/phpseclib": "dev-master"
+		"jaz303/phake": "*",
+		"phpseclib/phpseclib": "*"
 	},
 	"autoload": {
 		"psr-0": {
 			"Pomander": "lib"
 		}
 	},
-	"minimum-stability": "dev",
 	"bin": ["bin/pom"]
 }

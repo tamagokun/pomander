@@ -1,18 +1,22 @@
 {
-    "hash": "31851c878f60a9c050bf1a9b3f84f1b9",
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "c15580c25e2984edd75b0e55c9096694",
     "packages": [
         {
             "name": "jaz303/phake",
-            "version": "dev-master",
+            "version": "v0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jaz303/phake.git",
-                "reference": "8bf99fd8c5a49fbf2f27d8e50bfd902628e5ce05"
+                "reference": "v0.5.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jaz303/phake/zipball/8bf99fd8c5a49fbf2f27d8e50bfd902628e5ce05",
-                "reference": "8bf99fd8c5a49fbf2f27d8e50bfd902628e5ce05",
+                "url": "https://api.github.com/repos/jaz303/phake/zipball/v0.5.0",
+                "reference": "v0.5.0",
                 "shasum": ""
             },
             "require": {
@@ -36,22 +40,23 @@
             "homepage": "http://github.com/jaz303/phake",
             "keywords": [
                 "Tasks",
+                "automation",
                 "cli"
             ],
-            "time": "2013-02-07 00:29:57"
+            "time": "2013-05-27 18:36:49"
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "dev-master",
+            "version": "0.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "700d28f64296ae74542d5614e598dca6ecf9cc67"
+                "reference": "0.3.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/700d28f64296ae74542d5614e598dca6ecf9cc67",
-                "reference": "700d28f64296ae74542d5614e598dca6ecf9cc67",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/0.3.5",
+                "reference": "0.3.5",
                 "shasum": ""
             },
             "require": {
@@ -63,6 +68,11 @@
                 "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP >= 4.3.3."
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Crypt": "phpseclib/",
@@ -107,7 +117,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2013-04-08 06:04:52"
+            "time": "2013-06-08 17:40:39"
         }
     ],
     "packages-dev": [
@@ -116,11 +126,10 @@
     "aliases": [
 
     ],
-    "minimum-stability": "dev",
-    "stability-flags": {
-        "jaz303/phake": 20,
-        "phpseclib/phpseclib": 20
-    },
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ],
     "platform": [
 
     ],
