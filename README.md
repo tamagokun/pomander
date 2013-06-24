@@ -50,17 +50,16 @@ Otherwise, you need to add `pomander/pomander` to your project's composer.json:
 
 ```json
 {
-	"minimum-stability": "dev",
 	"require": {
-		"pomander/pomander": "dev-master"
-	}	
+		"pomander/pomander": "*"
+	}
 }
 ```
 
 You can also do this using Composer:
 
 ```bash
-$ composer require pomander/pomander:dev-master
+$ composer require pomander/pomander
 ```
 
 
