@@ -117,9 +117,10 @@ class Environment
 		if(!$this->target) return exec_cmd($cmd);
 		if(!$this->shell)
 		{
+            $keypass = $this->key_pass;
 			$auth = is_null($this->password)? $this->key_path : $this->password;
 			$user = is_null($this->user)? get_current_user : $this->user;
-			$this->shell = new RemoteShell($this->target, $this->port, $user, $auth);
+			$this->shell = new RemoteShell($this->target, $this->port, $user, $auth, $keypass);
 		}
 		return $this->shell->run($cmd);
 	}
@@ -160,6 +161,7 @@ class Environment
 			"port"=>22,
 			"umask"=>"002",
 			"key_path"=>home()."/.ssh/id_rsa",
+            "key_password"=>null,
 			"password"=>null,
 			"rsync_cmd"=>"rsync",
 			"rsync_flags"=>"-avuzPO --quiet",

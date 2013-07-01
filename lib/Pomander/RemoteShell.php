@@ -3,14 +3,15 @@ namespace Pomander;
 
 class RemoteShell
 {
-	protected $host, $port, $user, $auth, $shell;
+	protected $host, $port, $user, $auth, $shell, $key_pass;
 
-	public function __construct($host, $port, $user, $auth)
+	public function __construct($host, $port, $user, $auth, $key_pass)
 	{
 		$this->host = $host;
 		$this->port = $port? $port : 22;
 		$this->user = $user;
 		$this->auth = $auth;
+        $this->key_pass = $key_pass;
 		$this->connect();
 	}
 
@@ -38,6 +39,9 @@ class RemoteShell
 		if(file_exists($this->auth))
 		{
 			$key = new \Crypt_RSA();
+            if ($this->key_pass) {
+                $key->setPassword($this->key_pass);
+            }
 			$key_status = $key->loadKey(file_get_contents($this->auth));
 			if(!$key_status) abort("ssh", "Unable to load RSA key.");
 		}else
