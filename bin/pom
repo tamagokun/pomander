@@ -6,5 +6,5 @@ $arg_list = implode(' ', $GLOBALS['argv']);
 $file = dirname(__DIR__).'/Phakefile';
 $phake_path = dirname(dirname(dirname(__DIR__))).'/bin/phake';
 $phake = file_exists($phake_path)? $phake_path : "phake";
-passthru("$phake_path -f $file $arg_list", $status);
+passthru("$phake -f $file $arg_list", $status);
 exit($status);
