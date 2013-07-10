@@ -135,6 +135,7 @@ Tasks
 config            # Create development environment configuration
 db:backup         # Perform a backup suited for merging.
 db:create         # Create database.
+db:destroy        # Wipe database.
 db:full           # Perform a full database backup.
 db:merge          # Merge a backup into environment.
 deploy:cold       # First time deployment.
