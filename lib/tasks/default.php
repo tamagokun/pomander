@@ -132,6 +132,12 @@ group('db', function() {
 		run($app->env->adapter->create());
 	});
 
+	desc("Wipe database.");
+	task('destroy','db', function($app) {
+		warn("destroy","database {$app->env->database["name"]}");
+		run($app->env->adapter->destroy());
+	});
+
 	desc("Perform a backup suited for merging.");
 	task('backup','db', function($app) {
 		info("backup",$app->env->database["name"]);
