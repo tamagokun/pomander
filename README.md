@@ -27,7 +27,7 @@ so here is an easy way to allow global package installation:
 ### Setting up Composer for global installation
 
 ```bash
-$ curl https://gist.github.com/raw/4242494/35dde077b9d614d537b322c191fecf25ec74d1a5/global_composer.sh | sh
+$ curl https://gist.github.com/tamagokun/4242494/raw/35dde077b9d614d537b322c191fecf25ec74d1a5/global_composer.sh | sh
 ```
 
 If you haven't added composer's bin folder to your `$PATH`, better do that now:
