@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-if(function_exists('date_default_timezone_set')) date_default_timezone_set('UTC');
 // pass arguments to phake
 array_shift($GLOBALS['argv']);
 $arg_list = implode(' ', $GLOBALS['argv']);

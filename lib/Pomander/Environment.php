@@ -70,6 +70,7 @@ class Environment
 
 	public function new_release()
 	{
+		if(function_exists('date_default_timezone_set')) date_default_timezone_set('UTC');
 		return date('Ymdhis');
 	}
 
@@ -117,7 +118,7 @@ class Environment
 		if(!$this->target) return exec_cmd($cmd);
 		if(!$this->shell)
 		{
-            $keypass = $this->key_pass;
+			$keypass = $this->key_pass;
 			$auth = is_null($this->password)? $this->key_path : $this->password;
 			$user = is_null($this->user)? get_current_user : $this->user;
 			$this->shell = new RemoteShell($this->target, $this->port, $user, $auth, $keypass);
@@ -161,7 +162,7 @@ class Environment
 			"port"=>22,
 			"umask"=>"002",
 			"key_path"=>home()."/.ssh/id_rsa",
-            "key_password"=>null,
+			"key_password"=>null,
 			"password"=>null,
 			"rsync_cmd"=>"rsync",
 			"rsync_flags"=>"-avuzPO --quiet",
