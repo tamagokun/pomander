@@ -140,7 +140,7 @@ db:full           # Perform a full database backup.
 db:merge          # Merge a backup into environment.
 deploy:cold       # First time deployment.
 deploy:setup      # Setup application in environment.
-delpoy:update     # Update code to latest changes.
+deploy:update     # Update code to latest changes.
 init              # Set it up
 rollback          # Rollback to previous release
 ```
