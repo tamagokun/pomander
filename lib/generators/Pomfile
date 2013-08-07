@@ -1,6 +1,0 @@
-<?php
-$pom = new \Pomander\Builder();
-/* plugins
- * $pom->load('Wordpress'); */
-$pom->run();
-?>
