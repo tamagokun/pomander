@@ -13,51 +13,102 @@ $env->super_secret_setting // true
 	</code></pre>
 	<p>You can set and retrieve any known option or even define your own.</p>
 </section>
-<section class="annotate">
+<section>
 	<h2>Deploy Settings</h2>
-	<p>
-	</p>
-	<pre><code data-language="php">
-$env->deploy_to
-$env->app
-$env->repository
-$env->revision
-$env->branch
-$env->scm
-$env->releases
-$env->remote_cache
-$env->app
-	</code></pre>
+	<ul class="settings">
+		<li>
+			<code data-language="php">$env->deploy_to('/var/www/html/my_application');</code>
+			<p>Specify where your application will be deployed to.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->app('my-app.com'); $env->app(array('node-1.my-app.com','node-2.my-app.com'));</code>
+			<p>String or Array of application hosts to deploy to.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->repository('');</code>
+			<p>Location of the repository used for deploying.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->revision(); $env->branch();</code>
+			<p>Specify which branch/commit to deploy.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->scm</code>
+			<p>SCM to use. Git and Svn are currently supported. Defaults to git</p>
+		</li>
+		<li>
+			<code data-language="php">$env->releases</code>
+			<p>Use current/releases/shared structure. (true/false/number of releases to keep) Default: false</p>
+		</li>
+		<li>
+			<code data-language="php">$env->remote_cache</code>
+			<p>Cache repository for faster deploys. (true/false) Default: true when releases are set</p>
+		</li>
+	</ul>
 </section>
-<section class="annotate">
+<section>
 	<h2>SSH Settings</h2>
-	<p>
-	</p>
-	<pre><code data-language="php">
-$env->user
-$env->port
-$env->password
-$env->key_path
-$env->key_password
-	</code></pre>
+	<ul class="settings">
+		<li>
+			<code data-language="php">$env->user();</code>
+			<p>Specify where your application will be deployed to.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->port();</code>
+			<p>String or Array of application hosts to deploy to.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->password();</code>
+			<p>Location of the repository used for deploying.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->key_path(); $env->key_password();</code>
+			<p>Specify which branch/commit to deploy.</p>
+		</li>
+	</ul>
 </section>
-<section class="annotate">
+<section>
 	<h2>Database Settings</h2>
-	<p></p>
-	<pre><code data-language="php">
-$env->adapter
-$env->backup
-$env->db
-	</code></pre>
+	<ul class="settings">
+		<li>
+			<code data-language="php">$env->adapter();</code>
+			<p>Specify where your application will be deployed to.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->backup();</code>
+			<p>String or Array of application hosts to deploy to.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->db();</code>
+			<p>Location of the repository used for deploying.</p>
+		</li>
+	</ul>
 </section>
-<section class="annotate">
+<section>
 	<h2>Advanced Settings</h2>
-	<p></p>
-	<pre><code data-language="php">
-$env->umask
-$env->rsync_cmd
-$env->rsync_flags
-$env->db_backup_flags
-$env->db_swap_url
-	</code></pre>
+	<ul class="settings">
+		<li>
+			<code data-language="php">$env->umask();</code>
+			<p>Specify where your application will be deployed to.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->rsync_cmd();</code>
+			<p>String or Array of application hosts to deploy to.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->rsync_flags();</code>
+			<p>String or Array of application hosts to deploy to.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->db_backup_flags();</code>
+			<p>Location of the repository used for deploying.</p>
+		</li>
+		<li>
+			<code data-language="php">$env->db_swap_url();</code>
+			<p>If you are merging a database backup and the <code>$env-&gt;url</code> of the two environments differ, Pomander will attempt to replace all occurances of the urls. Set this option to <code>false</code> to prevent Pomander from doing that.</p>
+		</li>
+	</ul>
+</section>
+<section>
+	<p class="disclaimer">If there are any settings in need that are preventing you from using Pomander, please submit an <a href="https://github.com/tamagokun/pomander/issues">Issue</a>.</p>
 </section>

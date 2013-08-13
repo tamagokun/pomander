@@ -53,7 +53,8 @@ section:after {
 }
 
 @media all and (min-width: 768px) {
-	.annotate p {
+	.annotate p,
+	.annotate ul {
 		clear: left;
 		float: left;
 		width: 40%;
@@ -116,4 +117,31 @@ footer {
 footer p {
 	padding: 2em 0 1em;
 	border-top: 1px solid #deddd9;
+}
+
+.settings {
+	list-style: none;
+	margin: 1em 0;
+	padding: 0;
+	border-top: 1px solid #ddd;
+}
+
+.settings li {
+	border-bottom: 1px solid #ddd;
+}
+
+.settings li > code {
+	margin-top: 1em;
+	padding: .25em 0;
+	display: inline-block;
+}
+
+.settings p {
+	/* display: inline-block; */
+	margin-top: 0;
+}
+
+.disclaimer {
+	text-align: center;
+	font-style: italic;
 }

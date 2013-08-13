@@ -1,0 +1,123 @@
+/**
+ * Solairzed Light modified for inline <code>s
+ */
+pre {
+	background: #fdf6e3; /* base3 */
+	color: #657b83; /* base00 */
+}
+
+code .comment {
+	color: #93a1a1; /* base1 */
+}
+
+code .constant {
+	color: #657b83; /* base00 */
+}
+
+code .constant.language {
+	color: #268bd2; /* blue */
+}
+
+code .constant.regexp {
+	color: #2aa198; /* cyan */
+}
+
+code .storage {
+	color: #268bd2; /* blue */
+}
+
+code .string, code .comment.docstring {
+	color: #2aa198; /* cyan */
+}
+
+code .support.tag.script, pre .support.tag.style {
+	color: #2aa198; /* cyan */
+}
+
+code .string.regexp {
+	color: #2aa198; /* cyan */
+}
+
+code .string.regexp.open, code .string.regexp.close {
+	color: #2aa198; /* cyan */
+}
+
+code .keyword, code .selector {
+	color: #859900; /* green */
+}
+
+code .inherited-class {
+	font-style: italic;
+}
+
+code .entity {
+	color: #b58900; /* yellow */
+}
+
+code .support, *[data-language="c"] .function.call {
+	color: #859900; /* green */
+}
+
+code .support.method {
+	color: #657b83; /* base00 */
+}
+
+code .support.property {
+	color: #657b83; /* base00 */
+}
+
+code .variable.global, code .variable.class, code .variable.instance {
+	color: #657b83; /* base00 */
+}
+
+/**
+ * Tomorrow Night theme
+ *
+ * @author Chris Kempson
+ * @author skim
+ * @version 1.0.0
+ */
+pre {
+	word-wrap: break-word;
+	margin: 0px;
+	padding: 10px;
+	font-size: 14px;
+	margin-bottom: 20px;
+}
+
+pre.terminal {
+	background-color: #1d1f21;
+	color: #c5c8c6;
+}
+
+pre, code {
+	font-family: 'Monaco', courier, monospace;
+}
+
+pre.terminal .comment {
+	color: #969896;
+}
+
+pre.terminal .variable.global, pre.terminal .variable.class, pre.terminal .variable.instance {
+	color: #cc6666; /* red */
+}
+
+pre.terminal .constant.numeric, pre.terminal .constant.language, pre.terminal .constant.hex-color, pre.terminal .keyword.unit {
+	color: #de935f; /* orange */
+}
+
+pre.terminal .constant, pre.terminal .entity, pre.terminal .entity.class, pre.terminal .support {
+	color: #f0c674; /* yellow */
+}
+
+pre.terminal .constant.symbol, pre.terminal .string {
+	color: #b5bd68; /* green */
+}
+
+pre.terminal .entity.function, pre.terminal .support.css-property, pre.terminal .selector {
+	color: #81a2be; /* blue */
+}
+
+pre.terminal .keyword, pre.terminal .storage {
+	color: #b294bb; /* purple */
+}

@@ -39,7 +39,7 @@ task('the_task_name', function($app) {
 
 <section class="annotate">
 	<h2>Task Dependencies</h2>
-	<p></p>
+	<p>The first string in the task method will always define the name of the task.</p>
 	<pre><code data-language="php">
 task('sass', function($app) {
 	exec_cmd("");
@@ -54,11 +54,12 @@ task('assets', 'sass', 'coffee', function($app) {
 
 });
 	</code></pre>
+	<p>Subsequent strings passed before the callable block are dependency tasks that are run <strong>before</strong> the main task can run.</p>
 </section>
 
 <section class="annotate">
 	<h2>Groups</h2>
-	<p>Wrap some tasks in a group to be more specific.</p>
+	<p>Wrap some tasks in a group to... group tasks.</p>
 	<pre><code data-language="php">
 group('files', function() {
   task('sync', function($app) {   // invoked with files:sync
@@ -77,7 +78,7 @@ group('files', function() {
 
 <section class="annotate">
 	<h2>After/Before Blocks</h2>
-	<p></p>
+	<p>They look just like the <code>task</code> method, but they will run before/after the task you specify.</p>
 	<pre><code data-language="php">
 after('deploy:update', function($app) {
   info("deploy", "All done!");
@@ -87,19 +88,47 @@ before('db:backup', function($app) {
   if(!$app-&gt;env-&gt;db)
     abort("backup", "Please add database settings first.");
 });
+
+// $ pom db:backup
+//  * abort backup Please add database settings first.
+//
+//
+// $ pom deploy:update
+//  * info deploy Deploying code..
+//  * info deploy All done!
 	</code></pre>
 </section>
 
-<section class="annotate">
+<section>
 	<h2>Helper Methods</h2>
-	<p></p>
-	<pre><code data-language="php">
-info();
-warn();
-abort();
-run();
-exec_cmd();
-put();
-get();
-	</code></pre>
+	<ul class="settings">
+		<li>
+			<code data-language="php">info($label, $message)</code>
+			<p>Output a pretty line of text. Typically used for displaying progress.</p>
+		</li>
+		<li>
+			<code data-language="php">warn($label, $message)</code>
+			<p>Used to warn user about something that may be broken or misconfigured, but won't necessarily cause the task to fail.</p>
+		</li>
+		<li>
+			<code data-language="php">abort($label, $message, $exit_code = 1)</code>
+			<p>Warns user that something went wrong, and exits Pomander with an error.</p>
+		</li>
+		<li>
+			<code data-language="php">run()</code>
+			<p>Runs a string or array of commands on the environment's target (remote server).</p>
+		</li>
+		<li>
+			<code data-language="php">exec_cmd()</code>
+			<p>Runs a string or array of commands locally.</p>
+		</li>
+		<li>
+			<code data-language="php">put($what, $where)</code>
+			<p>Uploads a file/folder from the local machine to the environment's target.</p>
+		</li>
+		<li>
+			<code data-language="php">get($what, $where)</code>
+			<p>Retrieves file/folder from the environment's target to a local location</p>
+		</li>
+	</ul>
 </section>
