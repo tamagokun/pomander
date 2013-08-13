@@ -13,7 +13,7 @@
 		<h1><a href="index.html">Pomander</a></h1>
 		<nav>
 			{% for link in site.navigation %}
-				<a {% if page.url == link.url %}class="active"{% endif %} href="{{link.url}}">{{link.title}}</a>
+				<a {% if page.url contains link.url %}class="active"{% endif %} href="{{link.url}}">{{link.title}}</a>
 			{% endfor %}
 		</nav>
 	</header>
