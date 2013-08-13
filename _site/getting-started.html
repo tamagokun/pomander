@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pomander</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="css/site.css" type="text/css" charset="utf-8">
+	<link rel="stylesheet" href="css/tomorrow-night.css" type="text/css" charset="utf-8">
+</head>
+<body>
+	<header>
+		<a href="/"><img src="img/pomander.png" alt="a poorly drawn pomander..." /></a>
+		<h1><a href="/">Pomander</a></h1>
+		<nav>
+			
+				<a class="active" href="/getting-started.html">Getting Started</a>
+			
+				<a  href="/settings.html">Settings</a>
+			
+				<a  href="/tasks.html">Tasks</a>
+			
+				<a  href="/wordpress.html">Wordpress Plugin</a>
+			
+		</nav>
+	</header>
+	<div id="main">
+		<section class="annotate">
+	<h2>1. Introduce Pomander to your project</h2>
+	<p>This will give you a deploy folder and a development.php environment to get you started.</p>
+	<pre class="terminal"><code data-language="shell">
+$ pom init
+	</code></pre>
+	<p>The environment <code>development</code> is assumed to be your local machine and will act as such. This gives you the ability to automate your development environment to get up and running more easily.</p>
+	<p>If you want to deploy to a server, read on to step 2!</p>
+</section>
+<section class="annotate">
+	<h2>2. Configure your environments</h2>
+	<p>Create as many environments as you like, and name them as you please. Stuff like <em>staging</em> and <em>production</em> are great, but you can really do whatever you would like.</p>
+	<pre class="terminal"><code data-language="shell">
+$ touch deploy/experiment.php
+	</code></pre>
+	<p>Pomander is flexible enough to work with your environment.</p>
+	<pre><code data-language="php">
+&lt;?php
+  $env->user('deploy')
+      ->repository('git@github.com:github/teach.github.com.git')
+      ->deploy_to('/var/www/html')
+      ->releases(true)
+      ->app('wacky-experiment.test-node-1.rackspace.com')
+  ;
+	</code></pre>
+	<p>Refer to the <a href="settings.html">Settings</a> guide for complete docmentation.</p>
+</section>
+<section class="annotate">
+	<h2>3. Prepare environment for deployment</h2>
+	<p>This will create the proper directory structure for your deployments on the server, and yell at you if it doesn't have the proper permissions.</p>
+	<pre><code data-language="shell">
+$ pom staging deploy:setup
+	</code></pre>
+</section>
+<section class="annotate">
+	<h2>4. Profit</h2>
+	<p>$$$</p>
+	<pre class="terminal"><code data-language="shell">
+$ pom staging deploy
+	</code></pre>
+</section>
+
+	</div>
+	<footer>
+		<p>Pomander is a project by <a href="http://ripeworks.com/">Ripeworks</a>.</p>
+	</footer>
+	<script src="js/jquery-2.0.3.min.js"></script>
+	<script src="js/rainbow-custom.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>

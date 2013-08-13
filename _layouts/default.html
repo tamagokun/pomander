@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ site.name }}</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="css/site.css" type="text/css" charset="utf-8">
+	<link rel="stylesheet" href="css/tomorrow-night.css" type="text/css" charset="utf-8">
+</head>
+<body>
+	<header>
+		<a href="/"><img src="img/pomander.png" alt="a poorly drawn pomander..." /></a>
+		<h1><a href="/">Pomander</a></h1>
+		<nav>
+			{% for link in site.navigation %}
+				<a {% if page.url == link.url %}class="active"{% endif %} href="{{link.url}}">{{link.title}}</a>
+			{% endfor %}
+		</nav>
+	</header>
+	<div id="main">
+		{{ content }}
+	</div>
+	<footer>
+		<p>Pomander is a project by <a href="http://ripeworks.com/">Ripeworks</a>.</p>
+	</footer>
+	<script src="js/jquery-2.0.3.min.js"></script>
+	<script src="js/rainbow-custom.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>

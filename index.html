@@ -1,0 +1,68 @@
+---
+layout: default
+title: Pomander
+---
+<section>
+	<p><strong>Automate and deploy applications with PHP.</strong> A light-weight flexible deployment tool for deploying web applications. This project was inspired by Capistrano and Vlad the Deployer, as well as being built on top of Phake, a Rake clone.</p>
+</section>
+<section class="annotate">
+	<p>Install Pomander painlessly using Composer.</p>
+	<pre class="terminal"><code data-language="shell">
+$ composer require pomander/pomander:@stable
+	</code></pre>
+	<p>
+		If you don't have Composer yet, <a href="http://getcomposer.org/doc/00-intro.md#installation-nix">get it</a>.<br />
+		<em>I like to install utilities with Composer globally. If you dig it, <a href="http://ripeworks.com/using-composer-globally/">here's how</a>.</em>
+	</p>
+</section>
+<section class="annotate">
+	<h2>Staging comes standard</h2>
+	<p>One of the main reasons to build Pomander was to provide an easy way to manage Wordpress deployments across multiple environments.</p>
+	<pre class="terminal"><code data-language="shell">
+$ pom staging deploy
+ * info environment staging
+ * info target staging-node-1.rackspace.com
+ * info deploy updating code
+
+$ pom production db:backup staging db:merge
+ * info environment production
+ * info target cloud-db.rackspace.com
+ * info backup database teach_production
+ * info environment staging
+ * info target staging-node-1.rackspace.com
+ * info premerge replace teach.github.com with teach.staging-node1.rackspace.com
+ * info merge database teach_staging
+
+	</code></pre>
+	<p>Pomander allows you to run your tasks on any number of environments, and even pass data between them.</p>
+	<p>Ready? <a href="getting-started.html">Getting Started</a>.</p>
+</section>
+<section class="annotate">
+	<h2>Use PHP to manage your PHP</h2>
+	<p>While there are some great deployment tools out there in other languages, integrating with an existing PHP application can become a pain.</p>
+	<pre><span>deploy/production.php</span><code data-language="php">
+&lt;?php
+  $env->user('deploy')
+      ->repository('git@github.com:github/teach.github.com.git')
+      ->deploy_to('/var/www/html')
+      ->releases(true)
+      ->app(array(
+        'node-1.rackspace.com',
+        'node-2.rackspace.com'
+      ))
+      ->db(array(
+        'cloud-db.rackspace.com'
+      ))
+  ;
+
+  $env->database(array(
+    'name' => 'teach_production',
+    'user' => 'a4Vk0@_gH',
+    'password' => 'a21sVk^5g%fdAsDo)',
+    'host' => '127.0.0.1',
+    'charset' => 'utf8'
+  ));
+	</code></pre>
+	<p>Pomander uses environment named PHP files to allow the greatest amount of flexibility and customizations to your deployment process and automated tasks.</p>
+	<p>Check out <a href="settings.html">Settings</a> and <a href="tasks.html">Tasks</a> to see how much you can do with Pomander.</p>
+</section>
