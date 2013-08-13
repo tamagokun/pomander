@@ -4,10 +4,10 @@ permalink: /:title
 
 navigation:
 - title: Getting Started
-  url: /getting-started.html
+  url: getting-started.html
 - title: Settings
-  url: /settings.html
+  url: settings.html
 - title: Tasks
-  url: /tasks.html
+  url: tasks.html
 - title: Wordpress Plugin
-  url: /wordpress.html
+  url: wordpress.html
