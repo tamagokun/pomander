@@ -41,7 +41,18 @@ task('the_task_name', function($app) {
 	<h2>Task Dependencies</h2>
 	<p></p>
 	<pre><code data-language="php">
+task('sass', function($app) {
+	exec_cmd("");
+});
 
+task('coffee', function($app) {
+	exec_cmd("cofee");
+});
+
+desc("Compile application assets");
+task('assets', 'sass', 'coffee', function($app) {
+
+});
 	</code></pre>
 </section>
 
