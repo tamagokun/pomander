@@ -9,8 +9,8 @@
 </head>
 <body>
 	<header>
-		<a href="/"><img src="img/pomander.png" alt="a poorly drawn pomander..." /></a>
-		<h1><a href="/">Pomander</a></h1>
+		<a href="index.html"><img src="img/pomander.png" alt="a poorly drawn pomander..." /></a>
+		<h1><a href="index.html">Pomander</a></h1>
 		<nav>
 			{% for link in site.navigation %}
 				<a {% if page.url == link.url %}class="active"{% endif %} href="{{link.url}}">{{link.title}}</a>
