@@ -33,15 +33,15 @@ $env->super_secret_setting // true
 			<p>Specify which branch/commit to deploy.</p>
 		</li>
 		<li>
-			<code data-language="php">$env->scm</code>
+			<code data-language="php">$env->scm('git');</code>
 			<p>SCM to use. Git and Svn are currently supported. Defaults to git</p>
 		</li>
 		<li>
-			<code data-language="php">$env->releases</code>
+			<code data-language="php">$env->releases(true);</code>
 			<p>Use current/releases/shared structure. (true/false/number of releases to keep) Default: false</p>
 		</li>
 		<li>
-			<code data-language="php">$env->remote_cache</code>
+			<code data-language="php">$env->remote_cache(true);</code>
 			<p>Cache repository for faster deploys. (true/false) Default: true when releases are set</p>
 		</li>
 	</ul>
@@ -50,11 +50,11 @@ $env->super_secret_setting // true
 	<h2>SSH Settings</h2>
 	<ul class="settings">
 		<li>
-			<code data-language="php">$env->user();</code>
+			<code data-language="php">$env->user('deploy');</code>
 			<p>Specify where your application will be deployed to.</p>
 		</li>
 		<li>
-			<code data-language="php">$env->port();</code>
+			<code data-language="php">$env->port(22);</code>
 			<p>String or Array of application hosts to deploy to.</p>
 		</li>
 		<li>
@@ -71,16 +71,16 @@ $env->super_secret_setting // true
 	<h2>Database Settings</h2>
 	<ul class="settings">
 		<li>
-			<code data-language="php">$env->adapter();</code>
-			<p>Specify where your application will be deployed to.</p>
+			<code data-language="php">$env->adapter('mysql');</code>
+			<p>Which type of database you are using. MySQL is currently supported.</p>
 		</li>
 		<li>
-			<code data-language="php">$env->backup();</code>
-			<p>String or Array of application hosts to deploy to.</p>
+			<code data-language="php">$env->backup(true);</code>
+			<p>Create a full database backup before any merge commands.</p>
 		</li>
 		<li>
 			<code data-language="php">$env->db();</code>
-			<p>Location of the repository used for deploying.</p>
+			<p>String or Array of database hosts to deploy to.</p>
 		</li>
 	</ul>
 </section>
@@ -88,23 +88,23 @@ $env->super_secret_setting // true
 	<h2>Advanced Settings</h2>
 	<ul class="settings">
 		<li>
-			<code data-language="php">$env->umask();</code>
-			<p>Specify where your application will be deployed to.</p>
+			<code data-language="php">$env->umask('002');</code>
+			<p>Which umask to use on remote hosts.</p>
 		</li>
 		<li>
-			<code data-language="php">$env->rsync_cmd();</code>
-			<p>String or Array of application hosts to deploy to.</p>
+			<code data-language="php">$env->rsync_cmd('rsync');</code>
+			<p>Command used to sync files and folders. Default is rsync.</p>
 		</li>
 		<li>
-			<code data-language="php">$env->rsync_flags();</code>
-			<p>String or Array of application hosts to deploy to.</p>
+			<code data-language="php">$env->rsync_flags('-avuzPO --quiet');</code>
+			<p>Flags used to sync files and folders. Defaults to the above.</p>
 		</li>
 		<li>
-			<code data-language="php">$env->db_backup_flags();</code>
-			<p>Location of the repository used for deploying.</p>
+			<code data-language="php">$env->db_backup_flags("--lock-tables=FALSE --skip-add-drop-table | sed -e 's|INSERT INTO|REPLACE INTO|' -e 's|CREATE TABLE|CREATE TABLE IF NOT EXISTS|'");</code>
+			<p>Additional flags used when creating a database backup used for merging. By default backups will skip drop tables and use replace into as to not destroy existing data during a merge. This is useful if you are staging new data that isn't in production.</p>
 		</li>
 		<li>
-			<code data-language="php">$env->db_swap_url();</code>
+			<code data-language="php">$env->db_swap_url(true);</code>
 			<p>If you are merging a database backup and the <code>$env-&gt;url</code> of the two environments differ, Pomander will attempt to replace all occurances of the urls. Set this option to <code>false</code> to prevent Pomander from doing that.</p>
 		</li>
 	</ul>

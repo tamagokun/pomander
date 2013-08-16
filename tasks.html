@@ -42,16 +42,16 @@ task('the_task_name', function($app) {
 	<p>The first string in the task method will always define the name of the task.</p>
 	<pre><code data-language="php">
 task('sass', function($app) {
-	exec_cmd("");
+  exec_cmd("sass stylesheets/sass:stylesheets/compiled");
 });
 
 task('coffee', function($app) {
-	exec_cmd("cofee");
+  exec_cmd("coffee --compile --output lib/ src/");
 });
 
 desc("Compile application assets");
 task('assets', 'sass', 'coffee', function($app) {
-
+  info("assets", "compiled!");
 });
 	</code></pre>
 	<p>Subsequent strings passed before the callable block are dependency tasks that are run <strong>before</strong> the main task can run.</p>

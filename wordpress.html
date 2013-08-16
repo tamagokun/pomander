@@ -37,14 +37,34 @@ wpify               # Wordpress task stack for local machine (1 and done)
 
 <section class="annotate">
 	<h2>Command line usage</h2>
-	<p></p>
+	<p>Use <code>pom setup</code> to completely bootstrap your development environment.</p>
 	<pre class="terminal"><code data-language="shell">
+$ pom setup
+ * info fetch Wordpress 3.6
+ * info plugin advanced-custom-fields at http://plugins.svn.wordpress.org/advanced-custom-fields/trunk
+ * info plugins Successfully deployed.
+ * info create database wordpress_development
+ * info config creating wp-config.php
+ * info htaccess creating .htaccess
+ * info wpify success
+
+$ pom staging deploy
+ * info environment staging
+ * info target ec2-54-227-42-2.compute-1.amazonaws.com
+ * info deploy updating code
+HEAD is now at ab476f8
+ * info fetch Wordpress 3.6
+ * info plugin advanced-custom-fields at http://plugins.svn.wordpress.org/advanced-custom-fields/trunk
+ * info plugins Successfully deployed.
+ * info config creating wp-config.php
+ * info htaccess creating .htaccess
 	</code></pre>
+	<p>Every deploy will fetch a fresh copy of Wordpress, deploy your plugins, create a wp-config and htaccess file.</p>
 </section>
 
 <section class="annotate">
 	<h2>New Settings</h2>
-	<p></p>
+	<p>Use the wordpress setting to specify which version of Wordpress you need, and any other wordpress specific options.</p>
 	<pre><code data-language="php">
 $env-&gt;wordpress(array(
   'version'   =&gt; '3.6',
@@ -53,22 +73,40 @@ $env-&gt;wordpress(array(
 ));
 
 $env-&gt;plugins(array(
+  // fetches from plugins.wordpress.org
   'advanced-custom-fields' =&gt; array('version' =&gt; 'latest'),
+
+  // fetches from local folder
   'gravityforms' =&gt; array('dir' =&gt; 'lib/gravityforms')
+
+  // fetches from git repository
+  'wp-github-activity' =&gt; array('branch' =&gt; 'origin/master' =&gt; 'git' =&gt; 'https://github.com/alexkingorg/wp-github-activity'),
+
+  // fetches from svn repository
+  'more-types' =&gt; array('version' =&gt; '2.1', 'svn' =&gt; 'http://plugins.svn.wordpress.org/more-fields' )
+
 ));
 	</code></pre>
+	<p>You can optionally specify a <code>base_uri</code> to run wordpress in a sub directory or on a non standard port.</p>
+	<p>The plugins setting allows you to specify any plugins that you would like Pomander to deploy.</p>
+	<p>Plugins can be pulled down from multiple locations, check the example to the right to see them all.</p>
 </section>
 
 <section class="annotate">
 	<h2>Project Structure</h2>
+	<p>Pomander attempts to use a cleaner and safer structure to keep things sane.</p>
 	<pre class="terminal"><code data-language="shell">
-deploy/           # This is where your Pomander configs go (nothing weird about that)
-public/           # Welcome to your new wp-content folder.
+deploy/
+public/
 --- themes/
 --- uploads/
-vendor/           # Plugins go in here.
+vendor/
 --- plugins/
-wordpress/        # Your Wordpress installation goes here. You should never really have to go into this folder
-wp-config.php     # See that? We keep wp-config outside of your wordpress installation for added security
+wordpress/
+wp-config.php
 	</code></pre>
+	<p><code>wp-config.php</code> is kept out of the wordpress folder for added security.</p>
+	<p>Keep your wordpress themes in <code>public</code>.</p>
+	<p>Plugins are automatically deployed to <code>vendor/plugins</code>.</p>
+	<p>Wordpress core is kept completely isolated in its own folder. Make sure when you are setting up your web server virtual host, you point the document root to the wordpress folder.</p>
 </section>
