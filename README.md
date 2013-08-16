@@ -1,4 +1,4 @@
-Pomander
+[Pomander](http://ripeworks.com/pomander)
 =======
 
 A light-weight flexible deployment tool for deploying web applications. This project was inspired by [Capistrano](https://github.com/capistrano/capistrano) and [Vlad the Deployer](http://rubyhitsquad.com/Vlad_the_Deployer.html), as well as being built on top of [Phake](https://github.com/jaz303/phake), a [Rake](http://rake.rubyforge.org/) clone.
@@ -59,106 +59,18 @@ Otherwise, you need to add `pomander/pomander` to your project's composer.json:
 You can also do this using Composer:
 
 ```bash
-$ composer require pomander/pomander
+$ composer require pomander/pomander:@stable
 ```
 
 
 Setting up a project
 --------------------
 
-### Step 1. Create a `deploy/development.php`
-
 ```bash
 $ pom init
 ```
 
-Once the file has been created, you will want to fill in the appropriate values.
-You can also check out the [options reference](#options-reference) for help.
-
-_Pomander also supports YAML deploy environments, but recommends using php scripts for extra customization._
-
-### Step 2. Set up environment for deployment
-
-```bash
-$ pom staging deploy:setup  # staging is the environment name and uses deploy/staging.php
-```
-
-### Step 3. Deploy, and profit.
-
-```bash
-$ pom staging deploy
-```
-
-Use `pom -T` to see your available tasks.
-
-Options Reference
------------------------
-
-| *Option* | *Description* |
-|----------|---------------|
-| url | Application URL. Used primarily for database migration and isn't always needed. |
-| user | SSH user for performing remote tasks. |
-| repository | Repository url. |
-| revision | Revision/branch to deploy. _Default: origin/master, trunk_ |
-| branch | Alias of revision. |
-| scm | SCM to use. Currently support svn and git. _Default: git_ |
-| releases | Use current/releases/shared structure. (true/false/number of releases to keep) _Default: false_ |
-| adapter | Data adapter to use for databases. Currently support MySQL _Default: mysql_ |
-| remote\_cache | Cache repository for faster deploys. (true/false) _Default: true when releases are set_ |
-| deploy\_to | Path to deploy application to. _Default: cwd_ |
-| backup | Perform database backup on deployments. (true/false). _Default: false_ |
-| umask | User's umask for remote tasks. _Default: 002_ |
-| rsync\_cmd | Command to use for file syncing. _Default: rsync_ |
-| rsync\_flags | Extra flags used for file syncing. _Default: -avuzPO --quiet_ |
-| app | String or Array of application hosts to deploy to. |
-| db | String or Array of database hosts to deploy to. |
-
-### Example standard deployment script:
-
-```php
-<?php
-  $env->user('deploy')
-      ->repository('git@github.com:github/teach.github.com.git')
-      ->deploy_to('/var/www/html')
-      ->releases(true)
-      ->app(array(
-        'node-1.rackspace.com',
-        'node-2.rackspace.com'
-      ))
-  ;
-```
-
-Tasks
------
-
-```
-config            # Create development environment configuration
-db:backup         # Perform a backup suited for merging.
-db:create         # Create database.
-db:destroy        # Wipe database.
-db:full           # Perform a full database backup.
-db:merge          # Merge a backup into environment.
-deploy:cold       # First time deployment.
-deploy:setup      # Setup application in environment.
-deploy:update     # Update code to latest changes.
-init              # Set it up
-rollback          # Rollback to previous release
-```
-
-### Adding Tasks
-
-Adding tasks is easy, you can drop them right into your environment configurations.
-
-All of the tasks in Pomander are built using [Phake](https://github.com/jaz303/phake). A typical task looks something like this:
-
-```php
-<?php
-task('task_name', function($app) {
-	//task actions
-});
-```
-
-There are a lot of great things you can do with tasks, so please refer to [Phake's README](https://github.com/jaz303/phake) or the [Pomander Wiki](https://github.com/tamagokun/pomander/wiki).
+Refer to the [documentation](http://ripeworks.com/pomander) for a full list of commands and references for configuring environments.
 
 
 Plugins
