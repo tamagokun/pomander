@@ -18,7 +18,7 @@ group('deploy', function() {
 		}else
 		{
 			$deployed = run("if test -d {$app->env->current_dir}; then echo \"exists\"; fi", true);
-			if(count($deployed)) return abort("setup", "application has already been deployed.");
+			if(count($deployed)) return abort("setup", "application has already been setup.");
 			$cmd[] = "mkdir -p {$app->env->releases_dir} {$app->env->shared_dir}";
 			if($app->env->remote_cache === true) $cmd[] = $app->env->scm->create($app->env->cache_dir);
 		}
@@ -40,14 +40,14 @@ group('deploy', function() {
 			if($app->env->remote_cache === true)
 			{
 				$frozen = run("if test -d {$app->env->cache_dir}; then echo \"ok\"; fi", true);
-				if(empty($frozen)) return abort("deploy", "you must run deploy:cold first.");
+				if(empty($frozen)) return abort("deploy", "remote_cache folder not found. you should run deploy:setup or deploy:cold first.");
 				$cmd[] = "cd {$app->env->cache_dir}";
 				$cmd[] = $app->env->scm->update();
 				$cmd[] = "cp -R {$app->env->cache_dir} {$app->env->release_dir}";
 			}else
 			{
 				$frozen = run("if test -d {$app->env->releases_dir}; then echo \"ok\"; fi", true);
-				if(empty($frozen)) return abort("deploy", "you must run deploy:cold first.");
+				if(empty($frozen)) return abort("deploy", "releases folder not found. you should run deploy:setup or deploy:cold first.");
 				$cmd[] = $app->env->scm->create($app->env->release_dir);
 				$cmd[] = "cd {$app->env->release_dir}";
 				$cmd[] = $app->env->scm->update();
@@ -57,16 +57,33 @@ group('deploy', function() {
 		$app->can_rollback = true;
 	});
 
-	task('finalize', function($app) {
-		$cmd = array();
-		//if($app->env->backup === false) $cmd[] = "rm -rf {$app->env->shared_dir}/backup/{$app->env->merged}";		
+	task('finalize','deploy:cleanup', function($app) {
+		//if($app->env->backup === false) $cmd[] = "rm -rf {$app->env->shared_dir}/backup/{$app->env->merged}";
+		$deployed_to = basename($app->env->deploy_to);
 		if($app->env->releases === true)
 		{
-			$releases = run("ls -1t {$app->env->releases_dir}", true);
-			if(count($releases)) $cmd[] = "ln -nfs {$app->env->releases_dir}/{$releases[0]} {$app->env->current_dir}";
+			$deployed_to = basename($app->env->release_dir);
+			run(array(
+				"cd {$app->env->releases_dir}",
+				"current=`ls -1t | head -n 1`",
+				"ln -nfs {$app->env->releases_dir}/\$current {$app->env->current_dir}"
+			));
 		}
-		run($cmd);
 		$app->env->finalized = true;
+		info("deploy", "Complete. Deployed $deployed_to.");
+	});
+
+	task('cleanup', function($app) {
+		if($app->env->releases !== true) return;
+		$keep = max(1, $app->env->keep_releases);
+
+		info("cleanup", "cleaning up old releases");
+		run(array(
+			"cd {$app->env->releases_dir}",
+			"count=`ls -1t | wc -l`",
+			"old=$((count > {$keep} ? count - {$keep} : 0))",
+			"ls -1t | tail -n \$old | xargs rm -rf {}"
+		));
 	});
 
 	desc("First time deployment.");
@@ -140,12 +157,10 @@ group('db', function() {
 
 	desc("Perform a backup suited for merging.");
 	task('backup','db', function($app) {
-		info("backup",$app->env->database["name"]);
+		info("backup","database {$app->env->database["name"]}");
 		run($app->env->adapter->dump($app->env->shared_dir."/dump.sql",$app->env->db_backup_flags));
-		info("fetch","{$app->env->shared_dir}/dump.sql");
 		get("{$app->env->shared_dir}/dump.sql","./tmpdump.sql");
 		$app->old_url = $app->env->url;
-		info("clean","dump.sql");
 		run("rm {$app->env->shared_dir}/dump.sql");
 	});
 
@@ -166,12 +181,9 @@ group('db', function() {
 			fwrite($handle, $sql);
 			fclose($handle);
 		}
-		if(isset($app->env->backup) && $app->env->backup)
-			$app->invoke("db:full");
-		info("merge","dump.sql");
+		if(isset($app->env->backup) && $app->env->backup) $app->invoke("db:full");
 		put("./tmpdump.sql",$file);
 		run($app->env->adapter->merge($file),"rm -rf $file");
-		info("clean","tmpdump.sql");
 		unlink("./tmpdump.sql");
 	});
 
@@ -209,5 +221,8 @@ task('init', function($app) {
 	info("init","Creating development configuration");
 	$app->invoke("config");
 	info("init","Done!");
+	puts("    Modify deploy/development.php to get started.");
+	puts("    Add other environments before running pom deploy:setup");
+	puts("    Check out http://ripeworks.com/pomander for more information");
 });
 ?>
