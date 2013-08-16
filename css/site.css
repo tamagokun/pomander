@@ -60,7 +60,8 @@ section:after {
 		width: 40%;
 	}
 
-	.annotate pre {
+	.annotate > pre,
+	.annotate .highlight {
 		margin: 1em 0 1em 1em;
 		float: right;
 		width: 50%;
@@ -137,11 +138,17 @@ footer p {
 }
 
 .settings p {
-	/* display: inline-block; */
 	margin-top: 0;
 }
 
 .disclaimer {
 	text-align: center;
 	font-style: italic;
+}
+
+p code {
+	background: #ffee77;
+	border-radius: .5em;
+	padding: .25em .5em;
+	font-size: 0.858em;
 }
