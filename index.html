@@ -43,7 +43,7 @@ $ pom production db:backup staging db:merge
 	<pre><span class="filename">deploy/production.php</span><code data-language="php">
 &lt;?php
   $env->user('deploy')
-      ->repository('git@github.com&#58;tamagokun/mikey-kong.git')
+      ->repository('git&#x0040;github.com&#58;tamagokun/mikey-kong.git')
       ->deploy_to('/var/www/html')
       ->releases(true)
       ->app(array(
