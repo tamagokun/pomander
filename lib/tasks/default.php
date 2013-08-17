@@ -13,7 +13,7 @@ group('deploy', function() {
 
 		if($app->env->releases === false)
 		{
-			$cmd[] = "find {$app->env->deploy_to} -type f -delete";
+			$cmd[] = "rm -rf {$app->env->deploy_to}";
 			$cmd[] = $app->env->scm->create($app->env->deploy_to);
 		}else
 		{
@@ -203,15 +203,15 @@ group('db', function() {
 //local
 desc("Create development environment configuration");
 task('config', function($app) {
-  if( file_exists("./deploy/development.php"))
-    warn("development.php","Already exists, skipping");
-  else
+	if( file_exists("./deploy/development.php"))
 	{
-    if( copy($app->dir."/generators/config.php","./deploy/development.php") )
-      info("config","Created deploy/development.php");
-    else
-      warn("config","Unable to create deploy/development.php");
-  }
+		warn("development.php","Already exists, skipping");
+		return;
+	}
+	if( copy($app->dir."/generators/config.php","./deploy/development.php") )
+		info("config","Created deploy/development.php");
+	else
+		warn("config","Unable to create deploy/development.php");
 });
 
 desc("Set it up");
