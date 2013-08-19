@@ -152,3 +152,11 @@ p code {
 	padding: .25em .5em;
 	font-size: 0.858em;
 }
+
+#github {
+	position: fixed;
+	top: 0;
+	right: 0;
+	padding: .5em 0 .25em 1em;
+	background: rgba(33,33,33,.2);
+}
