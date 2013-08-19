@@ -77,7 +77,7 @@ group('deploy', function() {
 		if($app->env->releases !== true) return;
 		$keep = max(1, $app->env->keep_releases);
 
-		info('cleanup', 'app', "cleaning up old releases");
+		info('cleanup', "cleaning up old releases");
 		run(array(
 			"cd {$app->env->releases_dir}",
 			"count=`ls -1t | wc -l`",
