@@ -74,7 +74,8 @@ group('deploy', function() {
 	});
 
 	task('cleanup', function($app) {
-		if($app->env->releases !== true) return;
+		if($app->env->releases === false) return;
+		if($app->env->keep_releases === false) return;
 		$keep = max(1, $app->env->keep_releases);
 
 		info('deploy', "cleaning up old releases");

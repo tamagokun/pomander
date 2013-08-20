@@ -153,6 +153,7 @@ class Environment
 			"revision"=>"origin/master",
 			"remote_cache"=>true,
 			"releases"=>false,
+			"keep_releases"=>false,
 			"deploy_to"=>getcwd(),
 			"backup"=>false,
 			"app"=>"",
