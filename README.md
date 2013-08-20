@@ -20,48 +20,17 @@ $ sudo mv composer.phar /usr/local/bin/composer
 Installation
 ------------
 
-I like to install Pomander globally so I can use it in any project.
-Unfortunately, Composer does not have a way of doing this by default, 
-so here is an easy way to allow global package installation:
-
-### Setting up Composer for global installation
-
 ```bash
-$ curl https://gist.github.com/tamagokun/4242494/raw/35dde077b9d614d537b322c191fecf25ec74d1a5/global_composer.sh | sh
+$ composer global require pomander/pomander:@stable
 ```
 
-If you haven't added composer's bin folder to your `$PATH`, better do that now:
+If you haven't added composer's global bin folder to your `$PATH`, better do that now:
 
 ```bash
-$ echo 'export PATH="$HOME/.composer/bin:$PATH"' >> ~/.bashrc
+$ echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
 ```
 
 _Substitute .bashrc with whatever you use._
-
-### Installing Pomander
-
-If you are using the global installation method from above, you can easily do:
-
-```bash
-$ cd ~/.composer && composer require pomander/pomander
-```
-
-Otherwise, you need to add `pomander/pomander` to your project's composer.json:
-
-```json
-{
-	"require": {
-		"pomander/pomander": "*"
-	}
-}
-```
-
-You can also do this using Composer:
-
-```bash
-$ composer require pomander/pomander:@stable
-```
-
 
 Setting up a project
 --------------------
