@@ -7,31 +7,35 @@ title: Pomander
 </section>
 <section class="annotate">
 	<p>Install Pomander painlessly using Composer.</p>
-	<pre class="terminal"><code data-language="shell">
-$ composer require pomander/pomander:@stable
+	<pre class="terminal"><code>
+<span class="y">$ composer global require pomander/pomander:@stable</span>
+
+<span class="c"># Add $HOME/.composer/vendor/bin to $PATH</span>
 	</code></pre>
 	<p>
 		If you don't have Composer yet, <a href="http://getcomposer.org/doc/00-intro.md#installation-nix">get it</a>.<br />
-		<em>I like to install utilities with Composer globally. If you dig it, <a href="http://ripeworks.com/using-composer-globally/">here's how</a>.</em>
+		<em>Using the <code>global</code> command isn't required, but I dig it.</em>
 	</p>
 </section>
 <section class="annotate">
 	<h2>Staging comes standard</h2>
 	<p>One of the main reasons to build Pomander was to provide an easy way to manage Wordpress deployments across multiple environments.</p>
-	<pre class="terminal"><code data-language="shell">
-$ pom staging deploy
- * info environment staging
- * info target staging-node-1.rackspace.com
- * info deploy updating code
+	<pre class="terminal"><code>
+<span class="y">$ pom staging deploy</span>
 
-$ pom production db:backup staging db:merge
- * info environment production
- * info target cloud-db.rackspace.com
- * info backup database teach_production
- * info environment staging
- * info target staging-node-1.rackspace.com
- * info premerge replace teach.github.com with teach.staging-node1.rackspace.com
- * info merge database teach_staging
+ * <span class="g">info</span> <span class="p">environment</span> staging
+ * <span class="g">info</span> <span class="p">target</span> staging-node-1.rackspace.com
+ * <span class="g">info</span> <span class="p">deploy</span> updating code
+
+<span class="y">$ pom production db:backup staging db:merge</span>
+
+ * <span class="g">info</span> <span class="p">environment</span> production
+ * <span class="g">info</span> <span class="p">target</span> cloud-db.rackspace.com
+ * <span class="g">info</span> <span class="p">backup</span> database teach_production
+ * <span class="g">info</span> <span class="p">environment</span> staging
+ * <span class="g">info</span> <span class="p">target</span> staging-node-1.rackspace.com
+ * <span class="g">info</span> <span class="p">premerge</span> replace teach.github.com with teach.staging-node1.rackspace.com
+ * <span class="g">info</span> <span class="p">merge</span> database teach_staging
 
 	</code></pre>
 	<p>Pomander allows you to run your tasks on any number of environments, and even pass data between them.</p>

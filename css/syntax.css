@@ -103,11 +103,11 @@ pre, code {
 	font-family: 'Monaco', courier, monospace;
 }
 
-pre.terminal .comment {
+pre.terminal .comment, pre.terminal .c {
 	color: #969896;
 }
 
-pre.terminal .variable.global, pre.terminal .variable.class, pre.terminal .variable.instance {
+pre.terminal .variable.global, pre.terminal .variable.class, pre.terminal .variable.instance, pre.terminal .r {
 	color: #cc6666; /* red */
 }
 
@@ -115,18 +115,18 @@ pre.terminal .constant.numeric, pre.terminal .constant.language, pre.terminal .c
 	color: #de935f; /* orange */
 }
 
-pre.terminal .constant, pre.terminal .entity, pre.terminal .entity.class, pre.terminal .support {
+pre.terminal .constant, pre.terminal .entity, pre.terminal .entity.class, pre.terminal .support, pre.terminal .y {
 	color: #f0c674; /* yellow */
 }
 
-pre.terminal .constant.symbol, pre.terminal .string {
+pre.terminal .constant.symbol, pre.terminal .string, pre.terminal .g {
 	color: #b5bd68; /* green */
 }
 
-pre.terminal .entity.function, pre.terminal .support.css-property, pre.terminal .selector {
+pre.terminal .entity.function, pre.terminal .support.css-property, pre.terminal .selector, pre.terminal .b {
 	color: #81a2be; /* blue */
 }
 
-pre.terminal .keyword, pre.terminal .storage {
+pre.terminal .keyword, pre.terminal .storage, pre.terminal .p {
 	color: #b294bb; /* purple */
 }

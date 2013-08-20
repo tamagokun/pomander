@@ -4,8 +4,8 @@ title: Tasks
 ---
 <section class="annotate">
 	<p><strong>Deployment automation for Wordpress</strong>. This plugin is a set of tasks used to deploy and manage Wordpress sites. This plugin is particularly useful for moving Wordpress sites to different environments with ease.</p>
-	<pre class="terminal"><code data-language="shell">
-$ composer require pomander/wordpress:@stable
+	<pre class="terminal"><code>
+<span class="y">$ composer global require pomander/wordpress:@stable</span>
 	</code></pre>
 </section>
 
@@ -38,26 +38,28 @@ wpify               # Wordpress task stack for local machine (1 and done)
 <section class="annotate">
 	<h2>Command line usage</h2>
 	<p>Use <code>pom setup</code> to completely bootstrap your development environment.</p>
-	<pre class="terminal"><code data-language="shell">
-$ pom setup
- * info fetch Wordpress 3.6
- * info plugin advanced-custom-fields at http://plugins.svn.wordpress.org/advanced-custom-fields/trunk
- * info plugins Successfully deployed.
- * info create database wordpress_development
- * info config creating wp-config.php
- * info htaccess creating .htaccess
- * info wpify success
+	<pre class="terminal"><code>
+<span class="y">$ pom setup</span>
 
-$ pom staging deploy
- * info environment staging
- * info target ec2-54-227-42-2.compute-1.amazonaws.com
- * info deploy updating code
+ * <span class="g">info</span> <span class="p">fetch</span> Wordpress 3.6
+ * <span class="g">info</span> <span class="p">plugin</span> advanced-custom-fields at http://plugins.svn.wordpress.org/advanced-custom-fields/trunk
+ * <span class="g">info</span> <span class="p">plugins</span> Successfully deployed.
+ * <span class="g">info</span> <span class="p">create</span> database wordpress_development
+ * <span class="g">info</span> <span class="p">config</span> creating wp-config.php
+ * <span class="g">info</span> <span class="p">htaccess</span> creating .htaccess
+ * <span class="g">info</span> <span class="p">wpify</span> success
+
+<span class="y">$ pom staging deploy</span>
+
+ * <span class="g">info</span> <span class="p">environment</span> staging
+ * <span class="g">info</span> <span class="p">target</span> ec2-54-227-42-2.compute-1.amazonaws.com
+ * <span class="g">info</span> <span class="p">deploy</span> updating code
 HEAD is now at ab476f8
- * info fetch Wordpress 3.6
- * info plugin advanced-custom-fields at http://plugins.svn.wordpress.org/advanced-custom-fields/trunk
- * info plugins Successfully deployed.
- * info config creating wp-config.php
- * info htaccess creating .htaccess
+ * <span class="g">info</span> <span class="p">fetch</span> Wordpress 3.6
+ * <span class="g">info</span> <span class="p">plugin</span> advanced-custom-fields at http://plugins.svn.wordpress.org/advanced-custom-fields/trunk
+ * <span class="g">info</span> <span class="p">plugins</span> Successfully deployed.
+ * <span class="g">info</span> <span class="p">config</span> creating wp-config.php
+ * <span class="g">info</span> <span class="p">htaccess</span> creating .htaccess
 	</code></pre>
 	<p>Every deploy will fetch a fresh copy of Wordpress, deploy your plugins, create a wp-config and htaccess file.</p>
 </section>

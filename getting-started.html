@@ -5,10 +5,10 @@ title: Getting Started
 <section class="annotate">
 	<h2>1. Introduce Pomander to your project</h2>
 	<p>This will give you a deploy folder and a development.php environment to get you started.</p>
-	<pre class="terminal"><code data-language="shell">
-$ pom init
+	<pre class="terminal"><code>
+<span class="y">$ pom init</span>
 
-# NOTE: If you get 'command not found' try vendor/bin/pom
+<span class="c"># NOTE: If you get 'command not found' try vendor/bin/pom</span>
 	</code></pre>
 	<p>The environment <code>development</code> is assumed to be your local machine and will act as such. This gives you the ability to automate your development environment to get up and running more easily.</p>
 	<p>If you want to deploy to a server, read on to step 2!</p>
@@ -16,8 +16,8 @@ $ pom init
 <section class="annotate">
 	<h2>2. Configure your environments</h2>
 	<p>Create as many environments as you like, and name them as you please. Stuff like <em>staging</em> and <em>production</em> are great, but you can really do whatever you would like.</p>
-	<pre class="terminal"><code data-language="shell">
-$ touch deploy/experiment.php
+	<pre class="terminal"><code>
+<span class="y">$ touch deploy/experiment.php</span>
 	</code></pre>
 	<p>Pomander is flexible enough to work with your environment.</p>
 	<pre><code data-language="php">
@@ -34,14 +34,21 @@ $ touch deploy/experiment.php
 <section class="annotate">
 	<h2>3. Prepare environment for deployment</h2>
 	<p>This will create the proper directory structure for your deployments on the server, and yell at you if it doesn't have the proper permissions.</p>
-	<pre class="terminal"><code data-language="shell">
-$ pom staging deploy:setup
+	<pre class="terminal"><code>
+<span class="y">$ pom staging deploy:setup</span>
 	</code></pre>
 </section>
 <section class="annotate">
 	<h2>4. Profit</h2>
 	<p>$$$</p>
-	<pre class="terminal"><code data-language="shell">
-$ pom staging deploy
+	<pre class="terminal"><code>
+<span class="y">$ pom staging deploy</span>
+
+ * <span class="g">info</span> <span class="p">environment</span> staging
+ * <span class="g">info</span> <span class="p">target</span> ec2-54-227-42-2.compute-1.amazonaws.com
+ * <span class="g">info</span> <span class="p">deploy</span> updating code
+HEAD is now at ab476f8
+ * <span class="g">info</span> <span class="p">deploy</span> cleaning up old releases
+ * <span class="g">info</span> <span class="p">complete</span> deployed 20130820125941
 	</code></pre>
 </section>
