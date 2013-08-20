@@ -70,7 +70,7 @@ group('deploy', function() {
 			));
 		}
 		$app->env->finalized = true;
-		info("complete", "deployed $deployed_to.");
+		info("complete", "deployed $deployed_to");
 	});
 
 	task('cleanup', function($app) {
