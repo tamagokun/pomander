@@ -118,7 +118,7 @@ class Environment
 		if(!$this->target) return exec_cmd($cmd);
 		if(!$this->shell)
 		{
-			$keypass = $this->key_pass;
+			$keypass = $this->key_password;
 			$auth = is_null($this->password)? $this->key_path : $this->password;
 			$user = is_null($this->user)? get_current_user : $this->user;
 			$this->shell = new RemoteShell($this->target, $this->port, $user, $auth, $keypass);
