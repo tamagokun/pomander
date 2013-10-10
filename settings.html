@@ -51,15 +51,15 @@ $env->super_secret_setting // true
 	<ul class="settings">
 		<li>
 			<code data-language="php">$env->user('deploy');</code>
-			<p>Specify where your application will be deployed to.</p>
+			<p>Specify which user to connect as. Default: user running pom</p>
 		</li>
 		<li>
 			<code data-language="php">$env->port(22);</code>
-			<p>String or Array of application hosts to deploy to.</p>
+			<p>Which port to use when connecting to target. Default: 22</p>
 		</li>
 		<li>
 			<code data-language="php">$env->password();</code>
-			<p>Location of the repository used for deploying.</p>
+			<p>Password used when connecting to target.</p>
 		</li>
 		<li>
 			<code data-language="php">$env->key_path("~/.ssh/id_rsa"); $env->key_password();</code>
