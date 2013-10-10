@@ -218,7 +218,7 @@ task('config', function($app) {
 desc("Set it up");
 task('init', function($app) {
 	info("init","Creating deploy directory");
-	exec_cmd("mkdir -p ./deploy");
+	run_local("mkdir -p ./deploy");
 	info("init","Creating development configuration");
 	$app->invoke("config");
 	info("init","Done!");

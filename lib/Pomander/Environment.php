@@ -115,7 +115,7 @@ class Environment
 
 	public function exec($cmd)
 	{
-		if(!$this->target) return exec_cmd($cmd);
+		if(!$this->target) return run_local($cmd);
 		if(!$this->shell)
 		{
 			$keypass = $this->key_pass;
@@ -129,19 +129,19 @@ class Environment
 	public function put($what,$where)
 	{
 		if($this->target)
-			$cmd = "{$this->rsync_cmd} {$this->rsync_flags} $what {$this->user}@{$this->target}:$where";
+			$cmd = "{$this->rsync_cmd} -e \"ssh -i {$this->key_path}\" {$this->rsync_flags} $what {$this->user}@{$this->target}:$where";
 		else
 			$cmd = "cp -r $what $where";
-		return exec_cmd($cmd);
+		return run_local($cmd);
 	}
 
 	public function get($what,$where)
 	{
 		if($this->target)
-			$cmd = "{$this->rsync_cmd} {$this->rsync_flags} {$this->user}@{$this->target}:$what $where";
+			$cmd = "{$this->rsync_cmd} -e \"ssh -i {$this->key_path}\" {$this->rsync_flags} {$this->user}@{$this->target}:$what $where";
 		else
 			$cmd = "cp -r $what $where";
-		return exec_cmd($cmd);
+		return run_local($cmd);
 	}
 
 	private function defaults()
