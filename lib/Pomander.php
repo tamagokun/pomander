@@ -80,7 +80,7 @@ function run()
 	$cmd = implode(" && ",$cmd);
 	$app = builder()->get_application();
 
-	list($status, $output) = !isset($app->env)? exec_cmd($cmd) : $app->env->exec($cmd);
+	list($status, $output) = !isset($app->env)? run_local($cmd) : $app->env->exec($cmd);
 	if(!$silent && count($output)) puts(implode("\n", $output));
 
 	if($status > 0)
@@ -98,23 +98,29 @@ function run()
 	return $output;
 }
 
-function exec_cmd($cmd)
+function run_local($cmd)
 {
 	$cmd = is_array($cmd)? implode(" && ",$cmd) : $cmd;
 	exec($cmd, $output, $status);
-	return array($status, $output);	
+	return array($status, $output);
+}
+
+// Deprecated: use run_local()
+function exec_cmd($cmd)
+{
+	return run_local($cmd);
 }
 
 function put($what,$where)
 {
 	if(!isset(builder()->get_application()->env))
-		return exec_cmd("cp -R $what $where");
+		return run_local("cp -R $what $where");
 	builder()->get_application()->env->put($what,$where);
 }
 
 function get($what,$where)
 {
 	if(!isset(builder()->get_application()->env))
-		return exec_cmd("cp -R $what $where");
+		return run_local("cp -R $what $where");
 	builder()->get_application()->env->get($what,$where);
 }
