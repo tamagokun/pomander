@@ -108,7 +108,7 @@ function run_local($cmd)
 // Deprecated: use run_local()
 function exec_cmd($cmd)
 {
-	run_local($cmd);
+	return run_local($cmd);
 }
 
 function put($what,$where)
