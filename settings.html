@@ -62,8 +62,8 @@ $env->super_secret_setting // true
 			<p>Location of the repository used for deploying.</p>
 		</li>
 		<li>
-			<code data-language="php">$env->key_path(); $env->key_password();</code>
-			<p>Specify which branch/commit to deploy.</p>
+			<code data-language="php">$env->key_path("~/.ssh/id_rsa"); $env->key_password();</code>
+			<p>Specify path to deploy key (private), and optionally password to authenticate key. Default: ~/.ssh/id_rsa (Only supports RSA keys currently)</p>
 		</li>
 	</ul>
 </section>
