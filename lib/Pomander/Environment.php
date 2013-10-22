@@ -70,7 +70,6 @@ class Environment
 
 	public function new_release()
 	{
-		if(function_exists('date_default_timezone_set')) date_default_timezone_set('UTC');
 		return date('Ymdhis');
 	}
 

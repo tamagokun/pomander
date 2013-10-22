@@ -20,6 +20,9 @@ class Pomander
 	}
 }
 
+// set default date
+if(function_exists('date_default_timezone_set')) date_default_timezone_set('UTC');
+
 set_error_handler(function($errno,$errstr,$errfile,$errline) {
 	puts("aborted!");
 	puts("$errstr\n");
