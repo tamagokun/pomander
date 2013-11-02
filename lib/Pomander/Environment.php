@@ -157,6 +157,7 @@ class Environment
 			"backup"=>false,
 			"app"=>"",
 			"db"=>"",
+			"method"=>"git",
 			"scm"=>"git",
 			"adapter"=>"mysql",
 			"port"=>22,
