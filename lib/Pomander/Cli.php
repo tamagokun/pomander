@@ -1,0 +1,161 @@
+<?php
+namespace Pomander;
+
+use phake\Application;
+
+class Cli
+{
+	public $action = "invoke";
+	public $trace = false;
+	public $app;
+
+	public function exec($args)
+	{
+		try
+		{
+			$parser = new OptionParser($args);
+			// handle cli options
+			foreach ($parser->get_options() as $option => $value) $this->handle_option($option);
+
+			$task_args = array();
+			$tasks = array();
+
+			// handle tasks and task vars
+			foreach($parser->get_non_options() as $option)
+			{
+				if(strpos($option, '=') === false) $tasks[] = $option;
+				else $task_args[] = $option;
+			}
+
+			$this->app = new Application();
+			$this->app->set_args(\phake\Utils::parse_args($task_args));
+			$this->app->top_level_tasks = count($tasks) ? $tasks : array('default');
+			$this->app->dir = dirname(__DIR__);
+
+			\phake\Builder::$global = new \phake\Builder($this->app);
+
+			// load Pomander/Pomfile
+			$runfile = $this->resolve_runfile(getcwd());
+			if(!$runfile)
+			{
+				$pom = new \Pomander\Builder();
+				$pom->run();
+			}else
+			{
+				$directory = dirname($runfile);
+				if(!@chdir($directory))
+					throw new \Exception("Couldn't change to directory '$directory'");
+				else
+					echo "(in $directory)\n";
+				require $runfile;
+			}
+
+			if($this->action == "list")
+			{
+				$this->list_tasks();
+				return 0;
+			}
+
+			$this->app->reset();
+
+			switch($this->action)
+			{
+				case 'list':
+					$this->list_tasks();
+					break;
+				case 'invoke':
+					foreach($tasks as $task_name) $this->app->invoke($task_name);
+					break;
+			}
+		}catch(\phake\TaskNotFoundException $tnfe)
+		{
+			$this->fatal($tnfe, "Don't know how to build task '$task_name'\n");
+		}catch(\Exception $e)
+		{
+			$this->fatal($e, null);
+		}
+	}
+
+	public function error_handler($errno, $errstr, $errfile, $errline)
+	{
+		$exception = new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+		return $this->fatal($exception, $errstr, $errno);
+	}
+
+	public function exception_handler(\Exception $e)
+	{
+		return $this->fatal($e);
+	}
+
+	protected function handle_option($option)
+	{
+		switch($option)
+		{
+			case "t":
+			case "trace":
+				$this->trace = true;
+				break;
+			case "T":
+			case "tasks":
+				$this->action = "list";
+				break;
+			case "V":
+			case "version":
+				echo "Pomander ".implode(".", \Pomander::version())."\n";
+				exit;
+				break;
+			case "h":
+			case "H":
+			case "help":
+				echo "Usage:\n";
+				echo "pom {options} tasks...\n\n";
+				echo "Options:\n";
+				echo "    -T, --tasks        Display the available tasks.\n";
+				echo "    -t, --trace        Turn on invoke/execute tracing, enable full backtrace.\n";
+				echo "    -V, --version      Display the program version.\n";
+				echo "    -h, -H, --help     Display the help message.\n";
+				exit;
+				break;
+			default:
+				throw new \Exception("Unknown command line option '$option'");
+				break;
+		}
+	}
+
+	protected function fatal($exception, $message = null, $status = 1)
+	{
+		puts("aborted!");
+		if(!$message) $message = $exception->getMessage();
+		if(!$message) $message = get_class($exception);
+		puts("$message\n");
+		if($this->trace)
+			puts($exception->getTraceAsString());
+		else
+			puts("(See full trace by running task with --trace)");
+		exit($status > 0 ? $status : 1);
+	}
+
+	protected function list_tasks()
+	{
+		$task_list = $this->app->get_task_list();
+		if(!count($task_list)) return;
+		$max = max(array_map('strlen', array_keys($task_list)));
+		foreach($task_list as $name => $desc)
+			echo str_pad($name, $max + 4) . $desc . "\n";
+	}
+
+	protected function resolve_runfile($directory)
+	{
+		$runfiles = array('Phakefile','Phakefile.php','Pomfile','Pomfile.php');
+		do
+		{
+			foreach($runfiles as $r)
+			{
+				$candidate = $directory.'/'.$r;
+				if(file_exists($candidate)) return $candidate;
+			}
+			if($directory == '/') return false;
+			$directory = dirname($directory);
+		} while (true);
+	}
+}

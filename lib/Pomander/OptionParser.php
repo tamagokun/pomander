@@ -8,20 +8,24 @@ class OptionParser
 	private $options;
 	private $non_options;
 
-	public function __construct($args) {
+	public function __construct($args)
+	{
 		$this->args = $args;
 		$this->parse();
 	}
 
-	public function get_options() {
+	public function get_options()
+	{
 		return $this->options;
 	}
 
-	public function get_non_options() {
+	public function get_non_options()
+	{
 		return $this->non_options;
 	}
 
-	protected function parse() {
+	protected function parse()
+	{
 		$this->options      = array();
 		$this->non_options  = array();
 		$last_opt           = null;
@@ -53,7 +57,8 @@ class OptionParser
 		}
 	}
 
-	protected function append_option($option) {
+	protected function append_option($option)
+	{
 		if (isset($this->options[$option])) {
 			$this->options[$option] = (array) $this->options[$option];
 			$this->options[$option][] = false;
@@ -62,7 +67,8 @@ class OptionParser
 		}
 	}
 
-	protected function set_option_value($option, $value) {
+	protected function set_option_value($option, $value)
+	{
 		if (is_array($this->options[$option])) {
 			$len = count($this->options[$option]);
 			$this->options[$option][$len - 1] = $value;
@@ -71,7 +77,8 @@ class OptionParser
 		}
 	}
 
-	protected function next() {
+	protected function next()
+	{
 		if ($this->index == count($this->args)) {
 			return false;
 		}

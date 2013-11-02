@@ -4,40 +4,14 @@ require dirname(__FILE__).'/spyc.php';
 
 class Pomander
 {
-	public static function resolve_runfile($directory)
+	public static function version()
 	{
-		$runfiles = array('Phakefile','Phakefile.php','Pomfile','Pomfile.php');
-		do
-		{
-			foreach($runfiles as $r)
-			{
-				$candidate = $directory.'/'.$r;
-				if(file_exists($candidate)) return $candidate;
-			}
-			if($directory == '/') return false;
-			$directory = dirname($directory);
-		} while (true);
+		return array(0,3,9);
 	}
 }
 
 // set default date
 if(function_exists('date_default_timezone_set')) date_default_timezone_set('UTC');
-
-set_error_handler(function($errno,$errstr,$errfile,$errline) {
-	puts("aborted!");
-	puts("$errstr\n");
-	if($errno <= 0) $errno = 1;
-	global $trace;
-	if($trace)
-	{
-		$exception = new \ErrorException($errstr, 0, $errno, $errfile, $errline);
-		puts($exception->getTraceAsString());
-	}else
-	{
-		puts("(See full trace by running task with --trace)");
-	}
-	exit($errno);
-});
 
 //utils
 function info($status,$msg)
@@ -68,9 +42,10 @@ function puts($text) { echo $text.PHP_EOL; }
 
 function home()
 {
-	if(!isset(builder()->get_application()->home))
-		builder()->get_application()->home = trim(shell_exec("cd && pwd"),"\r\n");
-	return builder()->get_application()->home;
+	$app = builder()->get_application();
+	if(!isset($app->home))
+		$app->home = trim(shell_exec("cd && pwd"),"\r\n");
+	return $app->home;
 }
 
 function run()
