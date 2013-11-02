@@ -107,9 +107,9 @@ class Cli
 			case "h":
 			case "H":
 			case "help":
-				echo "Usage:\n";
+				echo ansicolor("Usage:\n", 33);
 				echo "pom {options} tasks...\n\n";
-				echo "Options:\n";
+				echo ansicolor("Options:\n", 33);
 				echo "    -T, --tasks        Display the available tasks.\n";
 				echo "    -t, --trace        Turn on invoke/execute tracing, enable full backtrace.\n";
 				echo "    -V, --version      Display the program version.\n";

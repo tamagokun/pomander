@@ -34,6 +34,7 @@ function ansicolor($text,$color)
 {
 	#31 red
 	#32 green
+	#33 yellow
 	#35 purple
 	return "\033[{$color}m{$text}\033[0m";
 }
