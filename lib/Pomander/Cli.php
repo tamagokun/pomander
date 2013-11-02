@@ -68,7 +68,7 @@ class Cli
 			switch($this->action)
 			{
 				case 'list':
-					$this->list_tasks();
+					$this->print_tasks();
 					break;
 				case 'invoke':
 					foreach($tasks as $task_name) $this->app->invoke($task_name);
@@ -129,17 +129,13 @@ class Cli
 			case "h":
 			case "H":
 			case "help":
-				echo ansicolor("Usage:\n", 33);
-				echo "pom {options} tasks...\n\n";
-				echo ansicolor("Options:\n", 33);
-				echo "    -T, --tasks        Display the available tasks.\n";
-				echo "    -t, --trace        Turn on invoke/execute tracing, enable full backtrace.\n";
-				echo "    -V, --version      Display the program version.\n";
-				echo "    -h, -H, --help     Display the help message.\n";
+				$this->print_help();
 				exit;
 				break;
 			default:
-				throw new \Exception("Unknown command line option '$option'");
+				puts("Unknown command line option '$option'\n");
+				$this->print_help();
+				exit(1);
 				break;
 		}
 	}
@@ -157,7 +153,18 @@ class Cli
 		exit($status > 0 ? $status : 1);
 	}
 
-	protected function list_tasks()
+	protected function print_help()
+	{
+		echo ansicolor("Usage:\n", 33);
+		echo "pom {options} tasks...\n\n";
+		echo ansicolor("Options:\n", 33);
+		echo "    -T, --tasks        Display the available tasks.\n";
+		echo "    -t, --trace        Turn on invoke/execute tracing, enable full backtrace.\n";
+		echo "    -V, --version      Display the program version.\n";
+		echo "    -h, -H, --help     Display the help message.\n";
+	}
+
+	protected function print_tasks()
 	{
 		$task_list = $this->app->get_task_list();
 		if(!count($task_list)) return;
