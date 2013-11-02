@@ -33,10 +33,11 @@ class Cli
 				if(strpos($option, '=') === false) $tasks[] = $option;
 				else $task_args[] = $option;
 			}
+			if(empty($tasks)) $tasks = array('default');
 
 			$this->app = new Application();
 			$this->app->set_args(\phake\Utils::parse_args($task_args));
-			$this->app->top_level_tasks = count($tasks) ? $tasks : array('default');
+			$this->app->top_level_tasks = $tasks;
 			$this->app->dir = dirname(__DIR__);
 
 			\phake\Builder::$global = new \phake\Builder($this->app);
