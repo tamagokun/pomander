@@ -13,6 +13,13 @@ class Cli
 	{
 		try
 		{
+			if(function_exists('pcntl_signal'))
+			{
+				declare(ticks=1);
+				pcntl_signal(SIGINT, array($this, "cancel"));
+				pcntl_signal(SIGTERM, array($this, "cancel"));
+			}
+
 			$parser = new OptionParser($args);
 			// handle cli options
 			foreach ($parser->get_options() as $option => $value) $this->handle_option($option);
@@ -74,6 +81,21 @@ class Cli
 		{
 			$this->fatal($e, null);
 		}
+	}
+
+	public function cancel()
+	{
+		puts("Stopping..");
+		$app = builder()->get_application();
+		if($app && $app->can_rollback)
+		{
+			warn("fail","Rolling back...");
+			$app->invoke('rollback');
+			info("rollback","rollback complete.");
+			exit(2);
+			return;
+		}
+		abort("fail","cancelled!", 2);
 	}
 
 	public function error_handler($errno, $errstr, $errfile, $errline)
