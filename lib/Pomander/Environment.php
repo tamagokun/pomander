@@ -22,7 +22,7 @@ class Environment
 			if(!class_exists($plugin))
 				return abort("load","Could not load plugin {$plugin}");
 		}
-		$plugin::load();
+		$plugin::load($this);
 	}
 
 	public function set($options)
