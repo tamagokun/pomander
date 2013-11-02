@@ -22,7 +22,7 @@ class Environment
 			if(!class_exists($plugin))
 				return abort("load","Could not load plugin {$plugin}");
 		}
-		$plugin::load();
+		$plugin::load($this);
 	}
 
 	public function set($options)
@@ -157,6 +157,7 @@ class Environment
 			"backup"=>false,
 			"app"=>"",
 			"db"=>"",
+			"method"=>"git",
 			"scm"=>"git",
 			"adapter"=>"mysql",
 			"port"=>22,

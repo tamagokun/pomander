@@ -1,10 +1,24 @@
 #!/usr/bin/env php
 <?php
-// pass arguments to phake
+
+if(!class_exists("\\Pomander"))
+{
+	try {
+		$dir = dirname(__DIR__)."/vendor";
+		if(!file_exists($dir)) $dir = dirname(dirname(dirname(__DIR__)));
+		require_once "{$dir}/autoload.php";
+	}catch(Exception $e)
+	{
+		echo "Failed to load Pomander library. Is pom installed in the proper location?\n";
+	}
+}
+
+\Pomander::version();
 array_shift($GLOBALS['argv']);
-$arg_list = implode(' ', $GLOBALS['argv']);
-$file = dirname(__DIR__).'/Phakefile';
-$phake_path = dirname(dirname(dirname(__DIR__))).'/bin/phake';
-$phake = file_exists($phake_path)? $phake_path : "phake";
-passthru("$phake -f $file $arg_list", $status);
+
+$cli = new \Pomander\Cli();
+set_error_handler(array($cli, 'error_handler'));
+set_exception_handler(array($cli, 'exception_handler'));
+
+$status = $cli->exec($GLOBALS['argv']);
 exit($status);

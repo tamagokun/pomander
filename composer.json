@@ -13,8 +13,8 @@
 		}
 	],
 	"require": {
-		"jaz303/phake": "*",
-		"phpseclib/phpseclib": "*"
+		"jaz303/phake": "@dev",
+		"phpseclib/phpseclib": "@stable"
 	},
 	"autoload": {
 		"psr-0": {
