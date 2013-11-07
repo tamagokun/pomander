@@ -160,3 +160,7 @@ p code {
 	padding: .5em 0 .25em 1em;
 	background: rgba(33,33,33,.2);
 }
+
+.asciicast {
+	margin: 2em auto;
+}
