@@ -58,12 +58,6 @@ class Cli
 				require $runfile;
 			}
 
-			if($this->action == "list")
-			{
-				$this->list_tasks();
-				return 0;
-			}
-
 			$this->app->reset();
 
 			switch($this->action)
