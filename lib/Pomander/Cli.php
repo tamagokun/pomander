@@ -44,18 +44,16 @@ class Cli
 
 			// load Pomander/Pomfile
 			$runfile = $this->resolve_runfile(getcwd());
-			if(!$runfile)
+			$directory = dirname($runfile);
+			if(!@chdir($directory))
+					throw new \Exception("Couldn't change to directory '$directory'");
+			else
+				puts("(in $directory)");
+			if($runfile) require $runfile;
+			if(!$pom)
 			{
 				$pom = new \Pomander\Builder();
 				$pom->run();
-			}else
-			{
-				$directory = dirname($runfile);
-				if(!@chdir($directory))
-					throw new \Exception("Couldn't change to directory '$directory'");
-				else
-					echo "(in $directory)\n";
-				require $runfile;
 			}
 
 			$this->app->reset();
