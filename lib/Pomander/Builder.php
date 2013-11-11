@@ -3,6 +3,8 @@ namespace Pomander;
 
 class Builder
 {
+	public $plugins = array();
+
 	public function config()
 	{
 		foreach(glob("deploy/*{.php,.yml}", GLOB_BRACE) as $config)
@@ -26,7 +28,7 @@ class Builder
 			if(!class_exists($plugin))
 				return abort("load","Could not load plugin {$plugin}");
 		}
-		$plugin::load();
+		$plugins[] = $plugin;
 	}
 
 	public function run($first = true)
@@ -68,6 +70,7 @@ class Builder
 			if(is_string($config)) require($config);
 			else $env->set($config);
 			$app->env = $env;
+			foreach($builder->plugins as $plugin) $app->env->load($plugin);
 			$app->env->setup();
 			$app->reset();
 		});
@@ -84,6 +87,7 @@ class Builder
 		if(is_string($config)) require($config);
 		else $env->set($config);
 		$app->env = $env;
+		foreach($this->plugins as $plugin) $app->env->load($plugin);
 		$app->env->setup();
 		$app->reset();
 	}
