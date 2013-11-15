@@ -28,7 +28,7 @@ class Builder
 			if(!class_exists($plugin))
 				return abort("load","Could not load plugin {$plugin}");
 		}
-		$plugins[] = $plugin;
+		$this->plugins[] = $plugin;
 	}
 
 	public function run($first = true)
