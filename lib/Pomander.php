@@ -21,12 +21,12 @@ function info($status,$msg)
 
 function warn($status,$msg)
 {
-	puts(" * ".ansicolor("warn ",31).ansicolor("$status ",35).$msg);
+	puts(" * ".ansicolor("warn ",33).ansicolor("$status ",35).$msg);
 }
 
 function abort($status, $msg, $code=1)
 {
-	warn($status,$msg);
+	puts(" * ".ansicolor("abort ",31).ansicolor("$status ",35).$msg);
 	die($code);
 }
 
