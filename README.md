@@ -46,3 +46,4 @@ Plugins
 -------
 
 * [pomander-wordpress](https://github.com/tamagokun/pomander-wordpress)
+* [pomander-symfony2](https://github.com/leopoiroux/pomander-symfony2)
