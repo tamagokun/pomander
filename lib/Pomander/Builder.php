@@ -4,6 +4,7 @@ namespace Pomander;
 class Builder
 {
 	public $plugins = array();
+	public $runfile;
 
 	public function config()
 	{
@@ -55,7 +56,16 @@ class Builder
 
 		$tasks = glob(dirname(__DIR__).'/tasks/*.php');
 		foreach($tasks as $task) require $task;
-		if($first) $this->inject_default($app);
+		if($first)
+		{
+			$this->runfile = $this->resolve_runfile(getcwd());
+			$directory = $this->runfile ? dirname($this->runfile) : getcwd();
+			if(!@chdir($directory))
+					throw new \Exception("Couldn't change to directory '$directory'");
+			else
+				puts("(in $directory)");
+			$this->inject_default($app);
+		}
 	}
 
 /* protected */
@@ -67,6 +77,7 @@ class Builder
 			\phake\Builder::$global->clear();
 			$builder->run(false);
 			$app->env = $env;
+			if($this->runfile) require $this->runfile;
 			if(is_string($config)) require($config);
 			else $env->set($config);
 			$app->env = $env;
@@ -83,6 +94,7 @@ class Builder
 		if(count($file) < 1) return;
 		$file = array_shift($file);
 		$app->env = $env;
+		if($this->runfile) require $this->runfile;
 		$config = $this->is_yaml($file)? \Spyc::YAMLLoad($file) : $file;
 		if(is_string($config)) require($config);
 		else $env->set($config);
@@ -90,6 +102,21 @@ class Builder
 		foreach($this->plugins as $plugin) $app->env->load($plugin);
 		$app->env->setup();
 		$app->reset();
+	}
+
+	protected function resolve_runfile($directory)
+	{
+		$runfiles = array('Phakefile','Phakefile.php','Pomfile','Pomfile.php');
+		do
+		{
+			foreach($runfiles as $r)
+			{
+				$candidate = $directory.'/'.$r;
+				if(file_exists($candidate)) return $candidate;
+			}
+			if($directory == '/') return false;
+			$directory = dirname($directory);
+		} while (true);
 	}
 
 /* private */

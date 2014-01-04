@@ -42,19 +42,8 @@ class Cli
 
 			\phake\Builder::$global = new \phake\Builder($this->app);
 
-			// load Pomander/Pomfile
-			$runfile = $this->resolve_runfile(getcwd());
-			$directory = dirname($runfile);
-			if(!@chdir($directory))
-					throw new \Exception("Couldn't change to directory '$directory'");
-			else
-				puts("(in $directory)");
-			if($runfile) require $runfile;
-			if(!$pom)
-			{
-				$pom = new \Pomander\Builder();
-				$pom->run();
-			}
+			$pom = new \Pomander\Builder();
+			$pom->run();
 
 			$this->app->reset();
 
@@ -164,20 +153,5 @@ class Cli
 		$max = max(array_map('strlen', array_keys($task_list)));
 		foreach($task_list as $name => $desc)
 			echo str_pad($name, $max + 4) . $desc . "\n";
-	}
-
-	protected function resolve_runfile($directory)
-	{
-		$runfiles = array('Phakefile','Phakefile.php','Pomfile','Pomfile.php');
-		do
-		{
-			foreach($runfiles as $r)
-			{
-				$candidate = $directory.'/'.$r;
-				if(file_exists($candidate)) return $candidate;
-			}
-			if($directory == '/') return false;
-			$directory = dirname($directory);
-		} while (true);
 	}
 }
