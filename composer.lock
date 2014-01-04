@@ -100,7 +100,7 @@
                 {
                     "name": "Jim Wigginton",
                     "email": "terrafrost@php.net",
-                    "role": "Developer"
+                    "role": "Lead Developer"
                 }
             ],
             "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
