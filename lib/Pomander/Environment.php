@@ -66,7 +66,11 @@ class Environment
 	}
 
 	public function __isset($prop) { return isset($this->config[$prop]); }
-	public function __set($prop,$value) { $this->config[$prop] = $value; }
+
+	public function __set($prop,$value)
+	{
+		$this->config[$prop] = is_array($value) && is_array($this->config[$prop]) ? array_merge_recursive($this->config[$prop], $value) : $value;
+	}
 
 	public function new_release()
 	{
