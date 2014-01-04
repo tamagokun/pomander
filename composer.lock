@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jaz303/phake.git",
-                "reference": "e78836990de25ad195b1e4564385a588efb75820"
+                "reference": "181068a5e839d923f2f41899ef9d39e52b91b9db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jaz303/phake/zipball/e78836990de25ad195b1e4564385a588efb75820",
-                "reference": "e78836990de25ad195b1e4564385a588efb75820",
+                "url": "https://api.github.com/repos/jaz303/phake/zipball/181068a5e839d923f2f41899ef9d39e52b91b9db",
+                "reference": "181068a5e839d923f2f41899ef9d39e52b91b9db",
                 "shasum": ""
             },
             "require": {
@@ -29,11 +29,7 @@
             "autoload": {
                 "psr-0": {
                     "phake": "lib/"
-                },
-                "files": [
-                    "lib/functions.php",
-                    "lib/term_colors.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -52,7 +48,7 @@
                 "automation",
                 "cli"
             ],
-            "time": "2013-08-21 08:36:46"
+            "time": "2013-12-22 00:23:39"
         },
         {
             "name": "phpseclib/phpseclib",

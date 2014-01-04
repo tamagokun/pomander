@@ -13,6 +13,43 @@ class Pomander
 // set default date
 if(function_exists('date_default_timezone_set')) date_default_timezone_set('UTC');
 
+// phake helpers
+function builder()
+{
+	if(!isset(phake\Builder::$global)) phake\Builder::$global = new phake\Builder;
+	return phake\Builder::$global;
+}
+
+function task()
+{
+	$deps = func_get_args();
+	$name = array_shift($deps);
+	if($deps[count($deps) - 1] instanceof Closure)
+		$work = array_pop($deps);
+	else
+		$work = null;
+	builder()->add_task($name, $work, $deps);
+}
+
+function group($name, $lambda = null)
+{
+	$thrown = null;
+	builder()->push_group($name);
+	try {
+			if ($lambda instanceof Closure) $lambda();
+	} catch (\Exception $e) {
+			$thrown = $e;
+	}
+	builder()->pop_group();
+	if ($thrown) throw $e;
+}
+
+function before($task, $lambda) { builder()->before($task, $lambda); }
+
+function after($task, $lambda) { builder()->after($task, $lambda); }
+
+function desc($description) { builder()->desc($description); }
+
 //utils
 function info($status,$msg)
 {
@@ -43,7 +80,7 @@ function puts($text) { echo $text.PHP_EOL; }
 
 function home()
 {
-	$app = builder()->get_application();
+  $app = builder()->get_application();
 	if(!isset($app->home))
 		$app->home = trim(shell_exec("cd && pwd"),"\r\n");
 	return $app->home;
