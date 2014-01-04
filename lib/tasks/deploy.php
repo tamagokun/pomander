@@ -87,10 +87,10 @@ group('deploy', function() {
 	});
 
 	desc("First time deployment.");
-	task('cold','deploy:setup','deploy:update','deploy:finalize');
+	task('cold','deploy:setup','deploy:update','composer:install','deploy:finalize');
 
 });
-task('deploy','deploy:update','deploy:finalize');
+task('deploy','deploy:update','composer:install','deploy:finalize');
 
 //rollback
 desc("Rollback to the previous release");
