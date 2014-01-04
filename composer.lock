@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jaz303/phake.git",
-                "reference": "181068a5e839d923f2f41899ef9d39e52b91b9db"
+                "reference": "ddfc0e71e7d65a9bfb852a8b3e1b9aad7b6b825e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jaz303/phake/zipball/181068a5e839d923f2f41899ef9d39e52b91b9db",
-                "reference": "181068a5e839d923f2f41899ef9d39e52b91b9db",
+                "url": "https://api.github.com/repos/jaz303/phake/zipball/ddfc0e71e7d65a9bfb852a8b3e1b9aad7b6b825e",
+                "reference": "ddfc0e71e7d65a9bfb852a8b3e1b9aad7b6b825e",
                 "shasum": ""
             },
             "require": {
@@ -48,7 +48,7 @@
                 "automation",
                 "cli"
             ],
-            "time": "2013-12-22 00:23:39"
+            "time": "2014-01-04 20:27:15"
         },
         {
             "name": "phpseclib/phpseclib",
