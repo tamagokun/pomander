@@ -2,7 +2,7 @@
 
 use \Pomander\Builder;
 
-class BuilderClass extends TestCase
+class BuilderTest extends TestCase
 {
   public function testDetectEnvironments()
   {
