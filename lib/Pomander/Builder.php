@@ -7,7 +7,7 @@ class Builder
 
 	public function config()
 	{
-		foreach(glob("deploy/*{.php,.yml}", GLOB_BRACE) as $config)
+		foreach(glob("deploy/*{.php,.yml,.yaml}", GLOB_BRACE) as $config)
 		{
 			$name = basename($config, ".".pathinfo($config, PATHINFO_EXTENSION));
 			$config = $this->is_yaml($config)? \Spyc::YAMLLoad($config) : $config;
@@ -17,7 +17,7 @@ class Builder
 
 	public function has_environments()
 	{
-		return count(glob("deploy/*{.php,.yml}", GLOB_BRACE)) > 0;
+		return count(glob("deploy/*{.php,.yml,.yaml}", GLOB_BRACE)) > 0;
 	}
 
 	public function run($first = true)

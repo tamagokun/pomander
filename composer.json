@@ -1,25 +1,28 @@
 {
-	"name": "pomander/pomander",
-	"type": "library",
-	"description": "Deployment for PHP",
-	"keywords": ["deploy","git","svn"],
-	"homepage": "http://github.com/tamagokun/pomander",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Mike Kruk",
-			"email": "tamagokun@gmail.com",
-			"homepage": "http://ripeworks.com"
-		}
-	],
-	"require": {
-		"jaz303/phake": "@dev",
-		"phpseclib/phpseclib": "@stable"
-	},
-	"autoload": {
-		"psr-0": {
-			"Pomander": "lib"
-		}
-	},
-	"bin": ["bin/pom"]
+  "name": "pomander/pomander",
+  "type": "library",
+  "description": "Deployment for PHP",
+  "keywords": ["deploy","git","svn"],
+  "homepage": "http://github.com/tamagokun/pomander",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mike Kruk",
+      "email": "tamagokun@gmail.com",
+      "homepage": "http://ripeworks.com"
+    }
+  ],
+  "require": {
+    "jaz303/phake": "@dev",
+    "phpseclib/phpseclib": "@stable"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "@stable"
+  },
+  "autoload": {
+    "psr-0": {
+      "Pomander": "lib"
+    }
+  },
+  "bin": ["bin/pom"]
 }
