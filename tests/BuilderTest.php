@@ -51,6 +51,24 @@ class BuilderClass extends TestCase
     $this->expectOutputString("hellohello");
   }
 
+  public function testLoadsRunfile()
+  {
+    ob_start();
+    $builder = $this->builder();
+    $builder->run();
+    ob_end_clean();
+
+    $app = builder()->get_application();
+    $app->invoke("from_pomfile");
+    $this->expectOutputString("Pom!");
+
+    ob_start();
+    $app->invoke("test");
+    ob_end_clean();
+    $app->invoke("from_pomfile");
+    $this->expectOutputString("Pom!Pom!");
+  }
+
   protected function builder()
   {
     // clear tasks and change directory
