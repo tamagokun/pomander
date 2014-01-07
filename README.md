@@ -2,6 +2,7 @@
 =======
 
 ![](https://api.travis-ci.org/tamagokun/pomander.png?branch=master)
+[![Analytics](https://ga-beacon.appspot.com/UA-4214672-13/pomander/readme)](https://github.com/igrigorik/ga-beacon)
 
 A light-weight flexible deployment tool for deploying web applications. This project was inspired by [Capistrano](https://github.com/capistrano/capistrano) and [Vlad the Deployer](http://rubyhitsquad.com/Vlad_the_Deployer.html), as well as being built on top of [Phake](https://github.com/jaz303/phake), a [Rake](http://rake.rubyforge.org/) clone.
 
