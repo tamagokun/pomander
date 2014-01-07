@@ -65,7 +65,7 @@ class Builder
 			\phake\Builder::$global->clear();
 			$builder->run(false);
 			$app->env = $env;
-			if($this->runfile) require $this->runfile;
+			if($builder->runfile) require $builder->runfile;
 			if(is_string($config)) require($config);
 			else $env->set($config);
 			$app->env = $env;
