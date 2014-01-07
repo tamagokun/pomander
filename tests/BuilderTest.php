@@ -41,7 +41,7 @@ class BuilderTest extends TestCase
     ob_start();
     $app->invoke("test");
     ob_end_clean();
-    $this->assertSame("git@github.com:tamagokun/pomander.git", $app->env->repository);
+    $this->assertSame("https://github.com/tamagokun/pomander.git", $app->env->repository);
 
     // re-load development for sanity
     ob_start();

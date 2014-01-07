@@ -6,14 +6,14 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
 >
-    <testsuites>
-        <testsuite name="Pomander Tests">
-            <directory>./tests/</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist>
-            <directory>./lib</directory>
-        </whitelist>
-    </filter>
+  <testsuites>
+    <testsuite name="Pomander Tests">
+      <directory>./tests/</directory>
+      <exclude>./tests/test_release/</exclude>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist>
+    </whitelist>
+  </filter>
 </phpunit>

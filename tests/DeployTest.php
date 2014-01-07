@@ -96,8 +96,10 @@ class DeployTest extends TestCase
 
     $app->invoke("deploy:update");
     $app->reset();
+    sleep(1);
     $app->invoke("deploy:update");
     $app->reset();
+    sleep(1);
     $app->invoke("deploy:update");
     $app->invoke("deploy:cleanup");
 
@@ -174,6 +176,7 @@ class DeployTest extends TestCase
 
     $app->invoke("deploy:update");
     $app->reset();
+    sleep(1);
     $app->invoke("deploy:update");
 
     $app->env->finalized = true;

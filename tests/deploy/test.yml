@@ -1,4 +1,4 @@
-repository: git@github.com:tamagokun/pomander.git
+repository: https://github.com/tamagokun/pomander.git
 deploy_to: test_release
 releases: true
 keep_releases: 2
