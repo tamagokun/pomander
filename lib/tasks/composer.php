@@ -4,7 +4,7 @@ group('composer', function () {
 
     desc("Install dependencies with Composer");
     task('install', function ($app) {
-        if($app->env->composer === false) return;
+        if($app->env->composer === true) return;
         info("composer", "install");
         run(array(
             "cd {$app->env->release_dir}",
@@ -14,7 +14,7 @@ group('composer', function () {
     });
 
     task('update', function ($app) {
-        if($app->env->composer === false) return;
+        if($app->env->composer === true) return;
         info("composer", "update");
         run(array(
             "cd {$app->env->release_dir}",
