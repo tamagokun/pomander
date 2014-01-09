@@ -1,28 +1,51 @@
 <?php
+
 namespace Pomander\Scm;
 
-class Git extends \Pomander\Scm
+use Pomander\Scm;
+
+/**
+ * Class Git
+ * @package Pomander\Scm
+ */
+class Git extends Scm
 {
+    /**
+     * @param $location
+     * @return string
+     */
     public function create($location)
     {
         return "git clone -q {$this->repository} {$location}";
     }
 
+    /**
+     * @return string
+     */
     public function update()
     {
+        $cmd = array();
+
+        // Fetch remote
         $remote = isset($this->app->env->remote)? $this->app->env->remote : "origin";
-        $cmd = array(
-            "git fetch -q {$remote}",
-            "git fetch --tags -q {$remote}"
-        );
-        $branch = isset($this->app["branch"])? $this->app["branch"] : $this->app->env->branch;
-        if(empty($branch)) $branch = $this->app->env->revision;
-        if(empty($branch)) $branch = "HEAD";
+        $cmd[] = "git fetch -q {$remote}";
+        $cmd[] = "git fetch --tags -q {$remote}";
 
-        // if specifying a remote ref, just grab the branch name
-        if(strpos($branch, "/") !== false) list($remote, $branch) = explode("/", $branch, 2);
+        // Search revision
+        if(!empty($this->app->env->revision)) {
+            $commit = $this->app->env->revision;
+        }
+        else {
+            if(!empty($this->app["branch"])) {
+                $commit = $this->get_commit_sha($this->app["branch"]);
+            } elseif(!empty($this->app->env->branch)) {
+                $commit = $this->get_commit_sha($this->app->env->branch);
+            } else {
+                $commit = 'HEAD';
+            }
+        }
 
-        $commit = $this->get_commit_sha($branch);
+        // Reset HARD commit
         $cmd[] = "git reset -q --hard {$commit}";
 
         if ($this->app->env->submodule !== false) {
@@ -35,17 +58,29 @@ class Git extends \Pomander\Scm
         return implode(' && ', $cmd);
     }
 
+    /**
+     * @return string
+     */
     public function revision()
     {
         return "git rev-parse HEAD";
     }
 
+    /**
+     * @param $ref
+     * @return string|void
+     */
     public function get_commit_sha($ref)
     {
-      list($status, $commit) = run_local("git ls-remote {$this->app->env->repository} {$ref}");
-      if($status > 0 || !$commit) return abort("update", "failed to retrieve commit for {$ref}.");
+        // if specifying a remote ref, just grab the branch name
+        if(strpos($ref, "/") !== false) $ref = end(explode("/", $ref, 2));
 
-      $commit = array_shift($commit);
-      return substr($commit, 0, strpos($commit, "\t"));
+        list($status, $commit) = run_local("git ls-remote {$this->app->env->repository} {$ref}");
+        if($status > 0 || !$commit) abort("update", "failed to retrieve commit for {$ref}.");
+
+        $commit = array_shift($commit);
+
+        return substr($commit, 0, strpos($commit, "\t"));
     }
+
 }
