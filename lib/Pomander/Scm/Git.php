@@ -32,6 +32,6 @@ class Git extends \Pomander\Scm
 
     public function revision()
     {
-        return "echo -e `git log --pretty=format:'%H' -n 1`";
+        return "git rev-parse HEAD";
     }
 }
