@@ -21,4 +21,3 @@ db:                        # Your database server(s) host or IP
 #  password:
 #  host: 127.0.0.1
 #  charset: utf8
-

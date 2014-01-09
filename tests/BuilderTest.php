@@ -1,6 +1,5 @@
 <?php
-
-use \Pomander\Builder;
+namespace Pomander;
 
 class BuilderTest extends TestCase
 {
@@ -73,7 +72,8 @@ class BuilderTest extends TestCase
   {
     // clear tasks and change directory
     chdir(__DIR__);
-    phake\Builder::$global = new phake\Builder;
+    \phake\Builder::$global = new \phake\Builder;
+
     return new Builder();
   }
 

@@ -1,6 +1,5 @@
 <?php
-
-use \Pomander\Environment;
+namespace Pomander;
 
 class EnvironmentTest extends TestCase
 {
@@ -129,4 +128,3 @@ class EnvironmentTest extends TestCase
   }
 
 }
-

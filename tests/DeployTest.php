@@ -1,6 +1,5 @@
 <?php
-
-use \Pomander\Builder;
+namespace Pomander;
 
 class DeployTest extends TestCase
 {
