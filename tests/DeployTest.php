@@ -72,6 +72,7 @@ class DeployTest extends TestCase
 
     $app->env->branch = "gh-pages";
     $app->invoke("deploy:update");
+    sleep(1);
     $app->reset();
     $expected_sha = $app->env->scm->get_commit_sha($app->env->branch);
     $current_sha = shell_exec("cd {$app->env->release_dir} && {$app->env->scm->revision()}");
