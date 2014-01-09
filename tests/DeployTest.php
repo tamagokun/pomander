@@ -57,6 +57,38 @@ class DeployTest extends TestCase
     ob_end_clean();
   }
 
+  public function testDeployBranch()
+  {
+    ob_start();
+    // releases
+    $this->clean();
+    $app = $this->app(array("test", "deploy:setup", "deploy:update"));
+
+    $app->invoke("test");
+    $app->invoke("deploy:setup");
+
+    // set absolute paths
+    $app->env->deploy_to = __DIR__."/".$app->env->deploy_to;
+    $app->env->setup();
+
+    $app->env->branch = "gh-pages";
+    $app->invoke("deploy:update");
+    $app->reset();
+    $current_branch = shell_exec("cd {$app->env->release_dir} && git rev-parse --abbrev-ref HEAD");
+
+    $this->assertFileExists($app->env->release_dir);
+    $this->assertSame($app->env->branch, trim($current_branch));
+
+    $app->env->branch = "";
+    $app->env->revision = "0.3.5";
+    $app->invoke("deploy:update");
+
+    $sha = shell_exec("cd {$app->env->release_dir} && git log --pretty=format:'%H' -n 1");
+    $this->assertSame($sha, "46bbf9cfe5cfa3656f1246870ff98656e27761e7");
+
+    ob_end_clean();
+  }
+
   public function testFinalize()
   {
     ob_start();

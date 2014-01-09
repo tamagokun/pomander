@@ -29,6 +29,6 @@ class Git extends \Pomander\Scm
 	
 	public function revision()
 	{
-		return "echo -e `git log --pretty=format:'%H%d' -n 1`";
+		return "echo -e `git log --pretty=format:'%H' -n 1`";
 	}
 }
