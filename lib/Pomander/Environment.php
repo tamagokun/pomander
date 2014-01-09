@@ -58,9 +58,9 @@ class Environment
 
     public function __get($prop)
     {
-        if(array_key_exists($prop, $this->config)) return $this->config[$prop];
-
-        return null;
+        if(!array_key_exists($prop, $this->config)) return null;
+        $value = $this->config[$prop];
+        return is_callable($value)? $value() : $value;
     }
 
     public function __isset($prop) { return isset($this->config[$prop]); }
