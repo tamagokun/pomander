@@ -73,14 +73,18 @@ class Git extends Scm
     public function get_commit_sha($ref)
     {
         // if specifying a remote ref, just grab the branch name
-        if(strpos($ref, "/") !== false) $ref = end(explode("/", $ref, 2));
+        if(strpos($ref, "/") !== false) {
+            $ref = explode("/", $ref);
+            $ref = end($ref);
+        }
 
         list($status, $commit) = run_local("git ls-remote {$this->app->env->repository} {$ref}");
         if($status > 0 || !$commit) abort("update", "failed to retrieve commit for {$ref}.");
 
         $commit = array_shift($commit);
+        $commit = substr($commit, 0, strpos($commit, "\t"));
 
-        return substr($commit, 0, strpos($commit, "\t"));
+        return $commit;
     }
 
 }
