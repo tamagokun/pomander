@@ -15,7 +15,7 @@ group('deploy', function () {
             $cmd[] = $app->env->scm->create($app->env->deploy_to);
         } else {
             $deployed = run("if test -d {$app->env->current_dir}; then echo \"exists\"; fi", true);
-            if(count($deployed)) return abort("setup", "application has already been setup.");
+            if(count($deployed)) abort("setup", "application has already been setup.");
             $cmd[] = "mkdir -p {$app->env->releases_dir} {$app->env->shared_dir}";
             if($app->env->remote_cache === true) $cmd[] = $app->env->scm->create($app->env->cache_dir);
         }
@@ -27,6 +27,8 @@ group('deploy', function () {
         info("deploy","updating code");
         $cmd = array();
         if ($app->env->releases === false) {
+            $frozen = run("if test -d {$app->env->deploy_to}; then echo \"ok\"; fi", true);
+            if(empty($frozen)) abort("deploy", "deploy_to folder not found. you should run deploy:setup or deploy:cold first.");
             $cmd[] = "cd {$app->env->deploy_to}";
             $cmd[] = "{$app->env->scm->revision()} > REVISION";
             $cmd[] = $app->env->scm->update();
@@ -34,13 +36,13 @@ group('deploy', function () {
             $app->env->release_dir = $app->env->releases_dir.'/'.$app->env->new_release();
             if ($app->env->remote_cache === true) {
                 $frozen = run("if test -d {$app->env->cache_dir}; then echo \"ok\"; fi", true);
-                if(empty($frozen)) return abort("deploy", "remote_cache folder not found. you should run deploy:setup or deploy:cold first.");
+                if(empty($frozen)) abort("deploy", "remote_cache folder not found. you should run deploy:setup or deploy:cold first.");
                 $cmd[] = "cd {$app->env->cache_dir}";
                 $cmd[] = $app->env->scm->update();
                 $cmd[] = "cp -R {$app->env->cache_dir} {$app->env->release_dir}";
             } else {
                 $frozen = run("if test -d {$app->env->releases_dir}; then echo \"ok\"; fi", true);
-                if(empty($frozen)) return abort("deploy", "releases folder not found. you should run deploy:setup or deploy:cold first.");
+                if(empty($frozen)) abort("deploy", "releases folder not found. you should run deploy:setup or deploy:cold first.");
                 $cmd[] = $app->env->scm->create($app->env->release_dir);
                 $cmd[] = "cd {$app->env->release_dir}";
                 $cmd[] = $app->env->scm->update();
@@ -80,10 +82,10 @@ group('deploy', function () {
     });
 
     desc("First time deployment.");
-    task('cold','deploy:setup','deploy:update','composer:update','deploy:finalize');
+    task('cold','deploy:setup','deploy:update','composer:install','deploy:finalize');
 
 });
-task('deploy','deploy:update','composer:update','deploy:finalize');
+task('deploy','deploy:update','composer:install','deploy:finalize');
 
 //rollback
 desc("Rollback to the previous release");
@@ -93,11 +95,11 @@ task('rollback','app', function ($app) {
 
     if ($app->env->releases) {
         $releases = run("ls -1t {$app->env->releases_dir}", true);
-        if(count($releases) < 2) return abort("rollback", "no releases to roll back to.");
+        if(count($releases) < 2) abort("rollback", "no releases to roll back to.");
 
         if ($app->env->release_dir == $app->env->current_dir) {
             $count = isset($app['releases'])? $app['releases'] : 1;
-            if(count($releases) < $count + 1) return abort("rollback", "can't rollback that far.");
+            if(count($releases) < $count + 1) abort("rollback", "can't rollback that far.");
             if($count > 1) info("rollback", "rolling back to {$releases[$count]}.");
             info("rollback", "pointing application to previous release.");
             $cmd[] = "ln -nfs {$app->env->releases_dir}/{$releases[$count]} {$app->env->current_dir}";
@@ -110,8 +112,11 @@ task('rollback','app', function ($app) {
             }
         }
     } else {
+        $frozen = run("if test -f {$app->env->release_dir}/REVISION; then echo \"ok\"; fi", true);
+        if(empty($frozen)) abort("rollback", "no releases to roll back to.");
+
         $revision = run("cat {$app->env->release_dir}/REVISION", true);
-        if(!count($revision)) return abort("rollback", "no releases to roll back to.");
+        if(!count($revision)) abort("rollback", "no releases to roll back to.");
 
         $app->env->revision = $revision[0];
         $cmd[] = $app->scm->update();

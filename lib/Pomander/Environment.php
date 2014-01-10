@@ -32,7 +32,6 @@ class Environment
     public function setup()
     {
         if($this->name == "development") $this->releases = false;
-        if($this->branch) $this->revision = $this->branch;
         if ($this->releases === false) {
             $this->current_dir = $this->deploy_to;
             $this->releases_dir = $this->deploy_to;
@@ -151,7 +150,8 @@ class Environment
             "url"=>"",
             "user"=>"",
             "repository"=>"",
-            "revision"=>"origin/master",
+            "revision"=>"",
+            "branch"=>"origin/master",
             "remote_cache"=>true,
             "releases"=>false,
             "keep_releases"=>false,
@@ -199,7 +199,7 @@ class Environment
 
     private function inject_multi_role_after($role,$task_name)
     {
-        info("injecting after $task_name");
+        info("injecting after $task_name", '');
         after($task_name,function ($app) use ($task_name,$role) {
             if ( $app->env->next_role($role) ) {
                 $app->reset();
