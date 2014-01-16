@@ -54,19 +54,24 @@ function after($task, $lambda) { builder()->after($task, $lambda); }
 function desc($description) { builder()->desc($description); }
 
 //utils
-function info($status,$msg)
+function info($status, $msg, $output = true)
 {
-    puts(" * ".ansicolor("info ",32).ansicolor("$status ",35).$msg);
+    $line = " * ".ansicolor("info ", 32).ansicolor("$status ", 35).$msg;
+    return $output? puts($line) : $line;
 }
 
-function warn($status,$msg)
+function warn($status, $msg, $output = true)
 {
-    puts(" * ".ansicolor("warn ",33).ansicolor("$status ",35).$msg);
+    $line = " * ".ansicolor("warn ", 33).ansicolor("$status ", 35).$msg;
+    return $output? puts($line) : $line;
 }
 
-function abort($status, $msg, $code=1)
+function abort($status, $msg, $code=1, $output = true)
 {
-    puts(" * ".ansicolor("abort ",31).ansicolor("$status ",35).$msg);
+    $line = " * ".ansicolor("abort ", 31).ansicolor("$status ", 35).$msg;
+    if( !$output ) return $line . " && false";
+
+    puts($line);
     die($code);
 }
 

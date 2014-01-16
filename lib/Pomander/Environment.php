@@ -3,7 +3,7 @@ namespace Pomander;
 
 class Environment
 {
-    public $name, $target, $scm, $adapter;
+    public $name, $target, $method, $adapter;
     private $config, $shell, $mysql;
     private $roles;
 
@@ -45,7 +45,7 @@ class Environment
             $this->shared_dir = $this->deploy_to.'/shared';
             $this->cache_dir = $this->shared_dir.'/cached_copy';
         }
-        $this->init_scm_adapter();
+        $this->init_method_adapter();
     }
 
     public function __call($name, $arguments)
@@ -160,7 +160,6 @@ class Environment
             "app"=>"",
             "db"=>"",
             "method"=>"git",
-            "scm"=>"git",
             "adapter"=>"mysql",
             "port"=>22,
             "umask"=>"002",
@@ -187,11 +186,13 @@ class Environment
         return true;
     }
 
-    private function init_scm_adapter()
+    private function init_method_adapter()
     {
-        $scm = "\\Pomander\\Scm\\".ucwords(strtolower($this->config["scm"]));
-        if( !$this->scm = new $scm($this->repository) )
-            abort("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
+        $method = $this->config["method"];
+        if( empty($this->config["method"]) && isset($this->config["scm"]) ) $method = $this->config["scm"];
+        $method = "\\Pomander\\Method\\".ucwords(strtolower($method));
+        if( !$this->method = new $method($this->repository) )
+            abort("method","There is no recipe for {$this->config["method"]}, perhaps create your own?");
         $adapter = "\\Pomander\\Db\\".ucwords(strtolower($this->config["adapter"]));
         if( !$this->adapter = new $adapter($this->database) )
             abort("db","There is no recipe for {$this->config["adapter"]}, perhaps create your own?");
