@@ -32,7 +32,6 @@ class Environment
     public function setup()
     {
         if($this->name == "development") $this->releases = false;
-        if($this->branch) $this->revision = $this->branch;
         if ($this->releases === false) {
             $this->current_dir = $this->deploy_to;
             $this->releases_dir = $this->deploy_to;
@@ -58,9 +57,9 @@ class Environment
 
     public function __get($prop)
     {
-        if(array_key_exists($prop, $this->config)) return $this->config[$prop];
-
-        return null;
+        if(!array_key_exists($prop, $this->config)) return null;
+        $value = $this->config[$prop];
+        return is_callable($value)? $value() : $value;
     }
 
     public function __isset($prop) { return isset($this->config[$prop]); }
@@ -151,7 +150,8 @@ class Environment
             "url"=>"",
             "user"=>"",
             "repository"=>"",
-            "revision"=>"origin/master",
+            "revision"=>"",
+            "branch"=>"master",
             "remote_cache"=>true,
             "releases"=>false,
             "keep_releases"=>false,
@@ -170,7 +170,8 @@ class Environment
             "rsync_cmd"=>"rsync",
             "rsync_flags"=>"-avuzPO --quiet",
             "db_backup_flags"=>"--lock-tables=FALSE --skip-add-drop-table | sed -e 's|INSERT INTO|REPLACE INTO|' -e 's|CREATE TABLE|CREATE TABLE IF NOT EXISTS|'",
-            "db_swap_url"=>true
+            "db_swap_url"=>true,
+            "composer"=>false
         );
 
         return $defaults;
@@ -199,7 +200,7 @@ class Environment
 
     private function inject_multi_role_after($role,$task_name)
     {
-        info("injecting after $task_name");
+        info("injecting after $task_name", '');
         after($task_name,function ($app) use ($task_name,$role) {
             if ( $app->env->next_role($role) ) {
                 $app->reset();

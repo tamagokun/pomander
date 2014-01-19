@@ -1,7 +1,7 @@
 <?php
 namespace Pomander;
 
-use phake\Application;
+use \phake\Application;
 
 class Cli
 {

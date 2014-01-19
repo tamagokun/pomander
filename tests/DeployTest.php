@@ -26,8 +26,8 @@ class DeployTest extends TestCase
     $app->invoke("norelease");
     $app->invoke("deploy:setup");
 
-    $this->assertFileExists($app->env->deploy_to."/.git");
     ob_end_clean();
+    $this->assertFileExists($app->env->deploy_to."/.git");
   }
 
   public function testUpdateCode()
@@ -51,9 +51,9 @@ class DeployTest extends TestCase
     $app->invoke("deploy:update");
     $new_sha = shell_exec("cd {$app->env->release_dir} && {$app->env->scm->revision()}");
 
+    ob_end_clean();
     $this->assertFileExists($app->env->release_dir);
     $this->assertTrue($sha == $new_sha);
-    ob_end_clean();
   }
 
   public function testDeployBranch()
@@ -72,20 +72,24 @@ class DeployTest extends TestCase
 
     $app->env->branch = "gh-pages";
     $app->invoke("deploy:update");
+    sleep(1);
     $app->reset();
-    $current_branch = shell_exec("cd {$app->env->release_dir} && git rev-parse --abbrev-ref HEAD");
+    $expected_sha = $app->env->scm->get_commit_sha($app->env->branch);
+    $current_sha = shell_exec("cd {$app->env->release_dir} && {$app->env->scm->revision()}");
 
+    ob_end_clean();
     $this->assertFileExists($app->env->release_dir);
-    $this->assertSame($app->env->branch, trim($current_branch));
+    $this->assertSame($expected_sha, trim($current_sha));
 
+    ob_start();
     $app->env->branch = "";
     $app->env->revision = "0.3.5";
     $app->invoke("deploy:update");
 
-    $sha = shell_exec("cd {$app->env->release_dir} && git log --pretty=format:'%H' -n 1");
-    $this->assertSame($sha, "46bbf9cfe5cfa3656f1246870ff98656e27761e7");
+    $sha = shell_exec("cd {$app->env->release_dir} && {$app->env->scm->revision()}");
 
     ob_end_clean();
+    $this->assertSame(trim($sha), "46bbf9cfe5cfa3656f1246870ff98656e27761e7");
   }
 
   public function testFinalize()
@@ -105,10 +109,10 @@ class DeployTest extends TestCase
     $app->invoke("deploy:update");
     $app->invoke("deploy:finalize");
 
+    ob_end_clean();
     $this->assertFileExists($app->env->current_dir);
     $this->assertTrue(is_link($app->env->current_dir));
     $this->assertTrue(readlink($app->env->current_dir) == $app->env->release_dir);
-    ob_end_clean();
   }
 
   public function testCleanUp()
@@ -134,9 +138,9 @@ class DeployTest extends TestCase
     $app->invoke("deploy:update");
     $app->invoke("deploy:cleanup");
 
+    ob_end_clean();
     $this->assertFileExists($app->env->release_dir);
     $this->assertCount(2, glob($app->env->releases_dir."/*"));
-    ob_end_clean();
   }
 
   public function testCold()
@@ -154,6 +158,7 @@ class DeployTest extends TestCase
 
     $app->invoke("deploy:cold");
 
+    ob_end_clean();
     $this->assertFileExists($app->env->release_dir);
     $this->assertFileExists($app->env->releases_dir);
     $this->assertFileExists($app->env->shared_dir);
@@ -163,8 +168,6 @@ class DeployTest extends TestCase
     $this->assertFileExists($app->env->current_dir);
     $this->assertTrue(is_link($app->env->current_dir));
     $this->assertTrue(readlink($app->env->current_dir) == $app->env->release_dir);
-
-    ob_end_clean();
   }
 
   public function testDefault()
@@ -183,11 +186,10 @@ class DeployTest extends TestCase
 
     $app->invoke("deploy");
 
+    ob_end_clean();
     $this->assertFileExists($app->env->current_dir);
     $this->assertTrue(is_link($app->env->current_dir));
     $this->assertTrue(readlink($app->env->current_dir) == $app->env->release_dir);
-
-    ob_end_clean();
   }
 
   public function testRollback()
@@ -216,12 +218,11 @@ class DeployTest extends TestCase
 
     $release = readlink($app->env->current_dir);
 
+    ob_end_clean();
     $this->assertFileExists($app->env->current_dir);
     $this->assertTrue(is_link($app->env->current_dir));
     $this->assertFileExists($release);
     $this->assertFalse(readlink($app->env->current_dir) == $app->env->release_dir);
-
-    ob_end_clean();
   }
 
 // private
