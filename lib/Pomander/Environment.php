@@ -151,7 +151,7 @@ class Environment
             "user"=>"",
             "repository"=>"",
             "revision"=>"",
-            "branch"=>"origin/master",
+            "branch"=>"master",
             "remote_cache"=>true,
             "releases"=>false,
             "keep_releases"=>false,
