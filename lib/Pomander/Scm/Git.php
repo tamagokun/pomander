@@ -34,8 +34,7 @@ class Git extends Scm
         // Search revision
         if(!empty($this->app->env->revision)) {
             $commit = $this->app->env->revision;
-        }
-        else {
+        } else {
             if(!empty($this->app["branch"])) {
                 $commit = $this->get_commit_sha($this->app["branch"]);
             } elseif(!empty($this->app->env->branch)) {
@@ -52,7 +51,6 @@ class Git extends Scm
             $cmd[] = 'git submodule update --init --recursive --quiet';
         }
 
-        $cmd[] = 'git clean -q -d -x -f';
         $cmd[] = 'git log --date=relative --format=format:"%C(bold blue)(%ar)%C(reset) %an \'%s\' %C(bold green)(%h)%C(reset)" | head -1';
 
         return implode(' && ', $cmd);
