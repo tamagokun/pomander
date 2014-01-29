@@ -50,7 +50,7 @@ class Environment
 
     public function __call($name, $arguments)
     {
-        $this->config[$name] = array_shift($arguments);
+        $this->$name = array_shift($arguments);
 
         return $this;
     }
