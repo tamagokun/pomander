@@ -21,7 +21,7 @@ class RemoteShell
         $this->shell->setTimeout(0);
         $this->shell->exec($cmd);
 
-        $output = $this->handle_data();
+        $output = $this->process();
         $status = $this->shell->getExitStatus();
         if($status === false) $status = -1;
 
@@ -52,18 +52,45 @@ class RemoteShell
             abort("ssh", "Login failed.");
     }
 
-    protected function handle_data($output = '')
+    protected function process()
     {
+        $output = "";
+        $offset = 0;
+        $this->shell->_initShell();
+        while( true ) {
+            $temp = $this->shell->_get_channel_packet(NET_SSH2_CHANNEL_EXEC);
+            switch( true ) {
+                case $temp === true:
+                    return $output;
+                case $temp === false:
+                    return false;
+                default:
+                    $output .= $temp;
+                    if( $this->handle_data(substr($output, $offset)) ) {
+                        $offset = strlen($output);
+                    }
+            }
+        }
+    }
+
+    protected function handle_data($output)
+    {
+        // hosts authenticity
         $regex = '/(The authenticity of host .* \(yes\/no\))/s';
-        $res = $this->shell->read($regex, NET_SSH2_READ_REGEX);
 
-        if (preg_match($regex, $res) > 0) {
-            $output .= $res;
+        if (preg_match($regex, $output) > 0) {
             $this->write("yes");
-
-            return $this->handle_data($output);
+            return true;
         }
 
-        return $output.$res;
+        // key password
+        $regex = '/Enter passphrase for key .*/';
+
+        if( preg_match($regex, $output) > 0 ) {
+            $this->write($this->key_pass);
+            return true;
+        }
+
+        return false;
     }
 }

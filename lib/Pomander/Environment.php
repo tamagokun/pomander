@@ -50,7 +50,7 @@ class Environment
 
     public function __call($name, $arguments)
     {
-        $this->config[$name] = array_shift($arguments);
+        $this->$name = array_shift($arguments);
 
         return $this;
     }
@@ -151,7 +151,7 @@ class Environment
             "user"=>"",
             "repository"=>"",
             "revision"=>"",
-            "branch"=>"origin/master",
+            "branch"=>"master",
             "remote_cache"=>true,
             "releases"=>false,
             "keep_releases"=>false,
@@ -169,7 +169,8 @@ class Environment
             "rsync_cmd"=>"rsync",
             "rsync_flags"=>"-avuzPO --quiet",
             "db_backup_flags"=>"--lock-tables=FALSE --skip-add-drop-table | sed -e 's|INSERT INTO|REPLACE INTO|' -e 's|CREATE TABLE|CREATE TABLE IF NOT EXISTS|'",
-            "db_swap_url"=>true
+            "db_swap_url"=>true,
+            "composer"=>false
         );
 
         return $defaults;
