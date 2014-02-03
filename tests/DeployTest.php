@@ -8,10 +8,11 @@ class DeployTest extends TestCase
   {
     ob_start();
     // releases
-    $this->clean();
+    shell_exec("rm -rf ".__DIR__."/test_release");
     $app = $this->app(array("test", "deploy:setup"));
 
     $app->invoke("test");
+
     $app->invoke("deploy:setup");
 
     $this->assertFileExists($app->env->releases_dir);
@@ -20,7 +21,7 @@ class DeployTest extends TestCase
     $this->assertFileExists($app->env->cache_dir."/.git");
 
     // (no releases)
-    $this->clean();
+    shell_exec("rm -rf ".__DIR__."/test_release");
     $app = $this->app(array("norelease", "deploy:setup"));
 
     $app->invoke("norelease");
@@ -45,11 +46,11 @@ class DeployTest extends TestCase
     $app->env->setup();
 
     // copy current sha and go back a bit.
-    $sha = shell_exec("cd {$app->env->cache_dir} && {$app->env->scm->revision()}");
+    $sha = shell_exec("cd {$app->env->cache_dir} && {$app->env->method->version()}");
     shell_exec("cd {$app->env->cache_dir} && git reset --hard HEAD~3");
 
     $app->invoke("deploy:update");
-    $new_sha = shell_exec("cd {$app->env->release_dir} && {$app->env->scm->revision()}");
+    $new_sha = shell_exec("cd {$app->env->release_dir} && {$app->env->method->version()}");
 
     ob_end_clean();
     $this->assertFileExists($app->env->release_dir);
@@ -74,8 +75,8 @@ class DeployTest extends TestCase
     $app->invoke("deploy:update");
     sleep(1);
     $app->reset();
-    $expected_sha = $app->env->scm->get_commit_sha($app->env->branch);
-    $current_sha = shell_exec("cd {$app->env->release_dir} && {$app->env->scm->revision()}");
+    $expected_sha = $app->env->method->get_commit_sha($app->env->branch);
+    $current_sha = shell_exec("cd {$app->env->release_dir} && {$app->env->method->version()}");
 
     ob_end_clean();
     $this->assertFileExists($app->env->release_dir);
@@ -86,7 +87,7 @@ class DeployTest extends TestCase
     $app->env->revision = "0.3.5";
     $app->invoke("deploy:update");
 
-    $sha = shell_exec("cd {$app->env->release_dir} && {$app->env->scm->revision()}");
+    $sha = shell_exec("cd {$app->env->release_dir} && {$app->env->method->version()}");
 
     ob_end_clean();
     $this->assertSame(trim($sha), "46bbf9cfe5cfa3656f1246870ff98656e27761e7");

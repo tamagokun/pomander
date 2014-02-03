@@ -22,15 +22,14 @@ abstract class Method
             $setup = "rm -rf $dir && {$this->setup_code($dir)}";
         } else {
             $dir = $env->current_dir;
-            $setup = "";
-            if ($env->remote_cache === true) $setup = $this->setup_code($env->cache_dir);
+            $setup = "mkdir -p {$env->deploy_to} {$env->releases_dir} {$env->shared_dir}";
+            if ($env->remote_cache === true) $setup .= ' && ' . $this->setup_code($env->cache_dir);
         }
 
         return array(
             "umask {$env->umask}",
-            "mkdir -p {$env->deploy_to}",
-            "[ test -d \"$dir\" ] && ( "
-            . abort("setup", "application has already been setup.", false)
+            "[ -e \"$dir\" ] && ( "
+            . abort("setup", "application has already been setup.", 1, false)
             . " ) || ( $setup )"
         );
     }
@@ -58,7 +57,7 @@ abstract class Method
         return array(
             "cd \"$dir\"",
             "( $deploy ) || ( "
-            . abort("deploy", "deploy folder not accessible. try running deploy:setup or deploy:cold first.", false)
+            . abort("deploy", "deploy folder not accessible. try running deploy:setup or deploy:cold first.", 1, false)
             . " )"
         );
     }
@@ -142,7 +141,7 @@ abstract class Method
             "( $failed ",
             info('rollback', "pointing to previous release.", false),
             "ln -nfs {$env->releases_dir}/\$previous {$env->current_dir} ) || ("
-            . abort('rollback', "", false)
+            . abort('rollback', "", 1, false)
             . " )"
         );
     }
