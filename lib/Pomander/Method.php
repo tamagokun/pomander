@@ -118,30 +118,33 @@ abstract class Method
         }
 
         $rollback_to = isset($this->app['releases'])? $this->app['releases'] : 2;
-        $failed = "";
+        $rollback = array();
 
         if ($env->release_dir !== $env->current_dir) {
             // remove broken release
             info('rollback', "removing failed release.");
-            $failed = info('rollback', "removing failed release.", false) . " && rm -rf \"{$env->release_dir}\"";
+            $rollback[] = info('rollback', "removing failed release.", false);
+            $rollback[] = "rm -rf \"{$env->release_dir}\"";
         }
 
-        //if($app->env->merged)
-        //{
-            //info("rollback", "restoring database to before merge.");
-            //$backup = "{$app->env->shared_dir}/backup/{$app->env->merged}";
-            //$cmd[] = $app->env->adapter->restore($backup);
-            //if($app->env->backup === false) $cmd[] = "rm -rf $backup";
-        //}
+        $rollback[] = info('rollback', "pointing to previous release.", false);
+        $rollback[] = "ln -nfs \"{$env->releases_dir}/\$previous\" \"{$env->current_dir}\"";
+        $rollback = implode(' && ', $rollback);
+
+        /*if($app->env->merged)
+        {
+            info("rollback", "restoring database to before merge.");
+            $backup = "{$app->env->shared_dir}/backup/{$app->env->merged}";
+            $cmd[] = $app->env->adapter->restore($backup);
+            if($app->env->backup === false) $cmd[] = "rm -rf $backup";
+        }*/
 
         return array(
             "count=`ls -1t \"{$env->releases_dir}\" | wc -l`",
-            "previous=`ls -1t \"{$env->releases_dir}\" | head -n {$rollback_to} | tail -1`",
-            "([ -e \"{$env->releases_dir}/\$previous\" ] && \$count >= {$rollback_to} )",
-            "( $failed ",
-            info('rollback', "pointing to previous release.", false),
-            "ln -nfs {$env->releases_dir}/\$previous {$env->current_dir} ) || ("
-            . abort('rollback', "", 1, false)
+            "release=`ls -1t \"{$env->releases_dir}\" | head -n {$rollback_to} | tail -1`",
+            "([ -e \"{$env->releases_dir}/\$release\" ] && (( \$count >= {$rollback_to} )) )",
+            "( $rollback ) || ( "
+            . abort('rollback', "no releases to roll back to", 1, false)
             . " )"
         );
     }

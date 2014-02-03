@@ -57,19 +57,19 @@ function desc($description) { builder()->desc($description); }
 function info($status, $msg, $output = true)
 {
     $line = " * " . ansicolor("info ", 32) . ansicolor("$status ", 35) . $msg;
-    return $output? puts($line) : $line;
+    return $output? puts($line) : "echo \"$line\"";
 }
 
 function warn($status, $msg, $output = true)
 {
     $line = " * " . ansicolor("warn ", 33) . ansicolor("$status ", 35) . $msg;
-    return $output? puts($line) : $line;
+    return $output? puts($line) : "echo \"$line\"";
 }
 
 function abort($status, $msg, $code=1, $output = true)
 {
     $line = " * " . ansicolor("abort ", 31) . ansicolor("$status ", 35) . $msg;
-    if( !$output ) return $line . " && false";
+    if( !$output ) return "echo \"$line\" && false";
 
     puts($line);
     die($code);
@@ -108,17 +108,7 @@ function run()
     list($status, $output) = !isset($app->env)? run_local($cmd) : $app->env->exec($cmd);
     if (!$silent && count($output)) puts(implode("\n", $output));
 
-    if ($status > 0) {
-        if ($app->can_rollback) {
-            warn("fail", "Rolling back...");
-            $app->invoke('rollback');
-            info("rollback", "rollback complete.");
-            exit($status);
-
-            return;
-        }
-        abort("fail","aborted!",$status);
-    }
+    check_rollback($status);
 
     return $output;
 }
@@ -134,14 +124,31 @@ function run_local($cmd)
 // Deprecated: use run_local()
 function exec_cmd($cmd) { return run_local($cmd); }
 
-function put($what,$where)
+function put($what, $where)
 {
-    if (!isset(builder()->get_application()->env)) return run_local("cp -R $what $where");
-    builder()->get_application()->env->put($what,$where);
+    $app = builder()->get_application();
+    list($status, $output) = isset($app->env)? $app->env->put($what, $where) : run_local("cp -R $what $where");
+    check_rollback($status);
 }
 
-function get($what,$where)
+function get($what, $where)
 {
-    if (!isset(builder()->get_application()->env)) return run_local("cp -R $what $where");
-    builder()->get_application()->env->get($what,$where);
+    $app = builder()->get_application();
+    list($status, $output) = isset($app->env)? $app->env->get($what, $where) : run_local("cp -R $what $where");
+    check_rollback($status);
+}
+
+function check_rollback($status) {
+    if ($status < 1) return;
+    $app = builder()->get_application();
+
+    if ($app->can_rollback) {
+        warn("fail", "Rolling back...");
+        $app->invoke('rollback');
+        info("rollback", "rollback complete.");
+        exit($status);
+
+        return;
+    }
+    abort("fail", "aborted!", $status);
 }
