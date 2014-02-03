@@ -142,7 +142,7 @@ abstract class Method
         return array(
             "count=`ls -1t \"{$env->releases_dir}\" | wc -l`",
             "release=`ls -1t \"{$env->releases_dir}\" | head -n {$rollback_to} | tail -1`",
-            "([ -e \"{$env->releases_dir}/\$release\" ] && (( \$count >= {$rollback_to} )) )",
+            "([ -e \"{$env->releases_dir}/\$release\" ] && [ \$count -ge {$rollback_to} ] )",
             "( $rollback ) || ( "
             . abort('rollback', "no releases to roll back to", 1, false)
             . " )"
