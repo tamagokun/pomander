@@ -19,10 +19,10 @@ abstract class Method
         $env = $this->app->env;
         if ($env->releases === false) {
             $dir = $env->deploy_to;
-            $setup = "rm -rf $dir && {$this->setup_code($dir)}";
+            $setup = "rm -rf \"$dir\" && {$this->setup_code($dir)}";
         } else {
             $dir = $env->current_dir;
-            $setup = "mkdir -p {$env->deploy_to} {$env->releases_dir} {$env->shared_dir}";
+            $setup = "mkdir -p \"{$env->deploy_to}\" \"{$env->releases_dir}\" \"{$env->shared_dir}\"";
             if ($env->remote_cache === true) $setup .= ' && ' . $this->setup_code($env->cache_dir);
         }
 
@@ -47,7 +47,7 @@ abstract class Method
             $env->release_dir = $env->releases_dir.'/'.$env->new_release();
             if ($env->remote_cache === true) {
                 $dir = $env->cache_dir;
-                $deploy = "{$this->update_code()} && cp -R {$env->cache_dir} {$env->release_dir}";
+                $deploy = "{$this->update_code()} && cp -R \"{$env->cache_dir}\" \"{$env->release_dir}\"";
             } else {
                 $dir = $env->release_dir;
                 $deploy = $this->setup_code();
