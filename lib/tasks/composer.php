@@ -9,7 +9,7 @@ group('composer', function () {
         run(array(
             "cd {$app->env->release_dir}",
             "([ -e 'composer.json' ] && which composer &>/dev/null)",
-            "composer install --optimize-autoloader || echo '    composer.json not found'"
+            "composer install --prefer-dist --optimize-autoloader || echo '    composer.json not found'"
         ));
     });
 
