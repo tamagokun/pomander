@@ -4,6 +4,8 @@
 ![](https://api.travis-ci.org/tamagokun/pomander.png?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/pomander/pomander/v/stable.png)](https://packagist.org/packages/pomander/pomander)
 
+[![Gitter chat](https://badges.gitter.im/tamagokun/pomander.png)](https://gitter.im/tamagokun/pomander)
+
 A light-weight flexible deployment tool for deploying web applications. This project was inspired by [Capistrano](https://github.com/capistrano/capistrano) and [Vlad the Deployer](http://rubyhitsquad.com/Vlad_the_Deployer.html), as well as being built on top of [Phake](https://github.com/jaz303/phake), a [Rake](http://rake.rubyforge.org/) clone.
 
 This project came out of the need for a way to deploy Wordpress sites to multiple environments easily and without firing up FTP clients, etc. What started as a simple Rakefile, quickly grew into much more, and has been finally abstracted and ported to PHP to be able to fully integrate tasks with your application.
