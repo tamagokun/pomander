@@ -50,7 +50,11 @@ class Environment
 
     public function __call($name, $arguments)
     {
-        $this->$name = array_shift($arguments);
+        if (array_key_exists($name, get_object_vars($this))) {
+            $this->config[$name] = array_shift($arguments);
+        } else {
+            $this->$name = array_shift($arguments);
+        }
 
         return $this;
     }
