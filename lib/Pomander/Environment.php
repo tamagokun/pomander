@@ -102,22 +102,31 @@ class Environment
     public function multi_role_support($role,$app)
     {
         $this->role($role);
+        $tasks = $app->get_tasks();
         foreach ($app->top_level_tasks as $task_name) {
-            if(!in_array($task_name, $app->get_task_list())) continue;
-            if( in_array($role,$app->resolve($task_name)->dependencies()) )
-                return $this->inject_multi_role_after($role,$task_name);
-            else {
-                foreach ($app->resolve($task_name)->dependencies() as $dependency) {
-                    if( in_array($role,$app->resolve($dependency)->dependencies()) )
-                        return $this->inject_multi_role_after($role,$dependency);
+            try {
+                $task = $app->get_task($task_name);
+                if (!$task->has_dependencies()) continue;
+                $deps = $task->get_dependencies();
+                if ($this->dependency_needs_multi_role($role, $deps)) {
+                    return $this->inject_multi_role_after($role, $task_name);
+                } else {
+                    foreach ($deps as $dep_name=>$dep) {
+                        if (!$dep->has_dependencies()) continue;
+                        if ($this->dependency_needs_multi_role($role, $dep->get_dependencies())) {
+                            return $this->inject_multi_role_after($role, $dep_name);
+                        }
+                    }
                 }
+            } catch (\Exception $e) {
+                continue;
             }
         }
     }
 
     public function exec($cmd)
     {
-        if(!$this->target) return run_local($cmd);
+        if (!$this->target) return run_local($cmd);
         if (!$this->shell) {
             $keypass = $this->key_password;
             $auth = is_null($this->password)? $this->key_path : $this->password;
@@ -130,7 +139,7 @@ class Environment
 
     public function put($what,$where)
     {
-        if($this->target)
+        if ($this->target)
             $cmd = "{$this->rsync_cmd} -e \"ssh -i {$this->key_path}\" {$this->rsync_flags} $what {$this->user}@{$this->target}:$where";
         else
             $cmd = "cp -r $what $where";
@@ -140,7 +149,7 @@ class Environment
 
     public function get($what,$where)
     {
-        if($this->target)
+        if ($this->target)
             $cmd = "{$this->rsync_cmd} -e \"ssh -i {$this->key_path}\" {$this->rsync_flags} {$this->user}@{$this->target}:$what $where";
         else
             $cmd = "cp -r $what $where";
@@ -183,9 +192,9 @@ class Environment
 
     private function update_target($target)
     {
-        if( !$target ) return false;
-        if( $this->target == $target ) return true;
-        if( $this->shell ) $this->shell = null;
+        if (!$target) return false;
+        if ($this->target == $target) return true;
+        if ($this->shell) $this->shell = null;
         $this->target = $target;
         info("target",$this->target);
 
@@ -198,15 +207,23 @@ class Environment
         if( !$this->scm = new $scm($this->repository) )
             abort("scm","There is no recipe for {$this->config["scm"]}, perhaps create your own?");
         $adapter = "\\Pomander\\Db\\".ucwords(strtolower($this->config["adapter"]));
-        if( !$this->adapter = new $adapter($this->database) )
+        if (!$this->adapter = new $adapter($this->database))
             abort("db","There is no recipe for {$this->config["adapter"]}, perhaps create your own?");
+    }
+
+    private function dependency_needs_multi_role($role, $deps)
+    {
+        if (in_array($role, array_keys($deps))) {
+            return true;
+        }
+
+        return false;
     }
 
     private function inject_multi_role_after($role,$task_name)
     {
-        info("injecting after $task_name", '');
-        after($task_name,function ($app) use ($task_name,$role) {
-            if ( $app->env->next_role($role) ) {
+        after($task_name, function ($app) use ($task_name,$role) {
+            if ($app->env->next_role($role)) {
                 $app->reset();
                 $app->invoke($task_name);
             }

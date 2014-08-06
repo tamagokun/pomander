@@ -10,7 +10,7 @@ class BuilderTest extends TestCase
 
     $app = builder()->get_application();
     $task_names = array_keys($app->get_tasks());
-    $this->assertSame(array('development', 'test', 'norelease'), $task_names);
+    $this->assertSame(array('development', 'multirole', 'test', 'norelease'), $task_names);
   }
 
   public function testCanFirstRun()

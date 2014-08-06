@@ -225,6 +225,20 @@ class DeployTest extends TestCase
     $this->assertFalse(readlink($app->env->current_dir) == $app->env->release_dir);
   }
 
+  public function testMultiRole()
+  {
+    ob_start();
+    $this->clean();
+
+    $app = $this->app(array("multirole", "check"));
+
+    $app->invoke("multirole");
+    $app->invoke("check");
+
+    ob_end_clean();
+    $this->assertTrue(3 === $app->env->role_count);
+  }
+
 // private
   protected function app($tasks = array(), $args = array())
   {
