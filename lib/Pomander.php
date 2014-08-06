@@ -11,7 +11,7 @@ class Pomander
 {
     public static function version()
     {
-        return array(0,4,3);
+        return array(0,4,4);
     }
 }
 
