@@ -3,3 +3,4 @@ vendor
 deploy
 tests/test_release
 .idea
+_site
