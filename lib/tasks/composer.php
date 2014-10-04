@@ -9,7 +9,7 @@ group('composer', function () {
         run(array(
             "cd {$app->env->release_dir}",
             "([ -e 'composer.json' ] && which composer &>/dev/null)",
-            "composer install --prefer-dist --optimize-autoloader || echo '    composer.json not found'"
+            "composer install --prefer-dist --optimize-autoloader --no-interaction || echo '    composer.json not found'"
         ));
     });
 
@@ -19,7 +19,7 @@ group('composer', function () {
         run(array(
             "cd {$app->env->release_dir}",
             "([ -e 'composer.json' ] && which composer &>/dev/null)",
-            "composer update --optimize-autoloader || echo '    composer.json not found'"
+            "composer update --optimize-autoloader --no-interaction || echo '    composer.json not found'"
         ));
     });
 
