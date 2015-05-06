@@ -3,7 +3,14 @@ namespace Pomander;
 
 class RemoteShell
 {
-    protected $host, $port, $user, $auth, $shell, $key_pass;
+    /**
+     * SSH
+     *
+     * @var \Net_SSH2
+     */
+    protected $shell;
+
+    protected $host, $port, $user, $auth, $key_pass;
 
     public function __construct($host, $port, $user, $auth, $key_pass)
     {
@@ -52,6 +59,11 @@ class RemoteShell
             abort("ssh", "Login failed.");
     }
 
+    /**
+     * Process remote command execution
+     *
+     * @return string
+     */
     protected function process()
     {
         $output = "";
@@ -61,9 +73,8 @@ class RemoteShell
             $temp = $this->shell->_get_channel_packet(NET_SSH2_CHANNEL_EXEC);
             switch( true ) {
                 case $temp === true:
-                    return $output;
                 case $temp === false:
-                    return false;
+                    return $output;
                 default:
                     $output .= $temp;
                     if( $this->handle_data(substr($output, $offset)) ) {
