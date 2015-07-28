@@ -14,7 +14,7 @@
   ],
   "require": {
     "jaz303/phake": "~0.6",
-    "phpseclib/phpseclib": "@stable"
+    "phpseclib/phpseclib": "^0.3.10"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable"
