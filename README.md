@@ -1,4 +1,4 @@
-[Pomander](http://ripeworks.com/pomander)
+[Pomander](http://tamagokun.github.io/pomander/)
 =======
 
 ![](https://api.travis-ci.org/tamagokun/pomander.png?branch=master)
@@ -44,7 +44,7 @@ Setting up a project
 $ pom init
 ```
 
-Refer to the [documentation](http://ripeworks.com/pomander) for a full list of commands and references for configuring environments.
+Refer to the [documentation](http://tamagokun.github.io/pomander/) for a full list of commands and references for configuring environments.
 
 
 Plugins
