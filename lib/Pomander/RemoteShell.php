@@ -1,12 +1,15 @@
 <?php
 namespace Pomander;
 
+use phpseclib\Crypt\RSA;
+use phpseclib\Net\SSH2;
+
 class RemoteShell
 {
     /**
      * SSH
      *
-     * @var \Net_SSH2
+     * @var SSH2
      */
     protected $shell;
 
@@ -43,9 +46,9 @@ class RemoteShell
 /* protected */
     protected function connect()
     {
-        $this->shell = new \Net_SSH2($this->host, $this->port);
+        $this->shell = new SSH2($this->host, $this->port);
         if (file_exists($this->auth)) {
-            $key = new \Crypt_RSA();
+            $key = new RSA();
             if ($this->key_pass) {
                 $key->setPassword($this->key_pass);
             }
@@ -70,7 +73,7 @@ class RemoteShell
         $offset = 0;
         $this->shell->_initShell();
         while( true ) {
-            $temp = $this->shell->_get_channel_packet(NET_SSH2_CHANNEL_EXEC);
+            $temp = $this->shell->_get_channel_packet(SSH2::CHANNEL_EXEC);
             switch( true ) {
                 case $temp === true:
                 case $temp === false:
